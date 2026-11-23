@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>KAS Sperrkarte &amp; Reklamation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: Kopfleiste mit Rolle/Sprache, Reiter je Rolle; Halle = große Kacheln für Tablet, QS = Listen + Akte mit Unterreitern */
+:root{
+  --bg:#eef3f1; --surface:#ffffff; --surface-2:#f5f8f7; --ink:#16231f; --muted:#5a6b66; --line:#d3dfdb;
+  --accent:#427269; --accent-ink:#ffffff; --accent-soft:#dcebe7; --accent-2:#81b6ac; --paper:#fbfcf9; --draw:#2a3b37;
+  --ok:#2c7a4b; --ok-soft:#e1f2e7; --warn:#a46410; --warn-soft:#fbefd9; --bad:#b3261e; --bad-soft:#fbe3e1; --info:#2f5f8a; --info-soft:#e2ecf6;
+  --auto:#2f5f8a; --auto-soft:#e4edf7; --input:#8a4b08; --input-soft:#fdf0dc;
+  --f-head:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif; --f-body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1715; --surface:#17221f; --surface-2:#1c2a26; --ink:#e4eeeb; --muted:#9db0aa; --line:#2b3c37;
+  --accent:#81b6ac; --accent-ink:#0f1715; --accent-soft:#22403a; --accent-2:#427269; --paper:#1a2522; --draw:#c9d9d4;
+  --ok:#6fcf97; --ok-soft:#173326; --warn:#f0b35a; --warn-soft:#3a2c15; --bad:#f28b82; --bad-soft:#3d1c1a; --info:#8ab4e0; --info-soft:#1b2c3d;
+  --auto:#8ab4e0; --auto-soft:#1b2c3d; --input:#f0b35a; --input-soft:#3a2c15; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1715; --surface:#17221f; --surface-2:#1c2a26; --ink:#e4eeeb; --muted:#9db0aa; --line:#2b3c37;
+  --accent:#81b6ac; --accent-ink:#0f1715; --accent-soft:#22403a; --accent-2:#427269; --paper:#1a2522; --draw:#c9d9d4;
+  --ok:#6fcf97; --ok-soft:#173326; --warn:#f0b35a; --warn-soft:#3a2c15; --bad:#f28b82; --bad-soft:#3d1c1a; --info:#8ab4e0; --info-soft:#1b2c3d;
+  --auto:#8ab4e0; --auto-soft:#1b2c3d; --input:#f0b35a; --input-soft:#3a2c15; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1240px;margin:0 auto}
+h1,h2,h3,h4{font-family:var(--f-head);font-weight:600;letter-spacing:.01em;text-wrap:balance;margin:0}
+h1{font-size:1.4rem} h2{font-size:1.35rem} h3{font-size:1.12rem} h4{font-size:1rem}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .small{font-size:.85rem} .tiny{font-size:.75rem}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent-2);outline-offset:2px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line);margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:8px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.toprow{display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap;max-width:1240px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 240px}
+.mark{flex:none;height:40px;width:auto}
+.logo-dark{display:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo-dark{display:block}:root:not([data-theme="light"]) .logo-light{display:none}}
+:root[data-theme="dark"] .logo-dark{display:block}:root[data-theme="dark"] .logo-light{display:none}
+.brand .sub{display:block;font-size:.78rem;color:var(--muted)}
+.badge-test{font:600 .7rem/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;background:var(--warn-soft);color:var(--warn);border-radius:999px;padding:6px 10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface-2)}
+.seg button{border:0;background:none;padding:8px 13px;min-height:40px;font-weight:600;font-size:.85rem;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.srcbtn{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:8px 13px;min-height:40px;font-weight:600;font-size:.85rem;color:var(--muted)}
+.srcbtn[aria-pressed="true"]{background:var(--auto-soft);color:var(--auto);border-color:var(--auto)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;max-width:1240px;margin:6px auto 0;scrollbar-width:none}
+nav.tabs button{flex:none;border:0;background:none;padding:11px 14px;min-height:46px;font-family:var(--f-head);font-size:1.05rem;font-weight:600;color:var(--muted);border-bottom:3px solid transparent}
+nav.tabs button[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+.count{display:inline-block;min-width:22px;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--accent-soft);color:var(--ink);font:600 .75rem/1.5 var(--f-body);text-align:center}
+main{padding-top:16px;display:grid;gap:16px}
+.note{border-radius:var(--r);padding:10px 14px;font-size:.9rem}
+.note.info{background:var(--info-soft)} .note.warn{background:var(--warn-soft)} .note.bad{background:var(--bad-soft)} .note.ok{background:var(--ok-soft)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.kpi b{display:block;font:600 1.55rem/1.1 var(--f-head);font-variant-numeric:tabular-nums}
+.kpi span{font-size:.8rem;color:var(--muted)}
+.kpi.alert b{color:var(--bad)}
+.list{display:grid;gap:10px}
+@media (min-width:900px){.list.two{grid-template-columns:1fr 1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:8px;min-width:0}
+.card.clickable{cursor:pointer;text-align:left;width:100%}
+.card.clickable:hover{border-color:var(--accent-2)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row.between{justify-content:space-between}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:600;background:var(--surface-2);border:1px solid var(--line);white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.chip.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.chip.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.chip.info{background:var(--info-soft);color:var(--info);border-color:transparent}
+.chip.kat{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.art-intern{background:var(--warn-soft);color:var(--warn)} .art-extern,.art-feld,.art-hinweis{background:var(--bad-soft);color:var(--bad)} .art-lieferant,.art-hinweis_lief{background:var(--info-soft);color:var(--info)}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;font-size:.92rem;align-items:baseline}
+.kv dt{color:var(--muted)} .kv dd{margin:0;min-width:0}
+.section-title{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:16px;min-width:0}
+.step{display:grid;gap:8px;min-width:0}
+.lbl{font-weight:600;font-size:.92rem}
+.hint{font-size:.82rem;color:var(--muted)}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.opt{border:1.5px solid var(--line);background:var(--surface-2);border-radius:var(--r);padding:10px 12px;min-height:54px;text-align:left;display:grid;gap:2px}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt .t{font-weight:600} .opt .d{font-size:.8rem;color:var(--muted)}
+.opt.big{min-height:84px;padding:14px}
+.opt.big .t{font:600 1.35rem/1.1 var(--f-head)}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;min-height:46px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);padding:10px 12px}
+textarea{min-height:80px;resize:vertical}
+.grid2{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.grid3{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.btn{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 18px;min-height:46px;font-weight:600}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+.btn.small{min-height:38px;padding:6px 12px;font-size:.85rem}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.confirm{border-radius:var(--r);border:1.5px solid var(--warn);background:var(--warn-soft);padding:12px 14px;display:grid;gap:10px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:.9rem}
+th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);white-space:nowrap}
+td input,td select{min-height:40px;padding:6px 8px}
+tr:last-child td{border-bottom:0}
+.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.tol-ok{background:var(--ok-soft)} .tol-bad{background:var(--bad-soft)}
+.timeline{display:grid;gap:6px;font-size:.85rem}
+.timeline div{display:grid;grid-template-columns:auto 1fr;gap:10px}
+.checks{display:grid;gap:6px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.checks label{display:flex;gap:10px;align-items:center;min-height:42px;padding:4px 10px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line)}
+.checks input{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.back{border:0;background:none;color:var(--accent);font-weight:600;padding:8px 0;min-height:40px;justify-self:start}
+.empty{padding:26px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:var(--r)}
+.subtabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px}
+.subtabs button{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:7px 13px;min-height:40px;font-weight:600;font-size:.86rem;color:var(--muted)}
+.subtabs button[aria-current="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.subtabs .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px;background:var(--line);vertical-align:middle}
+.subtabs .dot.ok{background:var(--ok)} .subtabs .dot.warn{background:var(--warn)} .subtabs .dot.bad{background:var(--bad)}
+/* Datenherkunft */
+.src{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;font:600 .66rem/1.45 var(--f-body);letter-spacing:.03em;text-transform:uppercase;vertical-align:middle;white-space:nowrap}
+.src.a{background:var(--auto-soft);color:var(--auto)} .src.e{background:var(--input-soft);color:var(--input)}
+.legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:.82rem;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
+/* Halle */
+.machine-head{display:grid;gap:10px;background:var(--accent);color:var(--accent-ink);border-radius:var(--r);padding:14px 16px}
+.machine-head .kv dt{color:inherit;opacity:.8} .machine-head .src.a{background:rgba(255,255,255,.18);color:inherit}
+.drawing{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:10px;overflow-x:auto}
+.drawing svg{display:block;width:100%;min-width:520px;height:auto}
+.balloon{cursor:pointer}
+.balloon circle{fill:var(--surface);stroke:var(--draw);stroke-width:1.6}
+.balloon text{fill:var(--draw);font:700 15px var(--f-mono)}
+.balloon.sel circle{fill:var(--bad);stroke:var(--bad)} .balloon.sel text{fill:#fff}
+.balloon:hover circle{stroke:var(--accent);stroke-width:2.4}
+.pp-row{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;border:1.5px solid var(--line);background:var(--surface);border-radius:var(--r);padding:8px 12px;min-height:56px;text-align:left;width:100%}
+.pp-row[aria-pressed="true"]{border-color:var(--bad);background:var(--bad-soft)}
+.pp-pos{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:2px solid var(--draw);font:700 .95rem var(--f-mono)}
+.pp-row[aria-pressed="true"] .pp-pos{background:var(--bad);border-color:var(--bad);color:#fff}
+.bigval{font:600 2.1rem/1 var(--f-mono);text-align:center;letter-spacing:.02em}
+input.bignum{font:600 1.8rem var(--f-mono);text-align:center;min-height:64px}
+.devbar{height:14px;border-radius:7px;background:var(--surface-2);border:1px solid var(--line);position:relative;overflow:hidden}
+.devbar .tol{position:absolute;top:0;bottom:0;background:var(--ok-soft)}
+.devbar .mark{position:absolute;top:-2px;bottom:-2px;width:4px;border-radius:2px;background:var(--bad);height:auto}
+.stepper{display:grid;grid-template-columns:56px 1fr 56px;gap:8px}
+.stepper button{min-height:56px;border-radius:var(--r);border:1.5px solid var(--line);background:var(--surface-2);font:600 1.5rem var(--f-head)}
+.auto-box{border:1px dashed var(--auto);background:var(--auto-soft);border-radius:var(--r);padding:12px 14px;display:grid;gap:8px}
+.auto-box ul{margin:0;padding-left:18px;display:grid;gap:2px;font-size:.88rem}
+/* Jour fixe */
+.agenda{display:grid;gap:12px}
+.ag-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ag-num{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--ink);color:var(--surface);font:700 .95rem var(--f-head);flex:none}
+.item{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);display:grid}
+.item > button.item-head{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 12px;background:none;border:0;text-align:left;width:100%;min-height:56px}
+.item .item-body{border-top:1px solid var(--line);padding:12px;display:grid;gap:12px;background:var(--surface-2)}
+.decide{display:flex;gap:6px;flex-wrap:wrap}
+.decide button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;min-height:38px;font-size:.85rem;font-weight:600}
+.decide button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.attendees{display:flex;gap:6px;flex-wrap:wrap}
+.attendees button{border:1.5px solid var(--line);background:var(--surface-2);border-radius:999px;padding:6px 12px;min-height:38px;font-size:.85rem;font-weight:600;color:var(--muted)}
+.attendees button[aria-pressed="true"]{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+/* Statistik */
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:minmax(120px,190px) 1fr 70px;gap:10px;align-items:center;font-size:.86rem}
+.bar .track{height:18px;background:var(--surface-2);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.bar .fill{height:100%;background:var(--accent)}
+/* Berichte */
+.report{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px}
+.report .rh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:2px solid var(--accent);padding-bottom:8px}
+.report .d{display:grid;grid-template-columns:54px 1fr;gap:12px;align-items:start}
+.report .d b.tag{font:700 .95rem var(--f-head);color:var(--accent-ink);background:var(--accent);border-radius:6px;text-align:center;padding:4px 0}
+.ishikawa{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.photo{max-width:220px;border-radius:8px;border:1px solid var(--line)}
+@media (prefers-reduced-motion:no-preference){.card,.opt,.btn,.pp-row{transition:border-color .15s,background .15s}}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="toprow">
+    <div class="brand">
+      <img class="mark logo-light" alt="KAS" src="data:image/png;base64,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"><img class="mark logo-dark" alt="KAS" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFMAAABgCAYAAABhXE4DAAAM+0lEQVR42u1df6xl1VX+1trnvveGhmmgtGj9MbYKBkunUhqidmqQEgRia6kw2DRBmlZMSo3ir5pCNYaWlNrEoKbVGCSIMkITFIpWa8YxbSOCQ0fbsW3oj5SIKTrQQqHvvXvPXuvzj7v2cOb23vvOvdx57817dycnN/fec/be5ztr7fXttdc6W7DFCsmOiNQkrwZwk7s7AG1xqalqAnBARN5KUkXEsV0LySo+LzCzFU5XPhF16KTtV1sIyCQiudvt7gbwN6q6FFIp5ZQRl8qAZOZp+1BtESBVRIzkSwHcB2Cnu5uIJJIEAFXVEdeWTwlgZduCGerII0eOnOzu96vqLnc3VU3uTlUVAHD31QGgCEBFZGFWfalOcCCPStJpp512N4Bz3D2LSOXuHkCuANirqp8NQ+QA0srKii0sLPy4qv51DAdbF8yQuLWMgIhIbWa3qerFAGoR6ZCkqhIAcs5Xdjqd+0e08X2z7POmBTNoibcA/SYAVwOoSRYgLe7t6k6n8zGSHQDWuCzF94UtDWbhdyTPAvD6uOljJNTMNKWU3f0MANeFsemEMSlA/qqI3F545+DwEG1wq0umAnAz+6mU0h8NOyGlhLDQcHeKSIq/sqpW7v6+lNItJKtBII9n2cwGaAVAdvc8pp9SgCRZq2rH3T+cUnpvEHhbzw6f6NSIJDMAV9UFd9+XUrqWZAJgIsI5mP2yA0Clqq366O4fV9WrggX4egO5WcH0GBcfBnCLu9soihT0R9x9RVXfLyI5DBg3ouObDsziqRGRBwE8OCmJ30hPz4lO2o9hTBslkVuGtG82TjcvczDnYG7pUoUba7sVabrvhrGCxjntwdxoC7hBJQdow6abDExsGslcwvNw1Z+gpbjgdgyZSXVInhTnTMQmxMwOqepL3J3bENRFEXnRgIr3ADw5BRY9MbMnVfXU7Wo0Bl2aIjJ1PRWAbl+6t6VkYvCeA9yJ7IiqgmSviso0Bl6Z9slsZYBblk41ZACuAfQ2USc3P1nvL8n3mmBmEemIyO0A3hvz9jwX0vaADnN0PCMij8/hmWIGNGZWNJfMGYBJESH7nlbOIZo7OuZgzsHcWrMheT5etGrWnWlyyXGLW0NcYK3H6GFRvdMspDXWmSgiR9eQom8lSqT12tJMwYxGOe25bePIZ7ECGZHGhoZniORCgGfTMJlqRhKZRMRyzu9OKV0SIP2HiFw3CFAJTgXwQne/XVVPDt+AA7gKwOOxZMth0hxM448BnO3uJSTmMVX9hQChlURGpPH3mtnPi8j5AH7A3V8AoDazJwF8keT+lNLHAXyjIQCji5l9nSTNrBcB8rdEg9UEYFZR175GoP2Dw1Syce5dzaj8nPP15cGMU22SLx8R2H/euOubDx4Acs6/TPIba2ULmNldbeo9HgZoGX2nqwF4dhjoEXXxDlXd6+4r4Q+4p6qq9xeJGddXM7sMAN296/1SvF5XrDX/b2jQ9SmlPwRwSkSMFL9Er/k9ykkbZc01Bu40WHcAlVdXV88CcAuAWlUXATymqte0SBWxULUrArAOgLuK14vkm4YEtX6Hane73d0ppfcBqNHPsMgAPgDgtar6ClU9G/240Pe4++cBLLa++xmr+W0NDTlQbiIoRyLZMbOD0V6XJOu6vmAtNWqo+I+YWY7rnyJ5ppn9T6PNPaPqauQIfbDRvuec945pt0PynLZ0ab14ZhIRc/cPqOq57r4aIYA3djqdfw71txb9/LnI1QGAz4jIIwAeaqjp3jGqzjjnbJKI9r9UVdXdBw4cqOJhaxypBMqKyKG21EjXCchM8hJV/TV370XC0ydV9XdbBqUaSXX3yxsur/tIiqo2g//fSHIx2pNhYALoDDrAzz//fKIfhlgOK3VMkqm2HmAaydPd/bYALQH4pqpeVQRq3JMPo0EA56jqK+PnHoD74/d/dPflAHhXznnPiHsr378UBqunqmfknK8oWkHymDgCEeEknPa4genuUjimu9+qqqe7ew41vUZEHkU/qWmtzpakqGJ4YGYHReTLoYqPAXigIbGjVL2o+UfxXMIaReSOnPNvA1gSkRw8drrgjONlgMzsU8Hnfj2+r8ZfH56k/lC1jpk90jA0vxH/LTU4I92dYZBOakwLBy36UT5sZj0zs6jzCySvJXnqICfdDNb870m+Oqxmj6STfIDkjhjgpUW9Jfh/T9TpZlaT/OFmuysrKz9IsmtmHgzhUvTDW9KQB6PxcG5tPPhuo9+PmdnvFVAnAfR4qnnX3d8RVtPQD3i4U0RWQr3bWEgZtNIkDwF4JAyDkdQdO3Z8xd0fLnmSVVVdMcxHUPwBIlKnlN4O4HIAh1R1IdqpAXyPqv4OgM+Q/NmYdqaNVvN/IvkiM/vvkMqa5FMkX9ly2idFlc3sUXcvVf/WAPfUUPXfbEjv/5I8eZiqNyW0YXTeQvLTjb6vNqa5143yVK37mElyj5nlUr+ZfZHkzsLp1lLxuq4vKlXGcPGqw4cPL5BcIlk+OyR3k2yOgW8K0Kq12mh8v5jkv0Q/a5J5knn/cZ0BFanIOf9KtLESn/es1UbpeIxtXh6ImX1lzNGLGZKb2b62GjA4hpvZRxoS6mb2560wWYfp5EL8d2cT0JzzDaPaKTd25MiRk83s8bjO2rwTohghM3uS5CmDqj7O8BVKRFKDPZS6/n2ta2fuHB5D2hOAX3T3H1XVs9y9l1K6sa7rQyLydw1H7dFZE0nLOb8++KmLiLr718JBMdyaqlYi8rLINT8VwEUk746JQi5GqHj5BzluzHoqEclmdhjAGfHXYht/5nqAyej4t0nuRT+3ZyE8NneQfI2IfHXAiUwRoZldGTehJD+rqueFZ5wjLL+SfEhEdhcWkFK6q5m9u7y8vCsmDGwMA/IcnkcTV89utPNEm5WAdXF0BL2oROQwgF+KzNusqqe4+0dJLgbtkfCmW/C8n46sXajq34pIN6afefCI37uqem/MvR3AhSRfHPV1AGBxcfFGM/sYyfNKW416apLJzD6oqme4ew+AqOr+NnitWx5QQ4X+0sx+TFWvDe/Rq939T1JKb2u4yczMLk4pneLu2d1TzvneBl0aF4t+H4AbQtV3mtklJO8IVa8B9FT1Z9z9UgCfI/mwmX0NQFdETnf3C1V1d8zdF939/5aXl/8s6rb1NEC3Bp3IJPcP8rNiOQ8ePNgxswei3W+HQXpn8SFGXfeUuszsc21mTYUKmdkXGtfeO2AI/6pMPdcyYiSf6PV6ezaKZ7ZZAypkeZeZPdG8ibqu3xDTw5cP3NxNbfrU6MeHmtevrKy8rOGoPofkvsG2B8qzJPeR/KHWQM5QzS2s6c0A9uWcQfKJAT/i0WXaGMgfJfk6AGeG+lVVVX0TAJaWlpZzzpdVVVUDSKr6b812WvTjQwA+mXO2qqqqpaWl5YZhOwTgLSRfDGC3mZ0J4CUiskjymZTSlwE8FEYKE73GbBaSOeXy8IYEvhZPesvzJjLQs47oUBwb0WFjDBIHzw/J8QC6eSMTJeOPu75IWeOcYQ/Vpwl0mHVEh8/i/GmTmia5/vm2sZELatuizMGcYRmm5jJtIuYczCEGPsaTeg7P8wfzBSRPi/9sDlF7MiNm9nVV/a5wKEgkYq4EZZgnCLQxPP3XqOVqyB8LmPHb+7aLZFYhfezzWGLWb+47AcrIuKRJJBNAXaEfmidlmRTbLLN3RIr0xBiIyGIF4Aj6rwDbTinSxR50RGTnMfPIvkP46UlsRqRIZyH5wm1I3hOAnHP+yaqq7o14ekYc1H4Ab8YUr5WoROTp7Woxer3eU0N+rkXkW1PxzG06y0kALOc8bgao00jmtuOSJcm2rmuOMCZTJeLOHR2zJO9zCOZgnjCOjs0yrs1fRjozVj3Fy0hH5VxuWzAbOwi8BsBlGLKDQGO2AlWFmfVSSn8gIs9s5A5Tm3YHAQA/AeA9LRwMSCnB3V938ODBS9GPutsQCd3MBqiL/g4CqxFvNO7oquqF55577h0hlboRk5FNC6ZZOye/iFQishjB/Vea2Z/Gen1ab0A38w4CHbTYQaCsEIhIB/1M4WtIHhGRGyIqJW9nMMsOAvsBvLsI4IDUli0Xvl9V3xnjZIpEgayq1+ecnxaR3y+RwHMW3M7631xipSJDrSReMef89jin08jY1fK9rusLSrx8Sb0m+Q8NnrtlQNII2B91dEosJ8m/KOkmDUBzhCm+eVQbvV7vtbME84Qm7SV4FsDb3P27VfXCsiEdSXF3VlV1J8nLAfxXoV2rq6tpaWnJzGzXXLe/U4KF5E4z+8+QtDwQAUwz60aeUPOo3b0ksG5dyZxEgiP15Vsk3+ju/6qqL22ku5RNPBdGPIy512gAUAtAH805vwHAs6qqJL2897dI4OBRCp5b8p6XkLKSrXERyYk2Pm4AO9/4OCQ0x9aIn8g5vyuldHOoeastuWNzu6kXGP8fWwsL/DHMmLsAAAAASUVORK5CYII=">
+      <div><h1 id="appTitle">Sperrkarte &amp; Reklamation</h1><span class="sub" id="appSub"></span></div>
+    </div>
+    <span class="badge-test" id="testBadge"></span>
+    <button class="srcbtn" id="srcBtn" data-action="src" aria-pressed="false"></button>
+    <div class="seg" role="group" aria-label="Ansicht">
+      <button id="vHalle" data-action="view" data-v="halle"></button>
+      <button id="vQs" data-action="view" data-v="qs"></button>
+    </div>
+    <div class="seg" role="group" aria-label="Sprache / Jazyk">
+      <button data-action="lang" data-v="de" id="lDe">DE</button>
+      <button data-action="lang" data-v="cs" id="lCs">CS</button>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs"></nav>
+</header>
+<div class="wrap"><main id="main"></main></div>
+<script>
+/* ===== KAS-ERP Probebau Stufe 1 · Version 2 – nur erfundene Testdaten ===== */
+/* ---------- Stammdaten (würden im KAS-ERP aus Artikelstamm, Prüfplan, MDE kommen) ---------- */
+const MASCH = [
+  { nr:'603', typ:'CNC-Langdreher', ba:'309900101', schicht:'Früh' },
+  { nr:'612', typ:'CNC-Langdreher', ba:'309900102', schicht:'Früh' },
+  { nr:'201', typ:'Star SR20', ba:'309900103', schicht:'Früh' },
+  { nr:'607', typ:'Mehrspindler', ba:'309900104', schicht:'Früh' }
+];
+const ARTIKEL = [
+  { id:'9900100001', de:'Distanzhülse Ø12', cs:'Distanční pouzdro Ø12', werkstoff:'CuZn39Pb3', vk:0.85, zgs:'Index C · 12.03.2025', kunde:'Muster Automotive GmbH',
+    stufen:[{l:3,d:11},{l:15,d:12}], bohrung:6.2, fase:true,
+    merkmale:[
+      {pos:1, de:'Außen-Ø 12 h9', cs:'Vnější Ø 12 h9', typ:'num', nenn:12, lo:11.957, hi:12.000, dp:3, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:1}},
+      {pos:2, de:'Innen-Ø 6,2 H11', cs:'Vnitřní Ø 6,2 H11', typ:'num', nenn:6.2, lo:6.200, hi:6.275, pm:'Grenzlehrdorn', pmcs:'Mezní kalibr', b:{t:'bore'}},
+      {pos:3, de:'Länge 18 ±0,1', cs:'Délka 18 ±0,1', typ:'num', nenn:18, lo:17.9, hi:18.1, pm:'Messschieber', pmcs:'Posuvné měřidlo', b:{t:'len'}},
+      {pos:4, de:'Fase 0,5×45°', cs:'Sražení 0,5×45°', typ:'attr', pm:'Sichtprüfung', pmcs:'Vizuální kontrola', b:{t:'edge'}},
+      {pos:5, de:'Oberfläche Ra 1,6', cs:'Povrch Ra 1,6', typ:'num', nenn:1.6, lo:0, hi:1.6, pm:'Rauheitsmessgerät', pmcs:'Drsnoměr', b:{t:'surf', seg:1}}]},
+  { id:'9900100002', de:'Anschlussbolzen M8', cs:'Připojovací čep M8', werkstoff:'11SMnPb30 verzinkt', vk:1.40, zgs:'Index A · 02.09.2024', kunde:'Beispiel Elektrotechnik AG',
+    stufen:[{l:14,d:8,gew:true},{l:20,d:10},{l:8,d:14}],
+    merkmale:[
+      {pos:1, de:'Gewinde M8-6g', cs:'Závit M8-6g', typ:'attr', pm:'Gewindelehrring', pmcs:'Závitový kroužek', b:{t:'dia', seg:0}},
+      {pos:2, de:'Schaft-Ø 10 f7', cs:'Ø dříku 10 f7', typ:'num', nenn:10, lo:9.972, hi:9.987, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:1}},
+      {pos:3, de:'Kopf-Ø 14 ±0,05', cs:'Ø hlavy 14 ±0,05', typ:'num', nenn:14, lo:13.95, hi:14.05, dp:2, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:2}},
+      {pos:4, de:'Länge 42 ±0,2', cs:'Délka 42 ±0,2', typ:'num', nenn:42, lo:41.8, hi:42.2, pm:'Messschieber', pmcs:'Posuvné měřidlo', b:{t:'len'}},
+      {pos:5, de:'Rundlauf 0,05', cs:'Házivost 0,05', typ:'num', nenn:0, lo:0, hi:0.05, pm:'Messuhr', pmcs:'Úchylkoměr', b:{t:'surf', seg:1}}]},
+  { id:'9900100003', de:'Crimphülse 50 mm²', cs:'Krimpovací dutinka 50 mm²', werkstoff:'Cu-ETP verzinnt', vk:2.10, zgs:'Index 02 · 20.02.2023', kunde:'Muster Automotive GmbH',
+    stufen:[{l:22,d:14},{l:8,d:11}], bohrung:9.5,
+    merkmale:[
+      {pos:1, de:'Bohrung Ø 9,5 +0,1', cs:'Otvor Ø 9,5 +0,1', typ:'num', nenn:9.5, lo:9.5, hi:9.6, dp:2, pm:'Grenzlehrdorn', pmcs:'Mezní kalibr', b:{t:'bore'}},
+      {pos:2, de:'Außen-Ø 14 ±0,05', cs:'Vnější Ø 14 ±0,05', typ:'num', nenn:14, lo:13.95, hi:14.05, dp:2, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:0}},
+      {pos:3, de:'Länge 30 ±0,1', cs:'Délka 30 ±0,1', typ:'num', nenn:30, lo:29.9, hi:30.1, pm:'Messschieber', pmcs:'Posuvné měřidlo', b:{t:'len'}},
+      {pos:4, de:'Schichtdicke Sn 4–8 µm', cs:'Tloušťka vrstvy Sn 4–8 µm', typ:'num', nenn:6, lo:4, hi:8, pm:'Schichtdickenmessgerät', pmcs:'Měřič tloušťky vrstvy', b:{t:'surf', seg:0}}]},
+  { id:'9900100004', de:'Gewindebuchse M6', cs:'Závitové pouzdro M6', werkstoff:'1.4305', vk:0.62, zgs:'Index B · 05.05.2025', kunde:'Beispiel Elektrotechnik AG',
+    stufen:[{l:10,d:10},{l:6,d:12}], bohrung:5,
+    merkmale:[
+      {pos:1, de:'Innengewinde M6-6H', cs:'Vnitřní závit M6-6H', typ:'attr', pm:'Gewindelehrdorn', pmcs:'Závitový trn', b:{t:'bore'}},
+      {pos:2, de:'Außen-Ø 10 h8', cs:'Vnější Ø 10 h8', typ:'num', nenn:10, lo:9.978, hi:10.0, dp:3, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:0}},
+      {pos:3, de:'Bund-Ø 12 ±0,1', cs:'Ø nákružku 12 ±0,1', typ:'num', nenn:12, lo:11.9, hi:12.1, pm:'Messschieber', pmcs:'Posuvné měřidlo', b:{t:'dia', seg:1}},
+      {pos:4, de:'Länge 16 ±0,1', cs:'Délka 16 ±0,1', typ:'num', nenn:16, lo:15.9, hi:16.1, pm:'Messschieber', pmcs:'Posuvné měřidlo', b:{t:'len'}}]}
+];
+const BA = {
+  '309900101':{artikel:'9900100001', menge:5000, charge:'CH-26-117', gut:3120, fq:1.8},
+  '309900102':{artikel:'9900100002', menge:2000, charge:'CH-26-121', gut:1450, fq:4.6},
+  '309900103':{artikel:'9900100003', menge:1500, charge:'CH-26-125', gut:610, fq:2.2},
+  '309900104':{artikel:'9900100004', menge:8000, charge:'CH-26-130', gut:5200, fq:0.7}
+};
+const FKAT = [
+  {k:'mass', de:'Maßfehler', cs:'Rozměrová vada'}, {k:'oberfl', de:'Oberfläche unregelmäßig', cs:'Nepravidelný povrch'},
+  {k:'gewinde', de:'Gewindefehler', cs:'Vada závitu'}, {k:'span', de:'Spänedrücker', cs:'Otlak od třísky'},
+  {k:'schlag', de:'Schlagstellen', cs:'Otlaky / rázy'}, {k:'grat', de:'Grat', cs:'Otřep'},
+  {k:'material', de:'Materialfehler', cs:'Vada materiálu'}, {k:'schicht', de:'Beschichtung n. i. O.', cs:'Povlak nevyhovuje'},
+  {k:'sonst', de:'Sonstiges', cs:'Jiné'}];
+const SOFORT = ['nacharbeit','rueckholung','neufertigung','lieferantenrekla','verschrottung','aussortieren','neuveredelung','lieferantenpruefung','sonderfreigabe','verkauf','ersatzlieferung','gutschrift','bestandspruefung'];
+const DOKPR = ['pruefanweisung','wzausgabe','versandanweisung','arbeitsanweisung','fehlerkatalog','erpstamm','fmea','prozessbeschreibung','pruefplan','logistikblatt','controlplan','feldausfallliste','einrichtblatt','veredelungsanweisung','schulung','sonstiges'];
+const ROLLEN = ['gf_k','gf_t','ek','vk','vs','qs','qmb','tech','prod','pers'];
+const ISHI = ['mensch','maschine','methode','material','messung','mitwelt'];
+const KAT = {
+  1:{art:'intern', docs:['sk','std'], kreis:['qs','abt'], frist:{at:5}},
+  2:{art:'intern', docs:['sk','std'], kreis:['qs','abt','tech'], frist:{at:5, esk:true}},
+  3:{art:'intern', docs:['sk','erw','a5'], kreis:['qs','abt','tech','vt'], frist:{at:5, esk:true}},
+  4:{art:'intern', docs:['sk','erw','a5','a4','5w','wirk'], kreis:['qs','abt','tech','vt','ctrl','gl'], frist:{h:48, esk:true}},
+  5:{art:'hinweis', docs:['std','ordner'], kreis:['qs','abt','tech','vt'], frist:{h:24}},
+  6:{art:'extern', docs:['erw','a5','a4','5w','8d','wirk'], kreis:['qs','abt','tech','vt','ctrl','gl'], frist:{h:24}},
+  7:{art:'feld', docs:['erw','a5','a4','5w','8d','wirk','fmea'], kreis:['qs','abt','tech','vt','ctrl','pers','gl'], frist:{h:4}},
+  8:{art:'hinweis_lief', docs:['std'], kreis:['qs','abt'], frist:{at:5, lief:true}},
+  9:{art:'lieferant', docs:['std','5w','8d'], kreis:['qs','abt','gl'], frist:{at:5, lief:true}}
+};
+const PARTNER = { kunde:['Muster Automotive GmbH','Beispiel Elektrotechnik AG'], lieferant:['Muster Metall GmbH','Beispiel Galvanik KG'] };
+const C_SK = 'sk2', C_RK = 'rk2', C_JF = 'jf2';
+
+/* ---------- Texte ---------- */
+const T = {
+de:{ title:'Sperrkarte & Reklamation', sub:'Probebau KAS-ERP · Version 2', test:'Probebau · Testdaten', src:'Woher kommen die Daten?',
+ vHalle:'Halle', vQs:'QS', t_tif:'Sperrkarte erfassen', t_na:'Nacharbeit', t_mine:'Sperrkarten', t_ueb:'Sperrlager', t_rk:'Reklamationen', t_jf:'Jour fixe', t_stat:'Statistik',
+ loading:'Daten werden geladen …', slow:'Die gemeinsamen Daten sind noch nicht erreichbar.', local:'Demo-Version: Eingaben bleiben nur in diesem Browser.', readonly:'Nur Lesen: keine Berechtigung zum Ändern.',
+ legendA:'kommt automatisch', legendE:'wird eingegeben', legendTxt:'Im KAS-ERP kommen blau markierte Angaben aus MDE, Prüfplan, Artikelstamm, Anmeldung oder werden berechnet – eingegeben wird nur, was orange ist.',
+ s_mde:'MDE', s_pp:'Prüfplan', s_art:'Artikelstamm', s_ba:'Betriebsauftrag', s_login:'Anmeldung', s_calc:'berechnet', s_clock:'Uhrzeit', s_qs004:'Regel QS004', s_lager:'Lager', s_in:'Eingabe', s_kunde:'Kundenstamm', s_jf:'Jour fixe',
+ machine:'Maschine', choose_m:'An welcher Maschine?', running:'läuft', ba:'Betriebsauftrag', artikel:'Artikel', charge:'Charge', zgs:'Zeichnungsstand', schicht:'Schicht', fq:'Fehlerquote BA',
+ pp:'Prüfplan', pp_hint:'Welches Maß stimmt nicht? Nummer auf der Zeichnung oder in der Liste antippen – sie entspricht der Position im Prüfplan.',
+ tol:'Toleranz', ist:'Istwert', ist_hint:'Gemessenen Wert eingeben', attr_nio:'Merkmal n. i. O. (Lehre)', zu_gross:'zu groß', zu_klein:'zu klein', in_tol:'in Toleranz',
+ fehler:'Fehlerart', menge:'Gesperrte Menge', stk:'Stk.', kisten:'Kisten', foto:'Foto', foto_hint:'Im Probebau nur Vorschau.', bem:'Bemerkung (optional)',
+ save_sk:'Sperrkarte speichern', cancel:'Abbrechen', need:'Bitte noch angeben:', auto_title:'Das füllt das System selbst aus', saved:'Gespeichert',
+ p_intol:'Der Istwert liegt innerhalb der Toleranz. Trotzdem sperren?', p_far:'Der Istwert weicht extrem ab – Tippfehler?', p_menge:'Mehr als die bisher gefertigte Menge im Auftrag.', yes:'Ja, so speichern', fix:'Korrigieren',
+ st_offen:'Entscheidung offen', st_nacharbeit:'in Nacharbeit', st_qs:'bei QS', st_verschrottet:'verschrottet', st_freigabe:'Sonderfreigabe', st_rekla:'Reklamation', st_erledigt:'erledigt',
+ alter:'Tage', wert:'Wert', decide:'Entscheidung', d_na:'Nacharbeit', d_schrott:'Verschrotten', d_qs:'Zur QS', d_frei:'Sonderfreigabe', rule_rk:'Verschrotten und „Zur QS“ legen nach QS004 automatisch eine interne Reklamation an.',
+ verlauf:'Verlauf', back:'← zurück', na_list:'Offene Nacharbeit', no_na:'Keine offene Nacharbeit.', na_title:'Nacharbeitsauftrag', na_hint:'Nach der Nacharbeit nur diese Maße prüfen. Weitere Maße bei Bedarf unten eintragen.',
+ pos:'Pos.', soll:'Soll / Toleranz', pm:'Prüfmittel', frei:'Weiteres Maß', ergebnis:'Ergebnis', io:'i. O.', nio:'n. i. O.', schrott:'Schrott', na_done:'Nacharbeit abschließen', p_sum:'Summe weicht von der gesperrten Menge ab',
+ no_sk:'Keine Sperrkarten.', mine:'Sperrkarten dieser Schicht',
+ k_open:'Sperrkarten ohne Entscheidung', k_wert:'Sperrbestand (Wert)', k_alt:'ältester Fall (Tage)', k_na:'in Nacharbeit', k_rk:'offene Reklamationen', k_frist:'Frist ≤ 24 h',
+ sperrlager:'Sperrlager und Nacharbeit', sort_hint:'Entscheidung offen zuerst, dann nach Wert',
+ rk_list:'Reklamationen', new_rk:'Reklamation erfassen', no_rk:'Keine Reklamationen.', all:'Alle',
+ a_intern:'intern', a_hinweis:'Hinweis extern', a_extern:'extern', a_feld:'Feldausfall', a_hinweis_lief:'Hinweis Lieferant', a_lieferant:'Lieferant',
+ kat:'Kategorie', kat_why:'Begründung', auftreten:'Auftreten (12 Mon.)', frist:'Frist', esk:'Eskalationstermin', frist_lief:'Rückmeldung Lieferant bis', frist_kunde:'Antwort an Kunden bis',
+ docs:'Pflichtdokumente', kreis:'Beteiligte', create:'Anlegen', partner:'Kunde / Lieferant', kref:'Kundenreferenz', fkat:'Fehlerkategorie', beschr:'Fehlerbeschreibung',
+ rt_erf:'Erfassung', rt_sofort:'Sofortmaßnahmen', rt_dok:'Dokumentenprüfung', rt_bespr:'Besprechung', rt_ana:'Ursache & Maßnahmen', rt_wirk:'Wirksamkeit', rt_ber:'Berichte',
+ sofort_hint:'Ausgewählte Sofortmaßnahmen werden Aufgaben mit Verantwortung und Termin.', anzahl:'Anzahl', gut:'Gutteile', schlecht:'Schlechtteile', dauer:'Dauer (h)', kosten:'Kosten €', verant:'Verantwortung', datum:'Termin', status:'Status',
+ dok_hint:'Alle genannten Dokumente wurden auf Aktualität geprüft. Angehakte Dokumente müssen überarbeitet werden – daraus entstehen Aufgaben.', dok_bem:'Bemerkung zur Dokumentenprüfung',
+ bespr_hint:'Besprochen im Jour fixe – Entscheidungen und Notizen kommen von dort.', bespr_none:'Noch nicht im Jour fixe besprochen.',
+ problem:'Problembeschreibung', ishi:'Einflussgrößen (Ishikawa)', i_mensch:'Mensch', i_maschine:'Maschine', i_methode:'Methode', i_material:'Material', i_messung:'Messung', i_mitwelt:'Mitwelt',
+ warum:'Warum?', ursache:'Grundursache', massn:'Abstellmaßnahmen', add_m:'Maßnahme hinzufügen', save:'Speichern',
+ wirk_hint:'Wird beim nächsten Betriebsauftrag des Artikels automatisch in der QS-Kontrolle Fertigung fällig – geprüft durch QS mit Rüster bzw. Bediener.', wirk_on:'Wirksamkeitsprüfung beim nächsten BA', wirk_res:'Ergebnis der Wirksamkeitsprüfung', wirk_ok:'wirksam', wirk_nok:'nicht wirksam',
+ ber_hint:'Alle Berichte entstehen aus denselben Angaben – nichts doppelt schreiben.', close:'Reklamation abschließen', reject:'Ablehnen', rkB:'in Bearbeitung', rkE:'erledigt', rkA:'abgelehnt', overdue:'überfällig', left:'noch',
+ d_sk:'Sperrkarte', d_std:'Standardformular', d_erw:'Erweitertes Formular', d_a5:'A5-Prozesslektion', d_a4:'A4-Problemlösung', d_5w:'5W-Analyse', d_8d:'8D-Report', d_wirk:'Wirksamkeitskontrolle', d_fmea:'FMEA / Control-Plan', d_ordner:'Reklamationsordner Artikel',
+ r_qs:'QS', r_abt:'betroffene Abteilung', r_tech:'Technologie', r_vt:'Vertrieb', r_ctrl:'Controlling', r_gl:'Geschäftsleitung', r_pers:'Personal (Versicherung)',
+ ro_gf_k:'GF kaufm.', ro_gf_t:'GF techn.', ro_ek:'Einkauf', ro_vk:'Verkauf', ro_vs:'Versand', ro_qs:'QS', ro_qmb:'QM', ro_tech:'Technologie', ro_prod:'Produktion', ro_pers:'Personal',
+ so_nacharbeit:'Nacharbeit', so_rueckholung:'Rückholung', so_neufertigung:'Neufertigung', so_lieferantenrekla:'Lieferantenreklamation', so_verschrottung:'Verschrottung', so_aussortieren:'Aussortieren', so_neuveredelung:'Neuveredelung', so_lieferantenpruefung:'Lieferantenprüfung', so_sonderfreigabe:'Sonderfreigabe', so_verkauf:'Verkauf', so_ersatzlieferung:'Ersatzlieferung', so_gutschrift:'Gutschrift', so_bestandspruefung:'Bestandsprüfung',
+ dk_pruefanweisung:'Prüfanweisung', dk_wzausgabe:'WZ-Ausgabeschein', dk_versandanweisung:'Versandanweisung', dk_arbeitsanweisung:'Arbeitsanweisungen', dk_fehlerkatalog:'Fehlerkatalog', dk_erpstamm:'ERP-Stammdatensatz', dk_fmea:'FMEA', dk_prozessbeschreibung:'Prozessbeschreibungen', dk_pruefplan:'Prüfplan', dk_logistikblatt:'Logistikdatenblatt', dk_controlplan:'Controlplan', dk_feldausfallliste:'Feldausfallliste', dk_einrichtblatt:'Einrichtblatt / Bedienhinweis', dk_veredelungsanweisung:'Veredelungsanweisung', dk_schulung:'Schulungsunterlagen', dk_sonstiges:'Sonstiges',
+ jf_title:'Jour fixe Reklamation', jf_date:'Besprechung am', jf_present:'Anwesend (einmal je Besprechung)', jf_hint:'Die Tagesordnung stellt das System zusammen. Entscheidungen werden per Antippen festgehalten und landen in der jeweiligen Reklamation.',
+ ag1:'Neue Reklamationen seit der letzten Besprechung', ag2:'Offene Reklamationen mit Entscheidung oder Frist', ag3:'Sperrlager: Entscheidung offen oder älter als 7 Tage', ag4:'Kritische Aufträge (Fehlerquote)', ag5:'Fällige Wirksamkeitsprüfungen', ag_none:'Nichts offen.',
+ dec_na:'Nacharbeit', dec_verw:'verwendbar', dec_schrott:'Verschrottung', dec_frei:'Sonderfreigabe', dec_sort:'Aussortieren', dec_kunde:'Kunde informieren', dec_8d:'8D starten', dec_lief:'Lieferant reklamieren',
+ notiz:'Notiz', jf_general:'Allgemeine Notizen', jf_close:'Protokoll abschließen', jf_closed:'Protokoll abgeschlossen', jf_last:'Letzte Besprechung', sperrq:'Sperrquote', fquote:'Fehlerquote',
+ stat_pareto:'Fehlerkategorien (Wert, letzte 12 Monate)', stat_kat:'Reklamationen je Kategorie', stat_art:'Reklamationen je Art', stat_cost:'Kosten Sofortmaßnahmen',
+ e_create:'Sperrkarte angelegt', e_dec:'Entscheidung', e_na:'Nacharbeit abgeschlossen', e_rk:'Reklamation angelegt', e_save:'gespeichert', e_jf:'im Jour fixe besprochen', e_status:'Status',
+ someone:'Jemand', you:'Sie', ex:'Beispiel', choose:'– wählen –', days:'Tage', hours:'Std.', sk_link:'Sperrkarte', rk_link:'Reklamation', none:'—'
+},
+cs:{ title:'Karta blokace & reklamace', sub:'Zkušební verze KAS-ERP · verze 2', test:'Zkušební verze · testovací data', src:'Odkud data pocházejí?',
+ vHalle:'Hala', vQs:'QS', t_tif:'Založit kartu blokace', t_na:'Přepracování', t_mine:'Karty blokace', t_ueb:'Blokační sklad', t_rk:'Reklamace', t_jf:'Porada', t_stat:'Statistika',
+ loading:'Načítání dat …', slow:'Sdílená data zatím nejsou dostupná.', local:'Demo verze: zadání zůstávají jen v tomto prohlížeči.', readonly:'Jen pro čtení.',
+ legendA:'doplní se automaticky', legendE:'zadává se', legendTxt:'Modře označené údaje převezme systém z MDE, plánu kontroly, kmenových dat, přihlášení nebo je vypočítá – zadává se jen to, co je oranžové.',
+ s_mde:'MDE', s_pp:'Plán kontroly', s_art:'Kmenová data', s_ba:'Výrobní zakázka', s_login:'Přihlášení', s_calc:'vypočteno', s_clock:'Čas', s_qs004:'Pravidlo QS004', s_lager:'Sklad', s_in:'Zadání', s_kunde:'Zákazník', s_jf:'Porada',
+ machine:'Stroj', choose_m:'U kterého stroje?', running:'běží', ba:'Výrobní zakázka', artikel:'Díl', charge:'Šarže', zgs:'Stav výkresu', schicht:'Směna', fq:'Podíl vad zakázky',
+ pp:'Plán kontroly', pp_hint:'Který rozměr nesedí? Klepněte na číslo na výkresu nebo v seznamu – odpovídá pozici v plánu kontroly.',
+ tol:'Tolerance', ist:'Skutečná hodnota', ist_hint:'Zadejte naměřenou hodnotu', attr_nio:'Znak nevyhovuje (kalibr)', zu_gross:'příliš velký', zu_klein:'příliš malý', in_tol:'v toleranci',
+ fehler:'Druh vady', menge:'Blokované množství', stk:'ks', kisten:'Bedny', foto:'Foto', foto_hint:'Ve zkušební verzi jen náhled.', bem:'Poznámka (nepovinné)',
+ save_sk:'Uložit kartu blokace', cancel:'Zrušit', need:'Ještě prosím zadejte:', auto_title:'Toto doplní systém sám', saved:'Uloženo',
+ p_intol:'Skutečná hodnota je v toleranci. Přesto zablokovat?', p_far:'Hodnota se extrémně liší – překlep?', p_menge:'Více než dosud vyrobené množství v zakázce.', yes:'Ano, uložit', fix:'Opravit',
+ st_offen:'čeká na rozhodnutí', st_nacharbeit:'v přepracování', st_qs:'u QS', st_verschrottet:'sešrotováno', st_freigabe:'zvláštní uvolnění', st_rekla:'reklamace', st_erledigt:'vyřízeno',
+ alter:'dní', wert:'Hodnota', decide:'Rozhodnutí', d_na:'Přepracovat', d_schrott:'Sešrotovat', d_qs:'Na QS', d_frei:'Zvláštní uvolnění', rule_rk:'Sešrotování a „Na QS“ založí podle QS004 automaticky interní reklamaci.',
+ verlauf:'Průběh', back:'← zpět', na_list:'Otevřené přepracování', no_na:'Žádné otevřené přepracování.', na_title:'Zakázka na přepracování', na_hint:'Po přepracování zkontrolujte jen tyto rozměry. Další rozměry podle potřeby zapište dole.',
+ pos:'Poz.', soll:'Požadavek / tolerance', pm:'Měřidlo', frei:'Další rozměr', ergebnis:'Výsledek', io:'OK', nio:'NOK', schrott:'Šrot', na_done:'Ukončit přepracování', p_sum:'Součet nesouhlasí s blokovaným množstvím',
+ no_sk:'Žádné karty blokace.', mine:'Karty blokace této směny',
+ st_x:'', choose:'– vyberte –', days:'dní', hours:'hod.', someone:'Někdo', you:'Vy', ex:'Ukázka', none:'—',
+ fk_mass:'Rozměrová vada', e_create:'Karta blokace založena', e_dec:'Rozhodnutí', e_na:'Přepracování ukončeno', e_rk:'Reklamace založena', e_save:'uloženo', e_jf:'projednáno na poradě', e_status:'Stav',
+ k_open:'karty bez rozhodnutí', k_wert:'blokovaná zásoba (hodnota)', k_alt:'nejstarší případ (dny)', k_na:'v přepracování', k_rk:'otevřené reklamace', k_frist:'lhůta ≤ 24 h',
+ sperrlager:'Blokační sklad a přepracování', sort_hint:'nejdřív bez rozhodnutí, pak podle hodnoty', rk_list:'Reklamace', all:'Vše', kat:'Kategorie', wert_x:''
+}};
+
+/* ---------- Zustand und Hilfen ---------- */
+const S = { lang:'de', view:'halle', tab:'tif', showSrc:true, sk:[], rk:[], jf:[], db:null, user:null, me:null, names:{}, mode:'loading', canWrite:true,
+  d:null, confirm:null, open:null, sub:'erf', msg:'', pending:false, force:false, slow:false, photo:null, rkFilter:'alle', rkNew:null, jfOpen:{}, out:'8d' };
+const LS = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+const pref = LS.get('kas-pref2'); if (pref){ S.lang = pref.lang||'de'; S.view = pref.view||'halle'; S.showSrc = pref.src!==false; S.tab = S.view==='halle' ? 'tif' : 'ueb'; }
+const t = k => (T[S.lang][k] || T.de[k] || k);
+const L = o => o ? (o[S.lang] || o.de) : '';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const art = id => ARTIKEL.find(a => a.id === id);
+const mm = (a, pos) => a ? a.merkmale.find(m => m.pos === pos) : null;
+const fk = k => FKAT.find(f => f.k === k);
+const loc = () => S.lang==='cs' ? 'cs-CZ' : 'de-DE';
+const nf = (n, d=2) => Number(n||0).toLocaleString(loc(), {minimumFractionDigits:d, maximumFractionDigits:d});
+const eur = n => nf(n,2) + ' €';
+const dt = iso => iso ? new Date(iso).toLocaleString(loc(), {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'}) : '';
+const dd = iso => iso ? new Date(iso).toLocaleDateString(loc(), {day:'2-digit', month:'2-digit', year:'numeric'}) : '';
+const days = iso => Math.max(0, Math.floor((Date.now() - new Date(iso)) / 86400000));
+const dec = m => m.dp ?? Math.max(1, ...[m.lo, m.hi].map(x => { const s = String(x); return s.includes('.') ? Math.min(3, s.split('.')[1].length) : 0; }));
+const tolTxt = m => m.typ==='num' ? `${nf(m.lo, dec(m))} – ${nf(m.hi, dec(m))}` : t('io')+' / '+t('nio');
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const src = (k, kind='a') => S.showSrc ? `<span class="src ${kind}">${esc(kind==='e' ? t('s_in') : t(k))}</span>` : '';
+const srcIn = () => src('s_in','e');
+function nextNr(prefix, list){ const y = String(new Date().getFullYear()).slice(2); let max = 0; list.forEach(x => { const m = String(x.nr||'').match(/-(\d+)$/); if (m) max = Math.max(max, +m[1]); }); return `${prefix}-${y}-${String(max+1).padStart(4,'0')}`; }
+function addWorkdays(d, n){ const x = new Date(d); let k = 0; while (k < n){ x.setDate(x.getDate()+1); const w = x.getDay(); if (w && w !== 6) k++; } return x; }
+function fristFor(kat, from){ const f = KAT[kat].frist; return f.h ? new Date(new Date(from).getTime() + f.h*3600000) : addWorkdays(from, f.at); }
+function schichtNow(){ const h = new Date().getHours(); return h >= 6 && h < 14 ? 'Früh' : h >= 14 && h < 22 ? 'Spät' : 'Nacht'; }
+function schichtTxt(s){ if (S.lang!=='cs') return s; return {Früh:'ranní', Spät:'odpolední', Nacht:'noční'}[s] || s; }
+function nextThursday(){ const d = new Date(); const add = (4 - d.getDay() + 7) % 7; d.setDate(d.getDate() + add); d.setHours(9,0,0,0); return d; }
+function kategorie(artKey, wert, auftreten){
+  const map = {hinweis:5, extern:6, feld:7, hinweis_lief:8, lieferant:9};
+  if (artKey !== 'intern') return {kat:map[artKey], why:t('a_'+artKey)};
+  const byW = wert < 100 ? 1 : wert < 500 ? 2 : wert < 2000 ? 3 : 4;
+  const byA = auftreten >= 3 ? 4 : auftreten >= 2 ? 3 : 1;
+  const wTxt = ['0–99 €','100–499 €','500–1.999 €','≥ 2.000 €'][byW-1];
+  return {kat:Math.max(byW, byA), why:`${t('a_intern')} · ${t('wert')} ${eur(wert)} (${wTxt}) · ${t('auftreten')} ${auftreten}×${byA>byW?' → '+t('kat')+' '+byA:''}`};
+}
+const auftretenFor = (artikel, fkat) => 1 + S.rk.filter(r => r.artikel === artikel && r.fkat === fkat && r.art === 'intern' && (Date.now() - new Date(r.erstellt)) < 365*86400000).length;
+const ev = (e, x) => ({ t:new Date().toISOString(), u:S.me, e, x:x||'' });
+const skWert = s => { const a = art(s.artikel); return a ? a.vk * (s.menge||0) : 0; };
+const name = u => !u ? t('someone') : u === S.me ? t('you') : (S.names[u] || t('someone'));
+
+async function put(coll, obj){
+  if (S.mode === 'db'){
+    try { await S.db.doc(coll + '/' + obj.id).set(obj); }
+    catch(err){ if (err && err.code === 'invalid_argument') S.canWrite = false; flash((err && err.message) || 'Fehler'); throw err; }
+  } else {
+    const key = coll===C_SK ? 'sk' : coll===C_RK ? 'rk' : 'jf'; const list = S[key];
+    const i = list.findIndex(x => x.id === obj.id); if (i >= 0) list[i] = obj; else list.push(obj);
+    LS.set('kas-demo2', {sk:S.sk, rk:S.rk, jf:S.jf}); S.force = true; render();
+  }
+}
+function flash(m){ S.msg = m; S.force = true; render(); setTimeout(() => { if (S.msg === m){ S.msg=''; S.force = true; render(); } }, 3500); }
+const clone = o => JSON.parse(JSON.stringify(o));
+
+/* ---------- Zeichnungsskizze mit Positionsnummern ---------- */
+function drawing(a, sel){
+  const W = 640, H = 270, x0 = 70, len = a.stufen.reduce((n,s) => n+s.l, 0), dmax = Math.max(...a.stufen.map(s => s.d));
+  const sx = 440 / len, sy = Math.min(9, 150 / dmax), cy = 120;
+  let x = x0, top = [], bot = [], segs = [];
+  a.stufen.forEach((s, i) => { const w = s.l*sx, h = s.d*sy/2; segs.push({x, w, h, s}); top.push(`${x},${cy-h} ${x+w},${cy-h}`); bot.unshift(`${x+w},${cy+h} ${x},${cy+h}`); x += w; });
+  let path = '';
+  segs.forEach((g,i) => { path += `<rect x="${g.x}" y="${cy-g.h}" width="${g.w}" height="${g.h*2}" fill="none" stroke="var(--draw)" stroke-width="2"/>`;
+    if (g.s.gew){ for (let k = g.x+4; k < g.x+g.w-2; k += 5) path += `<line x1="${k}" y1="${cy-g.h}" x2="${k+3}" y2="${cy-g.h+5}" stroke="var(--draw)" stroke-width=".8"/><line x1="${k}" y1="${cy+g.h}" x2="${k+3}" y2="${cy+g.h-5}" stroke="var(--draw)" stroke-width=".8"/>`; } });
+  if (a.bohrung){ const h = a.bohrung*sy/2; path += `<line x1="${x0}" y1="${cy-h}" x2="${x}" y2="${cy-h}" stroke="var(--draw)" stroke-width="1.2" stroke-dasharray="6 4"/><line x1="${x0}" y1="${cy+h}" x2="${x}" y2="${cy+h}" stroke="var(--draw)" stroke-width="1.2" stroke-dasharray="6 4"/>`; }
+  if (a.fase){ const g = segs[segs.length-1]; path += `<line x1="${g.x+g.w-6}" y1="${cy-g.h}" x2="${g.x+g.w}" y2="${cy-g.h+6}" stroke="var(--draw)" stroke-width="2"/>`; }
+  path += `<line x1="${x0-20}" y1="${cy}" x2="${x+20}" y2="${cy}" stroke="var(--draw)" stroke-width=".8" stroke-dasharray="14 4 3 4"/>`;
+  let ann = '';
+  const balloon = (pos, bx, by, ax, ay) => `<g class="balloon ${sel===pos?'sel':''}" data-action="pickM" data-v="${pos}" role="button" tabindex="0" aria-label="${esc(t('pos'))} ${pos}"><line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="var(--draw)" stroke-width="1"/><circle cx="${bx}" cy="${by}" r="16"/><text x="${bx}" y="${by+5}" text-anchor="middle">${pos}</text></g>`;
+  a.merkmale.forEach((m, i) => {
+    const b = m.b || {};
+    if (b.t === 'dia'){ const g = segs[b.seg]; const mx = g.x + g.w/2; ann += `<line x1="${mx}" y1="${cy-g.h}" x2="${mx}" y2="${cy+g.h}" stroke="var(--muted)" stroke-width="1" marker-start="url(#ar)" marker-end="url(#ar)"/>` + balloon(m.pos, mx, cy-g.h-42 - (i%2)*6, mx, cy-g.h); }
+    else if (b.t === 'bore'){ const h = (a.bohrung||4)*sy/2; const bx = x0 + 18; ann += balloon(m.pos, x0 - 34, cy - 4, bx, cy - h + 2); }
+    else if (b.t === 'len'){ const yy = cy + Math.max(...segs.map(g=>g.h)) + 28; ann += `<line x1="${x0}" y1="${yy}" x2="${x}" y2="${yy}" stroke="var(--muted)" stroke-width="1" marker-start="url(#ar)" marker-end="url(#ar)"/>` + balloon(m.pos, (x0+x)/2, yy + 30, (x0+x)/2, yy); }
+    else if (b.t === 'edge'){ const g = segs[segs.length-1]; ann += balloon(m.pos, g.x + g.w + 40, cy - g.h - 30, g.x + g.w - 2, cy - g.h + 3); }
+    else if (b.t === 'surf'){ const g = segs[b.seg]; const px = g.x + g.w*0.78; ann += `<path d="M${px-8},${cy+g.h+12} l5,8 l10,-20" fill="none" stroke="var(--muted)" stroke-width="1.2"/>` + balloon(m.pos, px + 34, cy + g.h + 38, px + 2, cy + g.h + 2); }
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(L(a))}"><defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+    <rect x="1" y="1" width="${W-2}" height="${H-2}" fill="none" stroke="var(--line)"/>${path}${ann}
+    <text x="${W-12}" y="${H-12}" text-anchor="end" fill="var(--muted)" style="font:12px var(--f-mono)">${esc(a.id)} · ${esc(a.zgs)}</text></svg>`;
+}
+
+/* ---------- Kopf und Rahmen ---------- */
+function setHead(){
+  document.documentElement.lang = S.lang;
+  const $ = id => document.getElementById(id);
+  $('appTitle').textContent = t('title'); $('appSub').textContent = t('sub'); $('testBadge').textContent = t('test');
+  $('srcBtn').textContent = t('src'); $('srcBtn').setAttribute('aria-pressed', S.showSrc);
+  $('vHalle').textContent = t('vHalle'); $('vQs').textContent = t('vQs');
+  $('vHalle').setAttribute('aria-pressed', S.view==='halle'); $('vQs').setAttribute('aria-pressed', S.view==='qs');
+  $('lDe').setAttribute('aria-pressed', S.lang==='de'); $('lCs').setAttribute('aria-pressed', S.lang==='cs');
+  const nOpen = S.sk.filter(s => s.status==='offen').length, nNa = S.sk.filter(s => s.status==='nacharbeit').length, nRk = S.rk.filter(r => r.status==='B').length;
+  const tabs = S.view==='halle' ? [['tif','t_tif'],['na','t_na',nNa],['mine','t_mine']] : [['ueb','t_ueb',nOpen],['rk','t_rk',nRk],['jf','t_jf'],['stat','t_stat'],['tif','t_tif'],['na','t_na',nNa]];
+  if (!tabs.some(x => x[0]===S.tab)) S.tab = tabs[0][0];
+  $('tabs').innerHTML = tabs.map(([k,l,c]) => `<button data-action="tab" data-v="${k}" ${S.tab===k && !S.open?'aria-current="page"':''}>${esc(t(l))}${c?`<span class="count">${c}</span>`:''}</button>`).join('');
+}
+function render(){
+  const a = document.activeElement;
+  if (!S.force && a && a.closest && a.closest('#main') && /INPUT|TEXTAREA|SELECT/.test(a.tagName)){ S.pending = true; setHead(); return; }
+  S.force = false; S.pending = false; setHead();
+  let h = '';
+  if (S.msg) h += `<div class="note ok" role="status">${esc(S.msg)}</div>`;
+  if (S.mode === 'loading') h += `<div class="note info">${esc(t('loading'))}</div>`;
+  if (S.mode === 'local') h += `<div class="note warn row between"><span>${esc(t('local'))}</span><button class="btn small" data-action="examples">${esc(S.lang==='cs'?'Obnovit ukázková data':'Beispieldaten zurücksetzen')}</button></div>`;
+  if (S.slow && S.mode === 'db') h += `<div class="note warn">${esc(t('slow'))}</div>`;
+  if (!S.canWrite) h += `<div class="note bad">${esc(t('readonly'))}</div>`;
+  if (S.showSrc) h += `<div class="legend"><span class="src a">${esc(t('legendA'))}</span><span class="src e">${esc(t('legendE'))}</span><span class="muted">${esc(t('legendTxt'))}</span></div>`;
+  if (S.open?.type === 'sk') h += viewSk(S.sk.find(x => x.id === S.open.id));
+  else if (S.open?.type === 'na') h += viewNa(S.sk.find(x => x.id === S.open.id));
+  else if (S.open?.type === 'rk') h += viewRk(S.rk.find(x => x.id === S.open.id));
+  else h += ({tif:viewTif, na:viewNaList, mine:viewMine, ueb:viewUeb, rk:viewRkList, jf:viewJf, stat:viewStat}[S.tab] || viewUeb)();
+  document.getElementById('main').innerHTML = h;
+  if (S.photo){ const img = document.getElementById('photoPrev'); if (img) img.src = S.photo; }
+}
+function stChip(s){ const c = {offen:'bad', nacharbeit:'warn', qs:'info', verschrottet:'', freigabe:'info', rekla:'info', erledigt:'ok'}[s] ?? ''; return `<span class="chip ${c}">${esc(t('st_'+s))}</span>`; }
+function artChip(a){ return `<span class="chip art-${a}" style="border-color:transparent">${esc(t('a_'+a))}</span>`; }
+
+/* ---------- Halle: Sperrkarte erfassen (TiF) ---------- */
+function viewTif(){
+  const d = S.d || (S.d = {m:null, pos:null, ist:'', fkat:'', menge:'', kisten:1, bem:''});
+  let h = `<div class="panel"><div class="section-title"><h2>${esc(t('t_tif'))}</h2><span class="muted small">${esc(t('schicht'))}: ${esc(schichtTxt(schichtNow()))} ${src('s_clock')}</span></div>
+  <div class="step"><span class="lbl">1 · ${esc(t('choose_m'))}</span><div class="pick">${MASCH.map(m => { const b = BA[m.ba]; const a = art(b.artikel);
+    return `<button class="opt big" data-action="pickMa" data-v="${m.nr}" aria-pressed="${d.m===m.nr}"><span class="t">${esc(m.nr)}</span><span class="d">${esc(m.typ)} · ${esc(t('running'))}: ${esc(L(a))}</span></button>`; }).join('')}</div></div>`;
+  if (d.m){
+    const ma = MASCH.find(x => x.nr === d.m), b = BA[ma.ba], a = art(b.artikel), m = mm(a, d.pos);
+    h += `<div class="machine-head"><div class="row between"><h3>${esc(L(a))} <span class="mono">${esc(a.id)}</span></h3><span>${esc(t('machine'))} ${esc(ma.nr)}</span></div>
+      <dl class="kv"><dt>${esc(t('ba'))}</dt><dd class="mono">${esc(ma.ba)} ${src('s_mde')}</dd><dt>${esc(t('charge'))}</dt><dd class="mono">${esc(b.charge)} ${src('s_ba')}</dd>
+      <dt>${esc(t('zgs'))}</dt><dd>${esc(a.zgs)} ${src('s_art')}</dd><dt>${esc(t('fq'))}</dt><dd class="mono">${nf(b.fq,1)} % ${src('s_mde')}</dd></dl></div>
+    <div class="step"><span class="lbl">2 · ${esc(t('pp'))} ${src('s_pp')}</span><span class="hint">${esc(t('pp_hint'))}</span>
+      <div class="drawing">${drawing(a, d.pos)}</div>
+      <div class="list">${a.merkmale.map(x => `<button class="pp-row" data-action="pickM" data-v="${x.pos}" aria-pressed="${d.pos===x.pos}"><span class="pp-pos">${x.pos}</span><span><b>${esc(L(x))}</b><br><span class="small muted">${esc(t('pm'))}: ${esc(S.lang==='cs'?x.pmcs:x.pm)}</span></span><span class="mono small">${esc(tolTxt(x))}</span></button>`).join('')}</div></div>`;
+    if (m){
+      const v = d.ist === '' ? null : +d.ist;
+      let abw = '';
+      if (m.typ==='num' && v != null){ abw = v > m.hi ? 'gross' : v < m.lo ? 'klein' : 'tol'; }
+      h += `<div class="grid2"><div class="step"><span class="lbl">3 · ${esc(t('ist'))} ${srcIn()}</span>`;
+      if (m.typ === 'num'){
+        const span = (m.hi - m.lo) || 1, lo = m.lo - span*1.5, hi = m.hi + span*1.5, p = x => Math.max(0, Math.min(100, (x - lo) / (hi - lo) * 100));
+        h += `<input class="bignum" id="fIst" type="number" inputmode="decimal" step="any" data-bind="ist" value="${esc(d.ist)}" aria-label="${esc(t('ist'))}">
+          <span class="hint mono">${esc(t('tol'))} ${esc(tolTxt(m))}</span>
+          <div class="devbar" aria-hidden="true"><div class="tol" style="left:${p(m.lo)}%;width:${p(m.hi)-p(m.lo)}%"></div>${v!=null?`<div class="mark" style="left:calc(${p(v)}% - 2px)"></div>`:''}</div>
+          ${abw?`<span class="chip ${abw==='tol'?'ok':'bad'}" style="justify-self:start">${esc(abw==='tol'?t('in_tol'):t(abw==='gross'?'zu_gross':'zu_klein'))} ${v!=null && abw!=='tol' ? '· '+(v>m.hi?'+':'−')+nf(Math.abs(v>m.hi?v-m.hi:m.lo-v), dec(m)) : ''} ${src('s_calc')}</span>`:''}`;
+      } else h += `<div class="chip bad" style="justify-self:start;padding:10px 14px">${esc(t('attr_nio'))}</div>`;
+      h += `</div><div class="step"><span class="lbl">4 · ${esc(t('fehler'))} ${m.typ==='num'?src('s_calc'):srcIn()}</span><div class="pick">${FKAT.slice(0,8).map(f => `<button class="opt" data-action="pickF" data-v="${f.k}" aria-pressed="${(d.fkat || (m.typ==='num'?'mass':''))===f.k}"><span class="t">${esc(L(f))}</span></button>`).join('')}</div></div></div>
+      <div class="grid2"><div class="step"><span class="lbl">5 · ${esc(t('menge'))} ${srcIn()}</span>
+        <input class="bignum" id="fMenge" type="number" inputmode="numeric" min="1" step="1" data-bind="menge" value="${esc(d.menge)}" aria-label="${esc(t('menge'))}">
+        <span class="hint">${esc(t('ba'))}: ${b.gut} / ${b.menge} ${esc(t('stk'))}</span></div>
+        <div class="step"><span class="lbl">${esc(t('kisten'))} ${srcIn()}</span><div class="stepper"><button data-action="kist" data-v="-1" aria-label="−">−</button><div class="bigval">${d.kisten}</div><button data-action="kist" data-v="1" aria-label="+">+</button></div>
+        <label for="fFoto" class="lbl">${esc(t('foto'))} ${srcIn()}</label><input id="fFoto" type="file" accept="image/*" capture="environment" data-change="photo"><span class="hint">${esc(t('foto_hint'))}</span>${S.photo?'<img id="photoPrev" class="photo" alt="">':''}</div></div>
+      <div class="step"><label for="fBem" class="lbl">${esc(t('bem'))}</label><textarea id="fBem" data-bind="bem">${esc(d.bem)}</textarea></div>
+      <div class="auto-box"><b>${esc(t('auto_title'))}</b><ul>
+        <li>${esc(t('ba'))} ${esc(ma.ba)}, ${esc(t('charge'))} ${esc(b.charge)}, ${esc(t('zgs'))} ${esc(a.zgs)} ${src('s_mde')}</li>
+        <li>${esc(t('schicht'))} ${esc(schichtTxt(schichtNow()))}, Datum/Uhrzeit, festgestellt von ${src('s_login')}</li>
+        <li>${esc(t('wert'))}: ${eur(a.vk * (+d.menge||0))} (${nf(a.vk)} €/${esc(t('stk'))} × ${esc(d.menge||0)}) ${src('s_calc')}</li>
+        <li>Lagerplatz ${esc('S')} (Sperrlager) ${src('s_lager')}</li>
+        <li>${esc(t('kat'))}: ${kategorie('intern', a.vk * (+d.menge||0), auftretenFor(a.id, d.fkat||'mass')).kat} (${esc(t('a_intern'))}) ${src('s_qs004')}</li></ul></div>`;
+    }
+  }
+  if (S.confirm) h += `<div class="confirm" role="alertdialog"><b>${S.confirm.map(esc).join('<br>')}</b><div class="actions"><button class="btn primary" data-action="saveSk" data-force="1">${esc(t('yes'))}</button><button class="btn" data-action="unconfirm">${esc(t('fix'))}</button></div></div>`;
+  else if (d.m) h += `<div class="actions"><button class="btn primary" data-action="saveSk" ${S.canWrite?'':'disabled'}>${esc(t('save_sk'))}</button><button class="btn" data-action="resetD">${esc(t('cancel'))}</button></div>`;
+  return h + `</div>`;
+}
+async function saveSk(force){
+  const d = S.d; if (!d || !d.m) return;
+  const ma = MASCH.find(x => x.nr === d.m), b = BA[ma.ba], a = art(b.artikel), m = mm(a, d.pos);
+  const miss = []; if (!m) miss.push(t('pp')); if (m && m.typ==='num' && d.ist==='') miss.push(t('ist')); if (!(+d.menge>0)) miss.push(t('menge'));
+  if (miss.length){ flash(t('need') + ' ' + miss.join(', ')); return; }
+  const fkat = d.fkat || (m.typ==='num' ? 'mass' : 'sonst');
+  if (!force){
+    const w = [];
+    if (m.typ==='num'){ const v = +d.ist; if (v >= m.lo && v <= m.hi) w.push(t('p_intol')); const span = (m.hi-m.lo)||1; if (Math.abs(v - (m.nenn||m.hi)) > Math.max(span*40, (m.nenn||1)*0.3)) w.push(t('p_far')); }
+    if (+d.menge > b.gut) w.push(`${t('p_menge')} (${b.gut} ${t('stk')})`);
+    if (w.length){ S.confirm = w; S.force = true; render(); return; }
+  }
+  const v = m.typ==='num' ? +d.ist : null;
+  const s = { id:uid(), nr:nextNr('SK', S.sk), erstellt:new Date().toISOString(), maschine:ma.nr, ba:ma.ba, artikel:a.id, charge:b.charge, zgs:a.zgs, schicht:schichtNow(),
+    merkmal:m.pos, ist:v, abw: v==null ? 'nio' : v > m.hi ? 'gross' : v < m.lo ? 'klein' : 'tol', fkat, menge:+d.menge, kisten:d.kisten, bem:d.bem||'', lagerplatz:'S', status:'offen', sprache:S.lang, verlauf:[ev('e_create')] };
+  S.confirm = null;
+  try { await put(C_SK, s); S.d = null; S.photo = null; S.open = {type:'sk', id:s.id}; flash(t('saved') + ' · ' + s.nr); } catch(e){}
+}
+function viewMine(){
+  const list = S.sk.filter(s => days(s.erstellt) < 2 || s.status==='offen').sort((a,b) => new Date(b.erstellt) - new Date(a.erstellt));
+  return `<h2>${esc(t('mine'))}</h2>` + (list.length ? `<div class="list two">${list.map(skCard).join('')}</div>` : `<div class="empty">${esc(t('no_sk'))}</div>`);
+}
+function skCard(s){
+  const a = art(s.artikel) || {}, m = mm(a, s.merkmal) || {};
+  return `<button class="card clickable" data-action="openSk" data-id="${esc(s.id)}">
+    <div class="row between"><span class="mono"><b>${esc(s.nr)}</b>${s.beispiel?` <span class="muted small">· ${esc(t('ex'))}</span>`:''}</span>${stChip(s.status)}</div>
+    <div><b>${esc(L(a))}</b> <span class="muted mono small">${esc(a.id)} · ${esc(t('machine'))} ${esc(s.maschine)}</span></div>
+    <div class="row small"><span class="pp-pos" style="width:26px;height:26px;font-size:.8rem">${esc(m.pos)}</span>${esc(L(m))}${s.ist!=null?` · <span class="mono">${esc(nf(s.ist, dec(m)))}</span> <span class="chip bad">${esc(t(s.abw==='gross'?'zu_gross':s.abw==='klein'?'zu_klein':'nio'))}</span>`:''}</div>
+    <div class="row between small"><span class="mono">${s.menge} ${esc(t('stk'))} · ${eur(skWert(s))}</span><span class="${days(s.erstellt)>7?'chip bad':'muted'}">${days(s.erstellt)} ${esc(t('alter'))}</span></div></button>`;
+}
+function viewSk(s){
+  if (!s) return `<button class="back" data-action="close">${esc(t('back'))}</button>`;
+  const a = art(s.artikel) || {}, m = mm(a, s.merkmal) || {}, f = fk(s.fkat);
+  let h = `<button class="back" data-action="close">${esc(t('back'))}</button><div class="panel">
+    <div class="row between"><h2 class="mono">${esc(s.nr)}</h2>${stChip(s.status)}</div>
+    <div class="grid2" style="align-items:start"><dl class="kv">
+      <dt>${esc(t('artikel'))}</dt><dd><b>${esc(L(a))}</b> <span class="mono muted">${esc(a.id)}</span> ${src('s_art')}</dd>
+      <dt>${esc(t('machine'))} / ${esc(t('ba'))}</dt><dd class="mono">${esc(s.maschine)} · ${esc(s.ba)} ${src('s_mde')}</dd>
+      <dt>${esc(t('charge'))}</dt><dd class="mono">${esc(s.charge)} ${src('s_ba')}</dd>
+      <dt>${esc(t('zgs'))}</dt><dd>${esc(s.zgs)} ${src('s_art')}</dd>
+      <dt>${esc(t('pp'))}</dt><dd><b>${esc(t('pos'))} ${esc(m.pos)}</b> · ${esc(L(m))} <span class="mono muted">(${esc(tolTxt(m))})</span> ${src('s_pp')}</dd>
+      <dt>${esc(t('ist'))}</dt><dd class="mono">${s.ist!=null?esc(nf(s.ist, dec(m)))+' · '+esc(t(s.abw==='gross'?'zu_gross':s.abw==='klein'?'zu_klein':'in_tol')):esc(t('attr_nio'))} ${srcIn()}</dd>
+      <dt>${esc(t('fehler'))}</dt><dd>${esc(L(f))}</dd>
+      <dt>${esc(t('menge'))}</dt><dd class="mono">${s.menge} ${esc(t('stk'))} · ${s.kisten||1} ${esc(t('kisten'))} · ${eur(skWert(s))} ${src('s_calc')}</dd>
+      <dt>${esc(t('schicht'))}</dt><dd>${esc(schichtTxt(s.schicht||''))} · ${esc(dt(s.erstellt))} ${src('s_clock')}</dd>
+      ${s.bem?`<dt>${esc(t('bem').split(' (')[0])}</dt><dd>${esc(s.bem)}</dd>`:''}
+      ${s.na?.erg?`<dt>${esc(t('ergebnis'))}</dt><dd class="mono">${esc(t('io'))} ${s.na.erg.io} · ${esc(t('nio'))} ${s.na.erg.nio} · ${esc(t('schrott'))} ${s.na.erg.schrott}</dd>`:''}
+    </dl><div class="drawing">${drawing(a, s.merkmal)}</div></div>`;
+  if (s.status === 'offen' && S.view === 'qs'){
+    h += `<div class="step"><span class="lbl">${esc(t('decide'))}</span><div class="actions">
+      <button class="btn primary" data-action="dec" data-v="nacharbeit" data-id="${esc(s.id)}" ${S.canWrite?'':'disabled'}>${esc(t('d_na'))}</button>
+      <button class="btn" data-action="dec" data-v="verschrottet" data-id="${esc(s.id)}" ${S.canWrite?'':'disabled'}>${esc(t('d_schrott'))}</button>
+      <button class="btn" data-action="dec" data-v="qs" data-id="${esc(s.id)}" ${S.canWrite?'':'disabled'}>${esc(t('d_qs'))}</button>
+      <button class="btn" data-action="dec" data-v="freigabe" data-id="${esc(s.id)}" ${S.canWrite?'':'disabled'}>${esc(t('d_frei'))}</button></div><span class="hint">${esc(t('rule_rk'))}</span></div>`;
+  }
+  if (s.status === 'nacharbeit') h += `<div class="actions"><button class="btn primary" data-action="openNa" data-id="${esc(s.id)}">${esc(t('na_title'))}</button></div>`;
+  if (s.rk){ const r = S.rk.find(x => x.id === s.rk); if (r) h += `<div class="actions"><button class="btn" data-action="openRk" data-id="${esc(r.id)}">${esc(t('rk_link'))} ${esc(r.nr)} · ${esc(t('kat'))} ${r.kat}</button></div>`; }
+  return h + timeline(s.verlauf) + `</div>`;
+}
+function timeline(v){
+  if (!v?.length) return '';
+  const x = e => e.x ? ': ' + esc(/^(st_|rk[BEA]$|dec_)/.test(e.x) ? t(e.x) : e.x) : '';
+  return `<div class="step"><span class="lbl">${esc(t('verlauf'))}</span><div class="timeline">${v.slice().reverse().map(e => `<div><span class="mono muted">${esc(dt(e.t))}</span><span>${esc(t(e.e))}${x(e)} · <span class="muted">${esc(name(e.u))}</span></span></div>`).join('')}</div></div>`;
+}
+
+/* ---------- Nacharbeit ---------- */
+function viewNaList(){
+  const list = S.sk.filter(s => s.status === 'nacharbeit').sort((a,b) => new Date(a.erstellt) - new Date(b.erstellt));
+  if (!list.length) return `<h2>${esc(t('na_list'))}</h2><div class="empty">${esc(t('no_na'))}</div>`;
+  return `<h2>${esc(t('na_list'))}</h2><div class="list two">${list.map(s => { const a = art(s.artikel)||{}, m = mm(a, s.merkmal)||{};
+    return `<button class="card clickable" data-action="openNa" data-id="${esc(s.id)}"><div class="row between"><b class="mono">${esc(s.nr)}</b><span class="chip warn">${s.menge} ${esc(t('stk'))}</span></div><div><b>${esc(L(a))}</b></div><div class="row small"><span class="pp-pos" style="width:26px;height:26px;font-size:.8rem">${m.pos}</span>${esc(L(m))} <span class="mono muted">${esc(tolTxt(m))}</span></div></button>`; }).join('')}</div>`;
+}
+function viewNa(s){
+  if (!s) return `<button class="back" data-action="close">${esc(t('back'))}</button>`;
+  const a = art(s.artikel)||{}, m = mm(a, s.merkmal)||{}, na = s.na || {}, w = na.w || {}, e = na.e || {};
+  const cls = (x, v) => (x.typ!=='num' || v==='' || v==null) ? '' : (+v >= x.lo && +v <= x.hi ? 'tol-ok' : 'tol-bad');
+  let h = `<button class="back" data-action="close">${esc(t('back'))}</button><div class="panel"><div class="row between"><h2>${esc(t('na_title'))} <span class="mono">${esc(s.nr)}</span></h2><span class="chip warn">${s.menge} ${esc(t('stk'))}</span></div>
+  <div class="small"><b>${esc(L(a))}</b> <span class="mono muted">${esc(a.id)} · ${esc(t('ba'))} ${esc(s.ba)} · ${esc(t('charge'))} ${esc(s.charge)}</span> ${src('s_mde')}</div>
+  <div class="note info">${esc(t('na_hint'))} ${src('s_pp')}</div>
+  <div class="tbl-wrap"><table><thead><tr><th>${esc(t('pos'))}</th><th>${esc(t('pp'))}</th><th>${esc(t('soll'))}</th><th>${esc(t('pm'))}</th><th>${esc(t('ist'))} 1</th><th>${esc(t('ist'))} 2</th><th>${esc(t('ist'))} 3</th></tr></thead><tbody>
+  <tr><td><span class="pp-pos">${m.pos}</span></td><td><b>${esc(L(m))}</b></td><td class="mono">${esc(tolTxt(m))}</td><td>${esc(S.lang==='cs'?m.pmcs:m.pm)}</td>${[1,2,3].map(i => { const v = w['p'+i] ?? ''; return `<td class="${cls(m,v)}">${m.typ==='num'?`<input type="number" step="any" inputmode="decimal" id="na-p${i}" data-na="p${i}" value="${esc(v)}" aria-label="${esc(t('ist'))} ${i}">`:`<select id="na-p${i}" data-na="p${i}"><option value="">${esc(t('choose'))}</option><option value="io" ${v==='io'?'selected':''}>${esc(t('io'))}</option><option value="nio" ${v==='nio'?'selected':''}>${esc(t('nio'))}</option></select>`}</td>`; }).join('')}</tr>`;
+  for (let i = 1; i <= 3; i++) h += `<tr><td class="muted">+</td><td colspan="3"><input type="text" id="na-f${i}" data-na="f${i}" value="${esc(w['f'+i]??'')}" placeholder="${esc(t('frei'))}" aria-label="${esc(t('frei'))}"></td><td colspan="3"><input type="text" id="na-f${i}v" data-na="f${i}v" value="${esc(w['f'+i+'v']??'')}" aria-label="${esc(t('ist'))}"></td></tr>`;
+  h += `</tbody></table></div><div class="step"><span class="lbl">${esc(t('ergebnis'))} ${srcIn()}</span><div class="grid3">
+    <div><label for="naIo" class="small">${esc(t('io'))} (${esc(t('stk'))})</label><input class="bignum" id="naIo" type="number" min="0" data-nae="io" value="${esc(e.io??'')}"></div>
+    <div><label for="naNio" class="small">${esc(t('nio'))} (${esc(t('stk'))})</label><input class="bignum" id="naNio" type="number" min="0" data-nae="nio" value="${esc(e.nio??'')}"></div>
+    <div><label for="naSch" class="small">${esc(t('schrott'))} (${esc(t('stk'))})</label><input class="bignum" id="naSch" type="number" min="0" data-nae="schrott" value="${esc(e.schrott??'')}"></div></div></div>`;
+  if (S.confirm) h += `<div class="confirm"><b>${S.confirm.map(esc).join('<br>')}</b><div class="actions"><button class="btn primary" data-action="naDone" data-id="${esc(s.id)}" data-force="1">${esc(t('yes'))}</button><button class="btn" data-action="unconfirm">${esc(t('fix'))}</button></div></div>`;
+  else h += `<div class="actions"><button class="btn primary" data-action="naDone" data-id="${esc(s.id)}" ${S.canWrite?'':'disabled'}>${esc(t('na_done'))}</button></div>`;
+  return h + `</div>`;
+}
+async function naDone(id, force){
+  const s = S.sk.find(x => x.id === id); if (!s) return;
+  const n = clone(s); n.na = n.na || {}; n.na.w = {}; n.na.e = {};
+  document.querySelectorAll('[data-na]').forEach(el => n.na.w[el.dataset.na] = el.value);
+  document.querySelectorAll('[data-nae]').forEach(el => n.na.e[el.dataset.nae] = el.value);
+  const io = +n.na.e.io||0, nio = +n.na.e.nio||0, sch = +n.na.e.schrott||0;
+  if (!force && io + nio + sch !== s.menge){ S.confirm = [`${t('p_sum')}: ${io+nio+sch} ≠ ${s.menge} ${t('stk')}`]; S.force = true; render(); return; }
+  n.na.erg = {io, nio, schrott:sch, am:new Date().toISOString()};
+  n.status = nio > 0 ? 'offen' : 'erledigt';
+  n.verlauf = [...(n.verlauf||[]), ev('e_na', `${t('io')} ${io} · ${t('nio')} ${nio} · ${t('schrott')} ${sch}`)];
+  S.confirm = null; await put(C_SK, n); S.open = {type:'sk', id}; S.force = true; render();
+}
+
+/* ---------- QS: Sperrlager-Übersicht ---------- */
+function viewUeb(){
+  const open = S.sk.filter(s => ['offen','nacharbeit','qs'].includes(s.status));
+  const wert = open.reduce((n,s) => n + skWert(s), 0), alt = open.length ? Math.max(...open.map(s => days(s.erstellt))) : 0;
+  const rkO = S.rk.filter(r => r.status==='B'), frist = rkO.filter(r => new Date(r.frist) - Date.now() < 86400000).length;
+  let h = `<div class="kpis">
+    <div class="kpi ${S.sk.filter(s=>s.status==='offen').length?'alert':''}"><b>${S.sk.filter(s=>s.status==='offen').length}</b><span>${esc(t('k_open'))}</span></div>
+    <div class="kpi"><b class="mono">${eur(wert)}</b><span>${esc(t('k_wert'))} ${src('s_calc')}</span></div>
+    <div class="kpi ${alt>7?'alert':''}"><b>${alt}</b><span>${esc(t('k_alt'))}</span></div>
+    <div class="kpi"><b>${S.sk.filter(s=>s.status==='nacharbeit').length}</b><span>${esc(t('k_na'))}</span></div>
+    <div class="kpi"><b>${rkO.length}</b><span>${esc(t('k_rk'))}</span></div>
+    <div class="kpi ${frist?'alert':''}"><b>${frist}</b><span>${esc(t('k_frist'))}</span></div></div>
+  <div class="section-title"><h2>${esc(t('sperrlager'))}</h2><span class="muted small">${esc(t('sort_hint'))}</span></div>`;
+  const list = open.slice().sort((a,b) => (b.status==='offen') - (a.status==='offen') || skWert(b) - skWert(a));
+  return h + (list.length ? `<div class="list two">${list.map(skCard).join('')}</div>` : `<div class="empty">${esc(t('no_sk'))}${S.mode==='local'?` <button class="btn small" data-action="examples">Beispieldaten</button>`:''}</div>`);
+}
+
+/* ---------- Reklamationen ---------- */
+function fristChip(r){
+  if (r.status !== 'B') return `<span class="chip ${r.status==='E'?'ok':''}">${esc(t('rk'+r.status))}</span>`;
+  const ms = new Date(r.frist) - Date.now(); if (ms < 0) return `<span class="chip bad">${esc(t('overdue'))}</span>`;
+  const h = ms/3600000; return `<span class="chip ${h<24?'warn':'info'}">${esc(t('left'))} ${h<48 ? Math.ceil(h)+' '+t('hours') : Math.ceil(h/24)+' '+t('days')}</span>`;
+}
+function viewRkList(){
+  const F = ['alle','intern','extern','lieferant','feld'];
+  let h = `<div class="section-title"><h2>${esc(t('rk_list'))}</h2><button class="btn primary" data-action="newRk" ${S.canWrite?'':'disabled'}>${esc(t('new_rk'))}</button></div>
+  <div class="subtabs">${F.map(f => `<button data-action="rkF" data-v="${f}" aria-current="${S.rkFilter===f}">${esc(f==='alle'?t('all'):t('a_'+f))} <span class="count">${S.rk.filter(r => f==='alle' || r.art===f || (f==='extern' && r.art==='hinweis') || (f==='lieferant' && r.art==='hinweis_lief')).length}</span></button>`).join('')}</div>`;
+  if (S.rkNew) h += rkForm();
+  const list = S.rk.filter(r => S.rkFilter==='alle' || r.art===S.rkFilter || (S.rkFilter==='extern' && r.art==='hinweis') || (S.rkFilter==='lieferant' && r.art==='hinweis_lief'))
+    .sort((a,b) => (a.status!=='B') - (b.status!=='B') || new Date(a.frist) - new Date(b.frist));
+  if (!list.length) return h + `<div class="empty">${esc(t('no_rk'))}</div>`;
+  return h + `<div class="tbl-wrap"><table><thead><tr><th>${esc(t('a_intern').replace(/./,c=>c)) && 'Art'}</th><th>Nr.</th><th>${esc(t('artikel'))}</th><th>${esc(t('fkat'))}</th><th>${esc(t('beschr'))}</th><th class="num">${esc(t('menge'))}</th><th class="num">${esc(t('wert'))}</th><th>${esc(t('kat'))}</th><th>${esc(t('frist'))}</th></tr></thead><tbody>
+  ${list.map(r => { const a = art(r.artikel)||{}; return `<tr data-action="openRk" data-id="${esc(r.id)}" style="cursor:pointer"><td>${artChip(r.art)}</td><td class="mono">${esc(r.nr)}</td><td class="mono">${esc(a.id)}</td><td>${esc(L(fk(r.fkat)))}</td><td class="small" style="max-width:320px">${esc((r.beschr||'').slice(0,80))}</td><td class="num">${r.menge} ${esc(t('stk'))}</td><td class="num">${eur(r.wert)}</td><td><span class="chip kat">${r.kat}</span></td><td>${fristChip(r)}</td></tr>`; }).join('')}
+  </tbody></table></div>`;
+}
+function rkForm(){
+  const d = S.rkNew, a = art(d.artikel), wert = a ? a.vk * (+d.menge||0) : 0;
+  const k = a && +d.menge>0 ? kategorie(d.art, wert, auftretenFor(d.artikel, d.fkat)) : null;
+  const pl = ['hinweis_lief','lieferant'].includes(d.art) ? PARTNER.lieferant : PARTNER.kunde;
+  let h = `<div class="panel"><h3>${esc(t('new_rk'))}</h3><div class="grid3">
+    <div class="step"><label for="rArt" class="lbl">Art ${srcIn()}</label><select id="rArt" data-rk="art">${['intern','hinweis','extern','feld','hinweis_lief','lieferant'].map(x => `<option value="${x}" ${d.art===x?'selected':''}>${esc(t('a_'+x))}</option>`).join('')}</select></div>
+    <div class="step"><label for="rArtikel" class="lbl">${esc(t('artikel'))} ${srcIn()}</label><select id="rArtikel" data-rk="artikel"><option value="">${esc(t('choose'))}</option>${ARTIKEL.map(x => `<option value="${x.id}" ${d.artikel===x.id?'selected':''}>${x.id} · ${esc(L(x))}</option>`).join('')}</select></div>
+    <div class="step"><label for="rMenge" class="lbl">${esc(t('menge'))} ${srcIn()}</label><input id="rMenge" type="number" min="1" data-rk="menge" value="${esc(d.menge)}"></div>
+    <div class="step"><label for="rFk" class="lbl">${esc(t('fkat'))} ${srcIn()}</label><select id="rFk" data-rk="fkat">${FKAT.map(f => `<option value="${f.k}" ${d.fkat===f.k?'selected':''}>${esc(L(f))}</option>`).join('')}</select></div>
+    ${d.art!=='intern'?`<div class="step"><label for="rP" class="lbl">${esc(t('partner'))} ${a?src('s_kunde'):srcIn()}</label><select id="rP" data-rk="partner"><option value="">${esc(t('choose'))}</option>${pl.map(p => `<option ${d.partner===p || (!d.partner && a && a.kunde===p && !['hinweis_lief','lieferant'].includes(d.art))?'selected':''}>${esc(p)}</option>`).join('')}</select></div>
+    <div class="step"><label for="rRef" class="lbl">${esc(t('kref'))} ${srcIn()}</label><input id="rRef" type="text" data-rk="kref" value="${esc(d.kref||'')}"></div>`:''}
+  </div><div class="step"><label for="rB" class="lbl">${esc(t('beschr'))} ${srcIn()}</label><textarea id="rB" data-rk="beschr">${esc(d.beschr||'')}</textarea></div>`;
+  if (k) h += katBox(k.kat, k.why, new Date());
+  return h + `<div class="actions"><button class="btn primary" data-action="createRk" ${k?'':'disabled'}>${esc(t('create'))}</button><button class="btn" data-action="cancelRk">${esc(t('cancel'))}</button></div></div>`;
+}
+function katBox(kat, why, from){
+  const K = KAT[kat], f = fristFor(kat, from);
+  const fl = K.frist.lief ? t('frist_lief') : K.frist.esk ? t('esk') : ['hinweis','extern','feld'].includes(K.art) ? t('frist_kunde') : t('frist');
+  return `<div class="card" style="border-color:var(--accent);background:var(--accent-soft)"><div class="row"><span class="chip kat">${esc(t('kat'))} ${kat}</span><span class="small">${esc(why)}</span>${src('s_qs004')}</div>
+    <dl class="kv"><dt>${esc(fl)}</dt><dd class="mono">${esc(dt(f.toISOString()))} (${K.frist.h ? K.frist.h+' '+esc(t('hours')) : K.frist.at+' AT'})</dd>
+    <dt>${esc(t('docs'))}</dt><dd>${K.docs.map(x => esc(t('d_'+x))).join(' · ')}</dd><dt>${esc(t('kreis'))}</dt><dd>${K.kreis.map(x => esc(t('r_'+x))).join(' · ')}</dd></dl></div>`;
+}
+function newRkObj(o){
+  const a = art(o.artikel), wert = a.vk * o.menge, now = new Date(), k = kategorie(o.art, wert, auftretenFor(o.artikel, o.fkat));
+  return { id:uid(), nr:nextNr('RK', S.rk), erstellt:now.toISOString(), art:o.art, artikel:a.id, menge:o.menge, wert, fkat:o.fkat, beschr:o.beschr||'', partner:o.partner||'', kref:o.kref||'',
+    ba:o.ba||'', charge:o.charge||'', merkmal:o.merkmal||null, ist:o.ist ?? null, sk:o.sk||null, kat:k.kat, why:k.why, frist:fristFor(k.kat, now).toISOString(), status:'B',
+    sofort:[], dok:{x:{}, bem:'', st:'B'}, bespr:[], ana:{problem:o.beschr||'', ishi:{}, warum:['','','','',''], ursache:'', massn:[]}, wirk:{on:true, erg:''}, docsDone:{}, verlauf:[ev('e_rk', t('kat')+' '+k.kat)] };
+}
+async function createRk(){
+  const d = S.rkNew, a = art(d.artikel); if (!a || !(+d.menge>0)) return;
+  const partner = d.art==='intern' ? '' : (d.partner || (!['hinweis_lief','lieferant'].includes(d.art) ? a.kunde : ''));
+  const r = newRkObj({...d, menge:+d.menge, partner}); await put(C_RK, r);
+  S.rkNew = null; S.open = {type:'rk', id:r.id}; S.sub = 'erf'; S.force = true; render();
+}
+function viewRk(r){
+  if (!r) return `<button class="back" data-action="close">${esc(t('back'))}</button>`;
+  const a = art(r.artikel)||{}, K = KAT[r.kat], m = mm(a, r.merkmal), ed = S.canWrite && r.status==='B' ? '' : 'disabled';
+  const dot = c => `<span class="dot ${c}"></span>`;
+  const sofOpen = (r.sofort||[]).some(x => x.st!=='E'), dokDone = r.dok?.st==='E', anaDone = !!(r.ana?.ursache && r.ana?.massn?.length);
+  const tabs = [['erf','rt_erf',''],['sofort','rt_sofort',(r.sofort||[]).length ? (sofOpen?'warn':'ok') : ''],['dok','rt_dok',dokDone?'ok':''],['bespr','rt_bespr',(r.bespr||[]).length?'ok':''],['ana','rt_ana',anaDone?'ok':''],['wirk','rt_wirk',r.wirk?.erg==='ok'?'ok':r.wirk?.erg==='nok'?'bad':''],['ber','rt_ber','']];
+  let h = `<button class="back" data-action="close">${esc(t('back'))}</button><div class="panel">
+    <div class="row between"><div class="row">${artChip(r.art)}<h2 class="mono">${esc(r.nr)}</h2>${r.beispiel?`<span class="muted small">${esc(t('ex'))}</span>`:''}</div><div class="row">${fristChip(r)}<span class="chip kat">${esc(t('kat'))} ${r.kat}</span></div></div>
+    <div class="subtabs">${tabs.map(([k,l,c]) => `<button data-action="sub" data-v="${k}" aria-current="${S.sub===k}">${esc(t(l))}${c?dot(c):''}</button>`).join('')}</div>`;
+  if (S.sub === 'erf'){
+    h += `<div class="grid2" style="align-items:start"><dl class="kv">
+      <dt>${esc(t('artikel'))}</dt><dd><b>${esc(L(a))}</b> <span class="mono muted">${esc(a.id)}</span> ${src('s_art')}</dd>
+      ${r.partner?`<dt>${esc(t('partner'))}</dt><dd>${esc(r.partner)} ${src('s_kunde')}${r.kref?` · <span class="mono">${esc(r.kref)}</span>`:''}</dd>`:''}
+      ${r.ba?`<dt>${esc(t('ba'))} / ${esc(t('charge'))}</dt><dd class="mono">${esc(r.ba)} · ${esc(r.charge)} ${src('s_mde')}</dd>`:''}
+      <dt>${esc(t('zgs'))}</dt><dd>${esc(a.zgs)} ${src('s_art')}</dd>
+      ${m?`<dt>${esc(t('pp'))}</dt><dd><b>${esc(t('pos'))} ${m.pos}</b> · ${esc(L(m))} <span class="mono muted">(${esc(tolTxt(m))})</span>${r.ist!=null?` · ${esc(t('ist'))} <span class="mono">${esc(nf(r.ist, dec(m)))}</span>`:''} ${src('s_pp')}</dd>`:''}
+      <dt>${esc(t('fkat'))}</dt><dd>${esc(L(fk(r.fkat)))}</dd>
+      <dt>${esc(t('menge'))} / ${esc(t('wert'))}</dt><dd class="mono">${r.menge} ${esc(t('stk'))} × ${nf(a.vk)} € = ${eur(r.wert)} ${src('s_calc')}</dd>
+      <dt>${esc(t('auftreten'))}</dt><dd class="mono">${auftretenFor(r.artikel, r.fkat) - 1}× ${src('s_calc')}</dd>
+      <dt>${esc(t('kat_why'))}</dt><dd class="small">${esc(r.why)} ${src('s_qs004')}</dd>
+      ${r.sk?`<dt>${esc(t('sk_link'))}</dt><dd><button class="back" style="padding:0;min-height:0" data-action="openSk" data-id="${esc(r.sk)}">${esc((S.sk.find(x=>x.id===r.sk)||{}).nr||'')}</button></dd>`:''}
+      <dt>${esc(t('beschr'))}</dt><dd>${esc(r.beschr||t('none'))}</dd></dl>
+      ${m ? `<div class="drawing">${drawing(a, r.merkmal)}</div>` : ''}</div>
+      ${katBox(r.kat, r.why, r.erstellt)}
+      <div class="step"><span class="lbl">${esc(t('docs'))} ${src('s_qs004')}</span><div class="checks">${K.docs.map(x => `<label><input type="checkbox" data-doc="${x}" ${r.docsDone?.[x]?'checked':''} ${ed}> ${esc(t('d_'+x))}</label>`).join('')}</div></div>`;
+  }
+  if (S.sub === 'sofort'){
+    const chosen = new Set((r.sofort||[]).map(x => x.k));
+    h += `<span class="hint">${esc(t('sofort_hint'))}</span><div class="checks">${SOFORT.map(k => `<label><input type="checkbox" data-sof="${k}" ${chosen.has(k)?'checked':''} ${ed}> ${esc(t('so_'+k))}</label>`).join('')}</div>`;
+    if ((r.sofort||[]).length){
+      h += `<div class="tbl-wrap"><table><thead><tr><th>${esc(t('rt_sofort'))}</th><th class="num">${esc(t('anzahl'))}</th><th class="num">${esc(t('gut'))}</th><th class="num">${esc(t('schlecht'))}</th><th class="num">${esc(t('dauer'))}</th><th class="num">${esc(t('kosten'))}</th><th>${esc(t('verant'))}</th><th>${esc(t('datum'))}</th><th>${esc(t('status'))}</th></tr></thead><tbody>
+      ${r.sofort.map((x,i) => `<tr><td><b>${esc(t('so_'+x.k))}</b></td>
+        <td><input type="number" id="so${i}a" data-so="${i}.anz" value="${esc(x.anz??'')}" ${ed} aria-label="${esc(t('anzahl'))}"></td><td><input type="number" id="so${i}g" data-so="${i}.gut" value="${esc(x.gut??'')}" ${ed} aria-label="${esc(t('gut'))}"></td>
+        <td><input type="number" id="so${i}s" data-so="${i}.schl" value="${esc(x.schl??'')}" ${ed} aria-label="${esc(t('schlecht'))}"></td><td><input type="number" step="0.5" id="so${i}d" data-so="${i}.h" value="${esc(x.h??'')}" ${ed} aria-label="${esc(t('dauer'))}"></td>
+        <td><input type="number" step="0.01" id="so${i}k" data-so="${i}.kost" value="${esc(x.kost??'')}" ${ed} aria-label="${esc(t('kosten'))}"></td>
+        <td><select id="so${i}r" data-so="${i}.rolle" ${ed}>${ROLLEN.map(ro => `<option value="${ro}" ${x.rolle===ro?'selected':''}>${esc(t('ro_'+ro))}</option>`).join('')}</select></td>
+        <td><input type="date" id="so${i}t" data-so="${i}.dat" value="${esc(x.dat||'')}" ${ed}></td>
+        <td><select id="so${i}st" data-so="${i}.st" ${ed}><option value="B" ${x.st!=='E'?'selected':''}>${esc(t('rkB'))}</option><option value="E" ${x.st==='E'?'selected':''}>${esc(t('rkE'))}</option></select></td></tr>`).join('')}
+      </tbody></table></div><div class="row between"><span class="mono small">Σ ${esc(t('kosten'))}: ${eur((r.sofort||[]).reduce((n,x)=>n+(+x.kost||0),0))} ${src('s_calc')}</span><button class="btn primary" data-action="saveSof" data-id="${esc(r.id)}" ${ed}>${esc(t('save'))}</button></div>`;
+    }
+  }
+  if (S.sub === 'dok'){
+    h += `<span class="hint">${esc(t('dok_hint'))}</span><div class="checks">${DOKPR.map(k => `<label><input type="checkbox" data-dk="${k}" ${r.dok?.x?.[k]?'checked':''} ${ed}> ${esc(t('dk_'+k))}</label>`).join('')}</div>
+      <div class="step"><label for="dkBem" class="lbl">${esc(t('dok_bem'))}</label><textarea id="dkBem" data-dkbem="1" ${ed}>${esc(r.dok?.bem||'')}</textarea></div>
+      <div class="row between"><label class="row"><input type="checkbox" id="dkSt" data-dkst="1" ${r.dok?.st==='E'?'checked':''} ${ed} style="width:20px;height:20px;accent-color:var(--accent)"> ${esc(t('rkE'))}</label><button class="btn primary" data-action="saveDok" data-id="${esc(r.id)}" ${ed}>${esc(t('save'))}</button></div>`;
+  }
+  if (S.sub === 'bespr'){
+    h += `<span class="hint">${esc(t('bespr_hint'))} ${src('s_jf')}</span>` + ((r.bespr||[]).length ? `<div class="timeline">${r.bespr.slice().reverse().map(b => `<div><span class="mono muted">${esc(dd(b.datum))}</span><span>${b.dec?.length?b.dec.map(x => `<span class="chip info">${esc(t(x))}</span>`).join(' ')+' ':''}${esc(b.notiz||'')} <span class="muted small">· ${(b.anw||[]).map(x => esc(t('ro_'+x))).join(', ')}</span></span></div>`).join('')}</div>` : `<div class="empty">${esc(t('bespr_none'))}</div>`);
+  }
+  if (S.sub === 'ana'){
+    const an = r.ana || {}, w = an.warum || ['','','','',''], ms = an.massn || [];
+    h += `<div class="step"><label for="anP" class="lbl">${esc(t('problem'))}</label><textarea id="anP" data-an="problem" ${ed}>${esc(an.problem||'')}</textarea></div>
+    <div class="step"><span class="lbl">${esc(t('ishi'))}</span><div class="ishikawa">${ISHI.map(k => `<div><label for="ish-${k}" class="small"><b>${esc(t('i_'+k))}</b></label><input type="text" id="ish-${k}" data-an="ishi.${k}" value="${esc(an.ishi?.[k]||'')}" ${ed}></div>`).join('')}</div></div>
+    <div class="step"><span class="lbl">5 × ${esc(t('warum'))}</span>${w.map((x,i) => `<div class="row" style="flex-wrap:nowrap"><span class="mono muted" style="width:28px">${i+1}.</span><input type="text" id="anW${i}" data-an="w${i}" value="${esc(x)}" ${ed} aria-label="${i+1}. ${esc(t('warum'))}"></div>`).join('')}</div>
+    <div class="step"><label for="anU" class="lbl">${esc(t('ursache'))}</label><input type="text" id="anU" data-an="ursache" value="${esc(an.ursache||'')}" ${ed}></div>
+    <div class="step"><span class="lbl">${esc(t('massn'))}</span>${ms.map((x,i) => `<div class="grid3"><input type="text" id="anM${i}" data-an="m${i}.t" value="${esc(x.t)}" ${ed} aria-label="${esc(t('massn'))}"><select id="anMr${i}" data-an="m${i}.r" ${ed}>${ROLLEN.map(ro => `<option value="${ro}" ${x.r===ro?'selected':''}>${esc(t('ro_'+ro))}</option>`).join('')}</select><input type="date" id="anMd${i}" data-an="m${i}.d" value="${esc(x.d||'')}" ${ed}></div>`).join('')}
+      <div class="actions"><button class="btn small" data-action="addM" data-id="${esc(r.id)}" ${ed}>${esc(t('add_m'))}</button></div></div>
+    <div class="actions"><button class="btn primary" data-action="saveAna" data-id="${esc(r.id)}" ${ed}>${esc(t('save'))}</button></div>`;
+  }
+  if (S.sub === 'wirk'){
+    const wk = r.wirk || {}; const nextBa = Object.entries(BA).find(([k,v]) => v.artikel===r.artikel);
+    h += `<div class="note info">${esc(t('wirk_hint'))}</div><dl class="kv"><dt>${esc(t('ba'))}</dt><dd class="mono">${nextBa?esc(nextBa[0]):t('none')} ${src('s_ba')}</dd>${m?`<dt>${esc(t('pp'))}</dt><dd>${esc(t('pos'))} ${m.pos} · ${esc(L(m))}</dd>`:''}</dl>
+    <div class="decide"><button data-action="wirk" data-v="ok" data-id="${esc(r.id)}" aria-pressed="${wk.erg==='ok'}" ${ed}>${esc(t('wirk_ok'))}</button><button data-action="wirk" data-v="nok" data-id="${esc(r.id)}" aria-pressed="${wk.erg==='nok'}" ${ed}>${esc(t('wirk_nok'))}</button></div>`;
+  }
+  if (S.sub === 'ber'){
+    const outs = [['8d','d_8d'],['5w','d_5w'],['a4','d_a4'],['a5','d_a5']];
+    h += `<span class="hint">${esc(t('ber_hint'))}</span><div class="decide">${outs.map(([k,l]) => `<button data-action="out" data-v="${k}" aria-pressed="${S.out===k}">${esc(t(l))}${K.docs.includes(k)?' ●':''}</button>`).join('')}</div>${report(r, S.out)}`;
+  }
+  if (r.status==='B') h += `<div class="actions" style="border-top:1px solid var(--line);padding-top:12px"><button class="btn primary" data-action="rkSt" data-v="E" data-id="${esc(r.id)}" ${S.canWrite?'':'disabled'}>${esc(t('close'))}</button><button class="btn danger" data-action="rkSt" data-v="A" data-id="${esc(r.id)}" ${S.canWrite?'':'disabled'}>${esc(t('reject'))}</button></div>`;
+  return h + timeline(r.verlauf) + `</div>`;
+}
+function report(r, kind){
+  const a = art(r.artikel)||{}, an = r.ana||{}, w = (an.warum||[]).filter(Boolean), ms = an.massn||[], so = r.sofort||[], m = mm(a, r.merkmal);
+  const head = (title) => `<div class="rh"><div><h3>${esc(title)}</h3><span class="small muted">${esc(r.nr)} · ${esc(a.id)} ${esc(a.de)}${r.partner?' · '+esc(r.partner):''}</span></div><div class="small mono">${esc(dd(r.erstellt))} · ${esc(t('kat'))} ${r.kat}</div></div>`;
+  const D = (tag, body) => `<div class="d"><b class="tag">${tag}</b><div>${body}</div></div>`;
+  const list = arr => arr.length ? `<ul style="margin:0;padding-left:18px">${arr.join('')}</ul>` : `<span class="muted">${esc(t('none'))}</span>`;
+  const msL = list(ms.map(x => `<li>${esc(x.t||'—')} <span class="muted small">(${esc(t('ro_'+(x.r||'qs')))}, ${esc(x.d||'—')})</span></li>`));
+  if (kind === '8d') return `<div class="report">${head('8D-Report')}
+    ${D('D1', esc(KAT[r.kat].kreis.map(x => T.de['r_'+x]).join(', ')))}
+    ${D('D2', `${esc(an.problem||r.beschr||'—')}${m?`<br><span class="small muted">${esc(t('pos'))} ${m.pos} ${esc(m.de)} · ${esc(tolTxt(m))}${r.ist!=null?' · Ist '+esc(nf(r.ist, dec(m))):''}</span>`:''}<br><span class="small muted">${r.menge} Stk. · ${eur(r.wert)}</span>`)}
+    ${D('D3', list(so.map(x => `<li>${esc(T.de['so_'+x.k])}${x.anz?` – ${esc(x.anz)} Stk. (gut ${esc(x.gut||0)}, schlecht ${esc(x.schl||0)})`:''}</li>`)))}
+    ${D('D4', `${esc(an.ursache||'—')}${w.length?`<br><span class="small muted">${w.map((x,i)=>`${i+1}. ${esc(x)}`).join(' → ')}</span>`:''}`)}
+    ${D('D5/D6', msL)}
+    ${D('D7', esc(Object.keys(r.dok?.x||{}).filter(k => r.dok.x[k]).map(k => T.de['dk_'+k]).join(', ') || 'Dokumentenprüfung: keine Änderung nötig'))}
+    ${D('D8', r.status==='E' ? 'abgeschlossen' : 'offen')}</div>`;
+  if (kind === '5w') return `<div class="report">${head('5W-Analyse')}${D('P', esc(an.problem||r.beschr||'—'))}${(an.warum||['','','','','']).map((x,i) => D('W'+(i+1), esc(x||'—'))).join('')}${D('U', esc(an.ursache||'—'))}</div>`;
+  if (kind === 'a4') return `<div class="report">${head('A4-Problemlösung')}<div class="grid2" style="align-items:start">
+    <div class="step"><b>1 · Problem</b><span>${esc(an.problem||r.beschr||'—')}</span><b>2 · Einflussgrößen</b>${list(ISHI.filter(k => an.ishi?.[k]).map(k => `<li><b>${esc(T.de['i_'+k])}:</b> ${esc(an.ishi[k])}</li>`))}<b>3 · Ursache</b><span>${esc(an.ursache||'—')}</span></div>
+    <div class="step"><b>4 · Maßnahmen</b>${msL}<b>5 · Wirksamkeit</b><span>${r.wirk?.erg==='ok'?'wirksam':r.wirk?.erg==='nok'?'nicht wirksam':'Prüfung beim nächsten BA'}</span></div></div></div>`;
+  return `<div class="report">${head('A5-Prozesslektion')}${D('?', `<b>Was ist passiert?</b><br>${esc(an.problem||r.beschr||'—')}`)}${D('!', `<b>Warum?</b><br>${esc(an.ursache||'—')}`)}${D('→', `<b>Was tun wir jetzt?</b><br>${esc(ms.map(x=>x.t).filter(Boolean).join('; ')||'—')}`)}${m?D('Pos', `<b>Darauf achten:</b> ${esc(t('pos'))} ${m.pos} ${esc(m.de)} – ${esc(tolTxt(m))}, prüfen mit ${esc(m.pm)}`):''}</div>`;
+}
+
+/* ---------- Jour fixe ---------- */
+function curJf(){ const d = nextThursday(); const id = 'jf-' + d.toISOString().slice(0,10); return S.jf.find(j => j.id === id) || {id, datum:d.toISOString(), anw:['qs','vs','prod','tech','gf_k'], punkte:{}, notiz:'', zu:false, neu:true}; }
+function viewJf(){
+  const j = curJf(), ed = S.canWrite && !j.zu ? '' : 'disabled';
+  const last = S.jf.filter(x => x.zu).sort((a,b) => new Date(b.datum) - new Date(a.datum))[0];
+  const since = last ? new Date(last.datum) : new Date(Date.now() - 7*86400000);
+  const neu = S.rk.filter(r => new Date(r.erstellt) > since);
+  const offen = S.rk.filter(r => r.status==='B' && !neu.includes(r) && (new Date(r.frist) - Date.now() < 3*86400000 || (r.sofort||[]).some(x => x.st!=='E')));
+  const sperr = S.sk.filter(s => s.status==='offen' || (['nacharbeit','qs'].includes(s.status) && days(s.erstellt) > 7));
+  const krit = Object.entries(BA).filter(([k,v]) => v.fq >= 2).sort((a,b) => b[1].fq - a[1].fq);
+  const wirk = S.rk.filter(r => r.status==='B' && r.wirk?.on && !r.wirk?.erg && r.ana?.massn?.length);
+  const decs = r => ['dec_na','dec_verw','dec_schrott','dec_frei','dec_sort', ...(r.art==='intern'?[]:['dec_kunde','dec_8d']), ...(['lieferant','hinweis_lief'].includes(r.art)?['dec_lief']:[])];
+  const item = (r) => { const a = art(r.artikel)||{}, p = j.punkte[r.id] || {}, open = S.jfOpen[r.id];
+    return `<div class="item"><button class="item-head" data-action="jfT" data-v="${esc(r.id)}" aria-expanded="${!!open}">${artChip(r.art)}<span><b class="mono">${esc(r.nr)}</b> · ${esc(L(a))} · ${esc(L(fk(r.fkat)))} <span class="muted small">· ${r.menge} ${esc(t('stk'))} · ${eur(r.wert)}</span>${(p.dec||[]).length?`<br>${p.dec.map(x => `<span class="chip info">${esc(t(x))}</span>`).join(' ')}`:''}</span><span class="row"><span class="chip kat">${r.kat}</span>${fristChip(r)}</span></button>
+      ${open?`<div class="item-body"><div class="small">${esc(r.beschr||'')}${r.ana?.ursache?` · <b>${esc(t('ursache'))}:</b> ${esc(r.ana.ursache)}`:''}</div>
+        <div class="decide">${decs(r).map(x => `<button data-action="jfD" data-id="${esc(r.id)}" data-v="${x}" aria-pressed="${(p.dec||[]).includes(x)}" ${ed}>${esc(t(x))}</button>`).join('')}</div>
+        <label for="jfn-${esc(r.id)}" class="small">${esc(t('notiz'))}</label><textarea id="jfn-${esc(r.id)}" data-jfn="${esc(r.id)}" ${ed}>${esc(p.notiz||'')}</textarea>
+        <div class="actions"><button class="btn small" data-action="openRk" data-id="${esc(r.id)}">${esc(t('rk_link'))} →</button></div></div>`:''}</div>`; };
+  const sec = (n, title, body, count) => `<div class="agenda"><div class="ag-head"><span class="ag-num">${n}</span><h3>${esc(title)}</h3><span class="count">${count}</span></div>${body || `<div class="empty">${esc(t('ag_none'))}</div>`}</div>`;
+  let h = `<div class="panel"><div class="section-title"><h2>${esc(t('jf_title'))}</h2><span class="row">${j.zu?`<span class="chip ok">${esc(t('jf_closed'))}</span>`:''}<span class="mono">${esc(t('jf_date'))} ${esc(dd(j.datum))}</span></span></div>
+    <span class="hint">${esc(t('jf_hint'))}</span>
+    <div class="step"><span class="lbl">${esc(t('jf_present'))}</span><div class="attendees">${ROLLEN.map(ro => `<button data-action="jfA" data-v="${ro}" aria-pressed="${j.anw.includes(ro)}" ${ed}>${esc(t('ro_'+ro))}</button>`).join('')}</div></div>
+    ${last?`<span class="small muted">${esc(t('jf_last'))}: ${esc(dd(last.datum))}</span>`:''}</div>
+  ${sec(1, t('ag1'), neu.map(item).join(''), neu.length)}
+  ${sec(2, t('ag2'), offen.map(item).join(''), offen.length)}
+  ${sec(3, t('ag3'), sperr.length ? `<div class="list two">${sperr.map(skCard).join('')}</div>` : '', sperr.length)}
+  ${sec(4, t('ag4'), krit.length ? `<div class="tbl-wrap"><table><thead><tr><th>${esc(t('ba'))}</th><th>${esc(t('artikel'))}</th><th class="num">${esc(t('sperrq'))}</th><th class="num">${esc(t('fquote'))}</th><th>${esc(t('machine'))}</th></tr></thead><tbody>${krit.map(([k,v]) => { const a = art(v.artikel); const gesperrt = S.sk.filter(s => s.ba===k).reduce((n,s)=>n+s.menge,0); const ma = MASCH.find(x => x.ba===k);
+      return `<tr><td class="mono">${esc(k)}</td><td>${esc(L(a))}</td><td class="num">${nf(gesperrt / Math.max(1,v.gut) * 100, 1)} %</td><td class="num"><span class="chip ${v.fq>=4?'bad':'warn'}">${nf(v.fq,1)} %</span></td><td class="mono">${esc(ma?ma.nr:'')}</td></tr>`; }).join('')}</tbody></table></div><span class="small muted">${src('s_mde')}</span>` : '', krit.length)}
+  ${sec(5, t('ag5'), wirk.map(item).join(''), wirk.length)}
+  <div class="panel"><label for="jfG" class="lbl">${esc(t('jf_general'))}</label><textarea id="jfG" data-jfg="1" ${ed}>${esc(j.notiz||'')}</textarea>
+    <div class="actions"><button class="btn" data-action="jfSave" ${ed}>${esc(t('save'))}</button><button class="btn primary" data-action="jfClose" ${ed}>${esc(t('jf_close'))}</button></div></div>`;
+  return h;
+}
+function collectJf(j){
+  document.querySelectorAll('[data-jfn]').forEach(el => { j.punkte[el.dataset.jfn] = {...(j.punkte[el.dataset.jfn]||{}), notiz:el.value}; });
+  const g = document.querySelector('[data-jfg]'); if (g) j.notiz = g.value;
+}
+
+/* ---------- Statistik ---------- */
+function viewStat(){
+  const yr = S.rk.filter(r => Date.now() - new Date(r.erstellt) < 365*86400000);
+  const by = (arr, key, val) => { const o = {}; arr.forEach(x => { const k = key(x); o[k] = (o[k]||0) + val(x); }); return Object.entries(o).sort((a,b) => b[1]-a[1]); };
+  const bars = (rows, fmt, lab) => { const max = Math.max(1, ...rows.map(r => r[1])); return `<div class="bars">${rows.map(([k,v]) => `<div class="bar"><span>${esc(lab(k))}</span><div class="track"><div class="fill" style="width:${v/max*100}%"></div></div><span class="num">${fmt(v)}</span></div>`).join('')}</div>`; };
+  const cost = S.rk.reduce((n,r) => n + (r.sofort||[]).reduce((m,x) => m + (+x.kost||0), 0), 0);
+  return `<div class="kpis"><div class="kpi"><b>${yr.length}</b><span>${esc(t('rk_list'))} (12 Mon.)</span></div><div class="kpi"><b class="mono">${eur(yr.reduce((n,r)=>n+r.wert,0))}</b><span>${esc(t('wert'))}</span></div><div class="kpi"><b class="mono">${eur(cost)}</b><span>${esc(t('stat_cost'))}</span></div></div>
+    <div class="grid2" style="align-items:start"><div class="panel"><h3>${esc(t('stat_pareto'))}</h3>${bars(by(yr, r => r.fkat, r => r.wert), v => eur(v), k => L(fk(k)))}<span class="small muted">${src('s_calc')}</span></div>
+    <div class="panel"><h3>${esc(t('stat_art'))}</h3>${bars(by(yr, r => r.art, () => 1), v => v, k => t('a_'+k))}<h3>${esc(t('stat_kat'))}</h3>${bars(by(yr, r => String(r.kat), () => 1).sort((a,b)=>a[0]-b[0]), v => v, k => t('kat')+' '+k)}</div></div>`;
+}
+
+/* ---------- Ereignisse ---------- */
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-action]'); if (!b) return;
+  const A = b.dataset.action, v = b.dataset.v, id = b.dataset.id;
+  const rk = id ? S.rk.find(x => x.id === id) : null;
+  switch (A){
+    case 'lang': S.lang = v; break;
+    case 'src': S.showSrc = !S.showSrc; break;
+    case 'view': S.view = v; S.open = null; S.tab = v==='halle' ? 'tif' : 'ueb'; break;
+    case 'tab': S.tab = v; S.open = null; S.confirm = null; break;
+    case 'close': S.open = null; S.confirm = null; break;
+    case 'examples': return loadExamplesLocal();
+    case 'pickMa': S.d = {m:v, pos:null, ist:'', fkat:'', menge:'', kisten:1, bem:S.d?.bem||''}; S.confirm = null; break;
+    case 'pickM': if (!S.open){ S.d.pos = +v; S.d.ist = ''; S.d.fkat = ''; S.confirm = null; } break;
+    case 'pickF': S.d.fkat = v; break;
+    case 'kist': S.d.kisten = Math.max(1, (S.d.kisten||1) + (+v)); break;
+    case 'unconfirm': S.confirm = null; break;
+    case 'resetD': S.d = null; S.photo = null; S.confirm = null; break;
+    case 'saveSk': return saveSk(!!b.dataset.force);
+    case 'openSk': S.open = {type:'sk', id}; break;
+    case 'openNa': S.open = {type:'na', id}; S.confirm = null; break;
+    case 'openRk': S.open = {type:'rk', id}; S.sub = 'erf'; break;
+    case 'naDone': return naDone(id, !!b.dataset.force);
+    case 'dec': return decide(id, v);
+    case 'rkF': S.rkFilter = v; break;
+    case 'newRk': S.rkNew = {art:'intern', artikel:'', menge:'', fkat:'mass', partner:'', beschr:''}; break;
+    case 'cancelRk': S.rkNew = null; break;
+    case 'createRk': return createRk();
+    case 'sub': S.sub = v; break;
+    case 'out': S.out = v; break;
+    case 'saveSof': { const n = clone(rk); collectSof(n); n.verlauf.push(ev('e_save', t('rt_sofort'))); await put(C_RK, n); flash(t('saved')); return; }
+    case 'saveDok': { const n = clone(rk); collectDok(n); n.verlauf.push(ev('e_save', t('rt_dok'))); await put(C_RK, n); flash(t('saved')); return; }
+    case 'saveAna': { const n = clone(rk); collectAna(n); n.verlauf.push(ev('e_save', t('rt_ana'))); await put(C_RK, n); flash(t('saved')); return; }
+    case 'addM': { const n = clone(rk); collectAna(n); n.ana.massn.push({t:'', r:'qs', d:''}); await put(C_RK, n); break; }
+    case 'wirk': { const n = clone(rk); n.wirk = {...(n.wirk||{}), erg:v}; n.verlauf.push(ev('e_save', t('rt_wirk')+': '+t(v==='ok'?'wirk_ok':'wirk_nok'))); await put(C_RK, n); break; }
+    case 'rkSt': { const n = clone(rk); n.status = v; n.verlauf.push(ev('e_status', 'rk'+v)); await put(C_RK, n); break; }
+    case 'jfT': S.jfOpen[v] = !S.jfOpen[v]; break;
+    case 'jfA': { const j = clone(curJf()); collectJf(j); j.anw = j.anw.includes(v) ? j.anw.filter(x => x!==v) : [...j.anw, v]; delete j.neu; await put(C_JF, j); break; }
+    case 'jfD': { const j = clone(curJf()); collectJf(j); const p = j.punkte[id] || {}; const s = new Set(p.dec||[]); s.has(v) ? s.delete(v) : s.add(v); j.punkte[id] = {...p, dec:[...s]}; delete j.neu; await put(C_JF, j); break; }
+    case 'jfSave': { const j = clone(curJf()); collectJf(j); delete j.neu; await put(C_JF, j); flash(t('saved')); return; }
+    case 'jfClose': return jfClose();
+    default: return;
+  }
+  LS.set('kas-pref2', {lang:S.lang, view:S.view, src:S.showSrc});
+  S.force = true; render();
+  if (['pickM','pickMa'].includes(A)) document.querySelector(A==='pickMa' ? '.machine-head' : '#fIst, .chip.bad')?.scrollIntoView({behavior:'smooth', block:'center'});
+});
+document.addEventListener('keydown', e => { if ((e.key==='Enter' || e.key===' ') && e.target.matches('g.balloon')){ e.preventDefault(); e.target.dispatchEvent(new MouseEvent('click', {bubbles:true})); } });
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.bind && S.d){ S.d[el.dataset.bind] = el.value; if (el.dataset.bind==='ist'){ S.liveIst = true; } }
+  if (el.dataset.rk && S.rkNew) S.rkNew[el.dataset.rk] = el.value;
+});
+document.addEventListener('change', async e => {
+  const el = e.target;
+  if (el.dataset.change === 'photo'){ const f = el.files?.[0]; if (f){ const rd = new FileReader(); rd.onload = () => { S.photo = rd.result; S.force = true; render(); }; rd.readAsDataURL(f); } return; }
+  if (el.dataset.bind === 'ist' || el.dataset.bind === 'menge'){ S.force = true; render(); return; }
+  if (el.dataset.rk && S.rkNew){ S.rkNew[el.dataset.rk] = el.value; if (el.dataset.rk==='art') S.rkNew.partner = ''; S.force = true; render(); return; }
+  const r = S.open?.type==='rk' ? S.rk.find(x => x.id === S.open.id) : null;
+  if (el.dataset.doc && r){ const n = clone(r); n.docsDone = {...(n.docsDone||{}), [el.dataset.doc]: el.checked}; await put(C_RK, n); return; }
+  if (el.dataset.sof && r){ const n = clone(r); collectSof(n); if (el.checked) n.sofort.push({k:el.dataset.sof, rolle:'qs', st:'B'}); else n.sofort = n.sofort.filter(x => x.k !== el.dataset.sof); await put(C_RK, n); S.force = true; render(); return; }
+  if (el.dataset.na && el.closest('td') && S.open?.type==='na'){ const s = S.sk.find(x => x.id === S.open.id), m = mm(art(s.artikel), s.merkmal); if (m?.typ==='num' && /^p\d$/.test(el.dataset.na)) el.closest('td').className = el.value==='' ? '' : (+el.value >= m.lo && +el.value <= m.hi ? 'tol-ok' : 'tol-bad'); }
+});
+document.addEventListener('focusout', () => setTimeout(() => { const a = document.activeElement; if (S.pending && !(a && a.closest && a.closest('#main') && /INPUT|TEXTAREA|SELECT/.test(a.tagName))) render(); }, 0));
+
+function collectSof(n){ n.sofort = (n.sofort||[]).map((x,i) => { const o = {...x}; document.querySelectorAll(`[data-so^="${i}."]`).forEach(el => { o[el.dataset.so.split('.')[1]] = el.value; }); return o; }); }
+function collectDok(n){ n.dok = n.dok || {x:{}}; n.dok.x = {}; document.querySelectorAll('[data-dk]').forEach(el => { if (el.checked) n.dok.x[el.dataset.dk] = true; }); const b = document.querySelector('[data-dkbem]'); if (b) n.dok.bem = b.value; const st = document.querySelector('[data-dkst]'); if (st) n.dok.st = st.checked ? 'E' : 'B'; }
+function collectAna(n){
+  const an = n.ana = n.ana || {ishi:{}, warum:['','','','',''], massn:[]}; an.ishi = an.ishi || {};
+  document.querySelectorAll('[data-an]').forEach(el => { const k = el.dataset.an;
+    if (k==='problem' || k==='ursache') an[k] = el.value;
+    else if (k.startsWith('ishi.')) an.ishi[k.slice(5)] = el.value;
+    else if (/^w\d$/.test(k)) an.warum[+k[1]] = el.value;
+    else if (/^m\d+\./.test(k)){ const [i, f] = k.slice(1).split('.'); an.massn[+i] = {...(an.massn[+i]||{}), [f]: el.value}; } });
+}
+async function decide(id, v){
+  const s = S.sk.find(x => x.id === id); if (!s) return;
+  const n = clone(s); n.verlauf = [...(n.verlauf||[]), ev('e_dec', 'st_'+v)];
+  if (v === 'nacharbeit'){ n.status = 'nacharbeit'; n.na = {}; await put(C_SK, n); S.open = {type:'na', id}; S.force = true; return render(); }
+  if (v === 'freigabe'){ n.status = 'freigabe'; await put(C_SK, n); S.force = true; return render(); }
+  const r = newRkObj({art:'intern', artikel:s.artikel, menge:s.menge, fkat:s.fkat, beschr:`${L(fk(s.fkat))} – ${t('pos')} ${s.merkmal}${s.ist!=null?' · '+t('ist')+' '+s.ist:''} (${s.nr})`, ba:s.ba, charge:s.charge, merkmal:s.merkmal, ist:s.ist, sk:s.id});
+  if (v === 'verschrottet') r.sofort.push({k:'verschrottung', anz:String(s.menge), rolle:'vs', st:'B'});
+  await put(C_RK, r);
+  n.status = v === 'verschrottet' ? 'verschrottet' : 'rekla'; n.rk = r.id; n.verlauf.push(ev('e_rk', r.nr)); await put(C_SK, n);
+  S.open = {type:'rk', id:r.id}; S.sub = 'erf'; S.force = true; render();
+}
+async function jfClose(){
+  const j = clone(curJf()); collectJf(j); delete j.neu; j.zu = true;
+  for (const [rid, p] of Object.entries(j.punkte)){
+    const r = S.rk.find(x => x.id === rid); if (!r || (!p.notiz && !(p.dec||[]).length)) continue;
+    const n = clone(r); n.bespr = [...(n.bespr||[]), {datum:j.datum, anw:j.anw, dec:p.dec||[], notiz:p.notiz||''}]; n.verlauf.push(ev('e_jf', (p.dec||[]).map(x => t(x)).join(', ')));
+    await put(C_RK, n);
+  }
+  await put(C_JF, j); flash(t('jf_closed'));
+}
+function loadExamplesLocal(){ const s = clone(SEED); S.sk = s.sk; S.rk = s.rk; S.jf = s.jf; S.open = null; S.d = null; try{ localStorage.removeItem('kas-demo2'); }catch(e){} flash('Beispieldaten wiederhergestellt'); }
+
+const SEED = {"sk": [{"id": "ex-sk1", "nr": "SK-26-0001", "erstellt": "2026-11-05T09:40:00Z", "maschine": "612", "ba": "309900102", "artikel": "9900100002", "charge": "CH-26-121", "zgs": "Index A · 02.09.2024", "schicht": "Früh", "merkmal": 3, "ist": 14.08, "abw": "gross", "fkat": "mass", "menge": 200, "kisten": 1, "bem": "", "lagerplatz": "S", "status": "erledigt", "na": {"erg": {"io": 190, "nio": 0, "schrott": 10, "am": "2026-11-06T11:00:00Z"}}, "verlauf": [{"t": "2026-11-05T09:40:00Z", "u": "", "e": "e_create", "x": ""}, {"t": "2026-11-05T13:10:00Z", "u": "", "e": "e_dec", "x": "st_nacharbeit"}, {"t": "2026-11-06T11:00:00Z", "u": "", "e": "e_na", "x": "i. O. 190 · n. i. O. 0 · Schrott 10"}], "beispiel": true, "sprache": "de"}, {"id": "ex-sk2", "nr": "SK-26-0002", "erstellt": "2026-11-12T19:15:00Z", "maschine": "612", "ba": "309900102", "artikel": "9900100002", "charge": "CH-26-121", "zgs": "Index A · 02.09.2024", "schicht": "Spät", "merkmal": 2, "ist": 9.965, "abw": "klein", "fkat": "mass", "menge": 300, "kisten": 2, "bem": "Werkzeugwechsel kurz vorher", "lagerplatz": "S", "status": "nacharbeit", "verlauf": [{"t": "2026-11-12T19:15:00Z", "u": "", "e": "e_create", "x": ""}, {"t": "2026-11-13T07:30:00Z", "u": "", "e": "e_dec", "x": "st_nacharbeit"}], "beispiel": true, "sprache": "de"}, {"id": "ex-sk3", "nr": "SK-26-0003", "erstellt": "2026-11-17T06:50:00Z", "maschine": "607", "ba": "309900104", "artikel": "9900100004", "charge": "CH-26-130", "zgs": "Index B · 05.05.2025", "schicht": "Nacht", "merkmal": 1, "ist": null, "abw": "nio", "fkat": "gewinde", "menge": 1200, "kisten": 4, "bem": "Gutlehrdorn geht nicht durch", "lagerplatz": "S", "status": "rekla", "rk": "ex-rk1", "verlauf": [{"t": "2026-11-17T06:50:00Z", "u": "", "e": "e_create", "x": ""}, {"t": "2026-11-17T08:05:00Z", "u": "", "e": "e_dec", "x": "st_qs"}, {"t": "2026-11-17T08:05:00Z", "u": "", "e": "e_rk", "x": "RK-26-0001"}], "beispiel": true, "sprache": "de"}, {"id": "ex-sk4", "nr": "SK-26-0004", "erstellt": "2026-11-20T10:20:00Z", "maschine": "603", "ba": "309900101", "artikel": "9900100001", "charge": "CH-26-117", "zgs": "Index C · 12.03.2025", "schicht": "Früh", "merkmal": 1, "ist": 12.031, "abw": "gross", "fkat": "mass", "menge": 450, "kisten": 2, "bem": "", "lagerplatz": "S", "status": "offen", "verlauf": [{"t": "2026-11-20T10:20:00Z", "u": "", "e": "e_create", "x": ""}], "beispiel": true, "sprache": "de"}, {"id": "ex-sk5", "nr": "SK-26-0005", "erstellt": "2026-11-23T05:35:00Z", "maschine": "201", "ba": "309900103", "artikel": "9900100003", "charge": "CH-26-125", "zgs": "Index 02 · 20.02.2023", "schicht": "Früh", "merkmal": 1, "ist": 9.62, "abw": "gross", "fkat": "mass", "menge": 180, "kisten": 1, "bem": "", "lagerplatz": "S", "status": "offen", "verlauf": [{"t": "2026-11-23T05:35:00Z", "u": "", "e": "e_create", "x": ""}], "beispiel": true, "sprache": "de"}], "rk": [{"sofort": [{"k": "aussortieren", "anz": "1200", "gut": "1150", "schl": "50", "h": "6", "kost": "240", "rolle": "prod", "dat": "2026-11-18", "st": "E"}, {"k": "bestandspruefung", "anz": "", "gut": "", "schl": "", "h": "1", "kost": "", "rolle": "qs", "dat": "2026-11-18", "st": "E"}], "dok": {"x": {"einrichtblatt": true}, "bem": "Standzeit Gewindebohrer fehlt im Einrichtblatt", "st": "B"}, "bespr": [{"datum": "2026-11-19T08:00:00Z", "anw": ["qs", "prod", "tech", "vs", "gf_t"], "dec": ["dec_sort"], "notiz": "Sortierung abgeschlossen, 50 Stk. Schrott. Technologie prüft Standzeit."}], "ana": {"problem": "Innengewinde M6 zu eng, Gutlehrdorn geht nicht durch, Nachtschicht BA 309900104", "ishi": {"maschine": "Gewindebohrer verschlissen", "methode": "Standzeit nicht festgelegt", "messung": "Lehrenprüfung nur stündlich"}, "warum": ["Gewinde zu eng", "Gewindebohrer verschlissen", "Werkzeug zu spät gewechselt", "Standzeit nicht im Einrichtblatt", "Einrichtblatt seit Werkzeugumstellung nicht aktualisiert"], "ursache": "Standzeit des Gewindebohrers nicht im Einrichtblatt hinterlegt", "massn": [{"t": "Standzeit 2.000 Stk. ins Einrichtblatt", "r": "tech", "d": "2026-11-27"}, {"t": "Lehrenprüfung alle 250 Stk. im Prüfplan", "r": "qs", "d": "2026-11-27"}]}, "wirk": {"on": true, "erg": ""}, "docsDone": {"sk": true}, "id": "ex-rk1", "nr": "RK-26-0001", "erstellt": "2026-11-17T08:05:00Z", "art": "intern", "artikel": "9900100004", "menge": 1200, "wert": 744.0, "fkat": "gewinde", "beschr": "Gewindefehler – Pos. 1 Innengewinde M6-6H, Gutlehrdorn geht nicht durch (SK-26-0003)", "partner": "", "kref": "", "ba": "309900104", "charge": "CH-26-130", "merkmal": 1, "ist": null, "sk": "ex-sk3", "kat": 3, "why": "intern · Wert 744,00 € (500–1.999 €) · Auftreten 1×", "frist": "2026-11-24T08:05:00Z", "status": "B", "verlauf": [{"t": "2026-11-17T08:05:00Z", "u": "", "e": "e_rk", "x": "Kategorie 3"}, {"t": "2026-11-19T09:00:00Z", "u": "", "e": "e_jf", "x": "Aussortieren"}], "beispiel": true}, {"sofort": [{"k": "rueckholung", "anz": "800", "gut": "", "schl": "", "h": "", "kost": "85", "rolle": "vs", "dat": "2026-11-24", "st": "B"}, {"k": "bestandspruefung", "anz": "1450", "gut": "", "schl": "", "h": "", "kost": "", "rolle": "qs", "dat": "2026-11-23", "st": "B"}, {"k": "ersatzlieferung", "anz": "800", "gut": "", "schl": "", "h": "", "kost": "", "rolle": "prod", "dat": "2026-11-25", "st": "B"}], "dok": {"x": {}, "bem": "", "st": "B"}, "bespr": [], "ana": {"problem": "", "ishi": {}, "warum": ["", "", "", "", ""], "ursache": "", "massn": []}, "wirk": {"on": true, "erg": ""}, "docsDone": {}, "id": "ex-rk2", "nr": "RK-26-0002", "erstellt": "2026-11-23T07:30:00Z", "art": "extern", "artikel": "9900100002", "menge": 800, "wert": 1120.0, "fkat": "mass", "beschr": "Kunde meldet Schaft-Ø zu klein, Teile lassen sich nicht einpressen. Wareneingang Kunde, Lieferung KW 47.", "partner": "Beispiel Elektrotechnik AG", "kref": "QN-26-0815", "ba": "309900102", "charge": "CH-26-121", "merkmal": 2, "ist": 9.969, "kat": 6, "why": "extern", "frist": "2026-11-24T07:30:00Z", "status": "B", "verlauf": [{"t": "2026-11-23T07:30:00Z", "u": "", "e": "e_rk", "x": "Kategorie 6"}], "beispiel": true}, {"sofort": [{"k": "lieferantenrekla", "anz": "1500", "gut": "", "schl": "", "h": "", "kost": "", "rolle": "ek", "dat": "2026-11-10", "st": "E"}, {"k": "neuveredelung", "anz": "1500", "gut": "1500", "schl": "0", "h": "", "kost": "0", "rolle": "ek", "dat": "2026-11-14", "st": "E"}], "dok": {"x": {}, "bem": "", "st": "E"}, "bespr": [{"datum": "2026-11-12T08:00:00Z", "anw": ["qs", "ek", "prod", "gf_k"], "dec": ["dec_lief"], "notiz": "8D vom Lieferanten angefordert"}, {"datum": "2026-11-19T08:00:00Z", "anw": ["qs", "prod", "tech", "vs", "gf_t"], "dec": [], "notiz": "8D eingegangen, Neuveredelung i. O."}], "ana": {"problem": "Schichtdicke Sn unter Spezifikation", "ishi": {"material": "Badkonzentration zu niedrig", "methode": "Expositionszeit verkürzt"}, "warum": ["Schicht zu dünn", "Badzeit verkürzt", "Durchsatz erhöht", "Kapazitätsengpass Galvanik", ""], "ursache": "Lieferant hat Badzeit wegen Kapazitätsengpass verkürzt", "massn": [{"t": "Schichtdickenprotokoll je Lieferung fordern", "r": "ek", "d": "2026-11-20"}]}, "wirk": {"on": true, "erg": ""}, "docsDone": {}, "id": "ex-rk3", "nr": "RK-26-0003", "erstellt": "2026-11-10T13:00:00Z", "art": "lieferant", "artikel": "9900100003", "menge": 1500, "wert": 3150.0, "fkat": "schicht", "beschr": "Zinnschicht 2–3 µm statt 4–8 µm, ganze Lieferung Galvanik", "partner": "Beispiel Galvanik KG", "kref": "", "merkmal": 4, "ist": 2.6, "kat": 9, "why": "Lieferant", "frist": "2026-11-17T13:00:00Z", "status": "B", "verlauf": [{"t": "2026-11-10T13:00:00Z", "u": "", "e": "e_rk", "x": "Kategorie 9"}], "beispiel": true}, {"sofort": [{"k": "verschrottung", "anz": "90", "gut": "0", "schl": "90", "h": "", "kost": "76.5", "rolle": "prod", "dat": "2026-10-15", "st": "E"}], "dok": {"x": {}, "bem": "", "st": "B"}, "bespr": [], "ana": {"problem": "Rattermarken", "ishi": {"maschine": "Lünette ausgeschlagen"}, "warum": ["", "", "", "", ""], "ursache": "Lünette verschlissen", "massn": [{"t": "Lünette getauscht", "r": "prod", "d": "2026-10-16"}]}, "wirk": {"on": true, "erg": "ok"}, "docsDone": {}, "id": "ex-rk4", "nr": "RK-26-0004", "erstellt": "2026-10-14T11:00:00Z", "art": "intern", "artikel": "9900100001", "menge": 90, "wert": 76.5, "fkat": "oberfl", "beschr": "Rattermarken Außen-Ø", "kat": 1, "why": "intern · Wert 76,50 € (0–99 €) · Auftreten 1×", "frist": "2026-10-21T11:00:00Z", "status": "E", "merkmal": 5, "verlauf": [], "beispiel": true}, {"sofort": [], "dok": {"x": {}, "bem": "", "st": "B"}, "bespr": [], "ana": {"problem": "", "ishi": {}, "warum": ["", "", "", "", ""], "ursache": "", "massn": []}, "wirk": {"on": true, "erg": ""}, "docsDone": {}, "id": "ex-rk5", "nr": "RK-26-0005", "erstellt": "2026-09-30T08:00:00Z", "art": "hinweis", "artikel": "9900100001", "menge": 20, "wert": 17.0, "fkat": "grat", "beschr": "Kunde weist auf leichten Grat hin, kein Ausfall", "partner": "Muster Automotive GmbH", "kat": 5, "why": "Hinweis extern", "frist": "2026-10-01T08:00:00Z", "status": "E", "verlauf": [], "beispiel": true}, {"sofort": [{"k": "nacharbeit", "anz": "250", "gut": "240", "schl": "10", "h": "4", "kost": "160", "rolle": "prod", "dat": "2026-08-21", "st": "E"}], "dok": {"x": {}, "bem": "", "st": "B"}, "bespr": [], "ana": {"problem": "", "ishi": {}, "warum": ["", "", "", "", ""], "ursache": "", "massn": []}, "wirk": {"on": true, "erg": ""}, "docsDone": {}, "id": "ex-rk6", "nr": "RK-26-0006", "erstellt": "2026-08-20T08:00:00Z", "art": "intern", "artikel": "9900100002", "menge": 250, "wert": 350.0, "fkat": "mass", "beschr": "Kopf-Ø zu groß", "kat": 2, "why": "intern · Wert 350,00 € (100–499 €) · Auftreten 1×", "frist": "2026-08-27T08:00:00Z", "status": "E", "merkmal": 3, "verlauf": [], "beispiel": true}], "jf": [{"id": "jf-2026-11-19", "datum": "2026-11-19T08:00:00Z", "anw": ["qs", "prod", "tech", "vs", "gf_t"], "punkte": {"ex-rk1": {"dec": ["dec_sort"], "notiz": "Sortierung abgeschlossen, 50 Stk. Schrott. Technologie prüft Standzeit."}, "ex-rk3": {"dec": [], "notiz": "8D eingegangen, Neuveredelung i. O."}}, "notiz": "", "zu": true, "beispiel": true}]};
+/* ---------- Start ---------- */
+render();
+(async () => {
+  const c = window.claude; let db = null, user = null;
+  try { db = c?.use ? await c.use('db') : null; } catch(e){}
+  try { user = c?.use ? await c.use('user') : null; } catch(e){}
+  S.user = user;
+  if (user){ try { S.me = await user.id(); } catch(e){} try { if (await user.can('data.write') === false) S.canWrite = false; } catch(e){} }
+  if (!db){ S.mode = 'local'; const l = LS.get('kas-demo2'); const src0 = l || clone(SEED); S.sk = src0.sk||[]; S.rk = src0.rk||[]; S.jf = src0.jf||[]; S.force = true; render(); return; }
+  S.db = db; S.mode = 'db'; S.force = true; render();
+  const timer = setTimeout(() => { S.slow = true; render(); }, 10000);
+  let got = 0; const ok = snap => { if (!snap.metadata.fromCache && ++got >= 3){ clearTimeout(timer); S.slow = false; } };
+  const fail = () => { clearTimeout(timer); S.slow = true; render(); };
+  const sub = (coll, key) => db.collection(coll).onSnapshot(snap => { S[key] = snap.docs.map(d => ({...d.data(), id:d.id})); ok(snap); names(); render(); }, fail);
+  sub(C_SK, 'sk'); sub(C_RK, 'rk'); sub(C_JF, 'jf');
+})();
+async function names(){
+  if (!S.user?.profiles) return;
+  const ids = new Set(); [...S.sk, ...S.rk].forEach(x => (x.verlauf||[]).forEach(e => e.u && ids.add(e.u)));
+  const need = [...ids].filter(i => !(i in S.names)); if (!need.length) return;
+  try { const ps = await S.user.profiles(need); need.forEach(i => S.names[i] = ps[i]?.name || ''); render(); } catch(e){}
+}
+
+</script>
+
+</body>
+</html>
