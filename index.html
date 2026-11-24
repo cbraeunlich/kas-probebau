@@ -423,7 +423,7 @@ function drawing(a, sel){
 
 /* ---------- Kopf und Rahmen ---------- */
 function setHead(){
-  document.querySelectorAll('.seg').forEach(x => x.hidden = false); { const ab = document.getElementById('areaBtn'); if (ab) ab.hidden = false; }
+  document.querySelectorAll('header .seg').forEach(x => x.hidden = false); { const ab = document.getElementById('areaBtn'); if (ab) ab.hidden = false; }
   document.documentElement.lang = S.lang;
   const $ = id => document.getElementById(id);
   $('appTitle').textContent = t('title'); $('appSub').textContent = t('sub'); $('testBadge').textContent = t('test');
@@ -1085,10 +1085,10 @@ const MODS = [
   }
   const off = L.filter(a => a.status !== 'entschieden'), nf2 = L.filter(a => a.status==='angebot' && atage(a.angebot) <= -VT_ART[a.art][1]+2).length;
   return `<div class="kpis"><div class="kpi"><b>${off.length}</b><span>offene Anfragen</span></div><div class="kpi ${off.some(a=>fristAmp(vtFrist(a))==='bad')?'alert':''}"><b>${off.filter(a=>fristAmp(vtFrist(a))==='bad').length}</b><span>über Frist</span></div><div class="kpi"><b>${L.filter(a=>a.meld).length}</b><span>„HSA fertig“ gemeldet</span></div><div class="kpi"><b>${nf2}</b><span>Nachfassen fällig</span></div></div>
-   <div class="board">${VT_ST.map(([k,l]) => { const c = L.filter(a => a.status===k); return `<div class="col"><h4>${l}<span class="count">${c.length}</span></h4>${c.map(a => `<button class="card clickable" data-a="vt:open" data-id="${a.id}">
+   <div class="board">${VT_ST.map(([k,l]) => { const c = L.filter(a => a.status===k); const cap = (A.more||{})["vt-"+k] ? 999 : 6; return `<div class="col"><h4>${l}<span class="count">${c.length}</span></h4>${c.slice(0,cap).map(a => `<button class="card clickable" data-a="vt:open" data-id="${a.id}">
      <div class="row between"><span class="mono small"><b>${a.id}</b></span>${a.erg ? `<span class="chip ${a.erg.g?'ok':'bad'}">${a.erg.g?'gewonnen':'verloren'}</span>` : `<span class="row small">${amp(fristAmp(vtFrist(a)))}${relTxt(vtFrist(a))}</span>`}</div>
      <b>${esc(a.teil)}</b><span class="small muted">${esc(a.kunde)}</span>
-     <div class="row between small"><span class="chip">${VT_ART[a.art][0]}</span>${a.warten?`<span class="muted">wartet: ${RO[a.warten]}</span>`:''}</div>${a.meld?'<span class="chip ok" style="justify-self:start">HSA fertig ✓</span>':''}</button>`).join('')}</div>`; }).join('')}</div>`;
+     <div class="row between small"><span class="chip">${VT_ART[a.art][0]}</span>${a.warten?`<span class="muted">wartet: ${RO[a.warten]}</span>`:''}</div>${a.meld?'<span class="chip ok" style="justify-self:start">HSA fertig ✓</span>':''}</button>`).join('')}${c.length>cap?`<button class="btn small" data-a="lv:more" data-v="vt-${k}">+ ${c.length-cap} weitere</button>`:''}</div>`; }).join('')}</div>`;
  }},
 { k:'ak', ic:'AK', name:'Auftragseingang', who:'Auftragskoordination · Produktion', step:'Prozess 2', kurz:'Jede Bestellung wird automatisch gegen Preis, Zeichnungsstand, Kapazität und Material geprüft. Grün wird sofort bestätigt.', gain:'AB bei Fertigung: ≥ 5 Tage → Regelfall 1 Tag',
  tabs:[['eingang','Eingang prüfen'],['delivery','Delivery-Board']],
@@ -1096,10 +1096,10 @@ const MODS = [
   const B = st.best;
   if (tab === 'delivery'){
    const wk = [0,1,2,3].map(i => ({i, l: i===0?'diese Woche':'KW +'+i}));
-   const rows = [...B.map(b => ({kunde:b.kunde, artikel:b.artikel, menge:b.menge, termin:b.termin, c: akAmp(b)})),
+   const rows = [...B.map(b => ({nr:b.nr, kunde:b.kunde, artikel:b.artikel, menge:b.menge, termin:b.termin, c: akAmp(b)})),
      {kunde:'Beispiel USA Inc.', artikel:'9900100002', menge:3000, termin:D(3), c:''},{kunde:'Muster Automotive GmbH', artikel:'9900100003', menge:2500, termin:D(-2), c:'bad', alt:true}];
    return `<div class="note info">Ersetzt die Kommissionsliste im Montags-Meeting: offene Positionen je Woche mit Ampel. Rot = Termin gefährdet oder überfällig. ${src('s_m4')}</div>
-    <div class="board">${wk.map(w => { const r = rows.filter(x => { const k = Math.max(0, Math.floor(atage(x.termin)/7)); return k===w.i || (w.i===3 && k>3); }); return `<div class="col"><h4>${w.l}<span class="count">${r.length}</span></h4>${r.map(x => { const a = art(x.artikel); return `<div class="card"><div class="row between">${amp(x.c)}<span class="small mono">${dd(x.termin)}</span></div><b>${esc(a.de)}</b><span class="small muted">${esc(x.kunde)} · ${nf(x.menge,0)} Stk.</span>${x.alt?'<span class="chip bad">Termin überschritten</span>':''}</div>`; }).join('')}</div>`; }).join('')}</div>`;
+    <div class="board">${wk.map(w => { const r = rows.filter(x => { const k = Math.max(0, Math.floor(atage(x.termin)/7)); return k===w.i || (w.i===3 && k>3); }); const cap = (A.more||{})['ak-'+w.i] ? 999 : 6; return `<div class="col"><h4>${w.l}<span class="count">${r.length}</span></h4>${r.slice(0,cap).map(x => { const a = art(x.artikel); return `<div class="card clickable" ${x.nr?`data-rec="auftrag:${x.nr}" role="button" tabindex="0"`:''}><div class="row between">${amp(x.c)}<span class="small mono">${dd(x.termin)}</span></div><b>${esc(a.de)}</b><span class="small muted">${esc(x.kunde)} · ${nf(x.menge,0)} Stk.</span>${x.alt?'<span class="chip bad">Termin überschritten</span>':''}</div>`; }).join('')}${r.length>cap?`<button class="btn small" data-a="lv:more" data-v="ak-${w.i}">+ ${r.length-cap} weitere</button>`:''}</div>`; }).join('')}</div>`;
   }
   const neu = B.filter(b => b.st==='neu');
   return `<div class="note info">Übergang Welle 1: Erfasst wird weiter in M4. KAS-ERP liest die Auftragszeilen, prüft und meldet nur Auffälligkeiten – keine Doppelerfassung. ${src('s_m4')}</div>
@@ -1107,7 +1107,7 @@ const MODS = [
    <div class="list">${B.map(b => akCard(b)).join('')}</div>`;
  }},
 { k:'fe', ic:'FE', name:'Rüstplanung', who:'Fertigungsleitung · Rüster · Messtechnik', step:'Prozess 4', kurz:'Planungsassistent mit dem Rüster als Engpass: Vorschläge nach Rüstfamilie, die Fertigungsleitung bestätigt. Dazu Abnahmen und Schichtbuch.', gain:'Rüstzeit sparen durch Rüstfamilien · Abnahmen ohne Papier',
- tabs:[['plan','Rüstplan'],['abn','Erst-/Zweitabnahme'],['buch','Schichtbuch']],
+ tabs:[['plan','Rüstvorschläge'],['abn','Erst-/Zweitabnahme'],['buch','Schichtbuch']],
  view(st, tab){
   if (tab === 'abn') return `<div class="note info">Erst- und Zweitabnahme werden quittiert, die Messwerte stehen im Prüfplan (Welle 2 direkt am Tablet). Daraus entsteht auf Wunsch das Erst-Freigabedokument für den Kunden.</div>
    <div class="tbl-wrap"><table><thead><tr><th>BA</th><th>Artikel</th><th>Maschine</th><th>Erstabnahme</th><th>Zweitabnahme</th><th>Letztteil</th></tr></thead><tbody>${st.abn.map((x,i) => { const a = art(x.artikel);
@@ -1359,7 +1359,7 @@ document.addEventListener('change', e => { const el = e.target;
 
 /* ---------- Startseite, Kopf, Rahmen ---------- */
 function setHeadArea(){
- document.querySelectorAll('.seg').forEach(x => x.hidden = true);
+ document.querySelectorAll('header .seg').forEach(x => x.hidden = true);
  const mod = MODS.find(m => m.k === S.area);
  document.getElementById('appTitle').textContent = mod ? mod.name : 'KAS-ERP Probebau';
  document.getElementById('appSub').textContent = mod ? `${mod.who} · ${mod.step}` : 'Entwürfe je Bereich · zum Ausprobieren und Kommentieren';
@@ -1602,10 +1602,352 @@ document.addEventListener('input', e => { const el = e.target;
  if (el.dataset.ea){ A.fe.ruest.ist[el.dataset.ea] = el.value; saveA(); }
 });
 document.addEventListener('change', e => { const el = e.target;
- if (el.dataset.we || el.dataset.ea){ if (el.dataset.ea) A.fe.ruest.ist[el.dataset.ea] = el.value; saveA(); S.force = true; render(); }
+ if (el.dataset.we || el.dataset.ea){ if (el.dataset.ea) A.fe.ruest.ist[el.dataset.ea] = el.value; saveA(); setTimeout(render, 0); }
  if (el.dataset.feba){ A.fe.ruest = {ba:el.value, wz:{}, ist:{}, pos:null, frei:false}; saveA(); S.force = true; render(); }
  if (el.dataset.pein != null){ A.pe.ein.hak[el.dataset.pein] = el.checked; saveA(); S.force = true; render(); }
 });
+
+/* ===================== Runde 2: alles verlinkt, Tabelle/Filter, Gantt, mehrere Chargen ===================== */
+(function(){ const st = document.createElement('style'); st.textContent = `
+.lnk{color:var(--info);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--info) 40%,transparent);text-underline-offset:2px;cursor:pointer;border-radius:3px}
+.lnk:hover,.lnk:focus-visible{background:var(--info-soft);outline:none}
+#rec{position:fixed;inset:0;z-index:30;display:none}
+#rec.on{display:block}
+#rec .bd{position:absolute;inset:0;background:rgba(10,20,18,.35)}
+#rec .sheet{position:absolute;top:0;right:0;bottom:0;width:min(760px,100%);background:var(--bg);box-shadow:-8px 0 30px rgba(0,0,0,.2);display:flex;flex-direction:column}
+#rec .sh{display:flex;gap:8px;align-items:center;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px 16px;background:var(--surface);border-bottom:1px solid var(--line);padding-top:max(10px,env(safe-area-inset-top,0px))}
+#rec .crumbs{display:flex;gap:4px;flex-wrap:wrap;align-items:center;flex:1;min-width:0;font-size:.85rem}
+#rec .crumbs button{border:0;background:none;color:var(--info);padding:4px 2px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#rec .crumbs b{padding:4px 2px}
+#rec .sb{overflow:auto;padding:16px;display:grid;gap:14px;align-content:start;padding-bottom:max(24px,env(safe-area-inset-bottom,0px))}
+#rec .ic2{width:40px;height:40px;border-radius:10px;background:var(--info-soft);color:var(--info);display:grid;place-items:center;font:700 .8rem var(--f-head);flex:none}
+.lvbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0}
+.lvbar input[type=search]{flex:1 1 200px;min-height:42px;border:1px solid var(--line);border-radius:999px;padding:0 14px;background:var(--surface)}
+th[data-a="lv:sort"]{cursor:pointer;user-select:none}th[aria-sort="ascending"]::after{content:" ▲"}th[aria-sort="descending"]::after{content:" ▼"}
+tr.rowlink{cursor:pointer}tr.rowlink:hover td{background:var(--surface-2)}
+.gantt{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.gin{position:relative}
+.grow{display:flex;border-bottom:1px solid var(--line);min-height:46px}
+.glab{position:sticky;left:0;z-index:3;flex:none;width:96px;background:var(--surface);border-right:1px solid var(--line);padding:6px 8px;font-size:.85rem;display:flex;flex-direction:column;justify-content:center}
+.gtrack{position:relative;flex:none}
+.gnight{position:absolute;top:0;bottom:0;background:var(--surface-2)}
+.gbar{position:absolute;top:7px;height:32px;border-radius:6px;display:flex;overflow:hidden;font-size:.72rem;line-height:1.1;cursor:pointer;border:1px solid transparent}
+.gbar>i{display:block;height:100%}
+.gbar .rs{background:repeating-linear-gradient(135deg,var(--warn) 0 5px,color-mix(in srgb,var(--warn) 60%,var(--surface)) 5px 10px)}
+.gbar .fg{background:var(--accent);color:var(--accent-ink);padding:3px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-style:normal;flex:1}
+.gbar .wt{background:repeating-linear-gradient(90deg,var(--line) 0 3px,transparent 3px 6px)}
+.gbar.run .fg{background:var(--accent-2);color:var(--ink)}
+.gbar.ghost{border:2px dashed var(--accent);background:var(--surface)}.gbar.ghost .fg{background:transparent;color:var(--accent)}.gbar.ghost .rs{opacity:.5}
+.gbar.late{border-color:var(--bad);box-shadow:0 0 0 2px var(--bad-soft)}
+.gbar.sel{outline:3px solid var(--info);outline-offset:1px}
+.gnow{position:absolute;top:0;bottom:0;width:2px;background:var(--bad);z-index:2}
+.ghead{display:flex;position:sticky;top:0;z-index:4;background:var(--surface);border-bottom:1px solid var(--line)}
+.ghead .gday{position:absolute;top:0;height:100%;border-left:1px solid var(--line);font-size:.75rem;padding:4px 6px;color:var(--muted);white-space:nowrap}
+.gshift{position:absolute;top:6px;bottom:6px;border-radius:6px;font-size:.7rem;display:grid;place-items:center;text-align:center;line-height:1.1;background:var(--ok-soft);color:var(--ok)}
+.gshift.over{background:var(--bad-soft);color:var(--bad);font-weight:700}.gshift.none{background:transparent;color:var(--muted)}
+.legend2{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);align-items:center}
+.legend2 i{display:inline-block;width:22px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.chrow{display:grid;grid-template-columns:1.2fr .8fr 1.6fr auto;gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:8px}
+@media (max-width:640px){.chrow{grid-template-columns:1fr 1fr}}
+`; document.head.appendChild(st); })();
+
+/* ---------- zusätzliche Daten: mehr Vorgänge, Maschinen, Chargen ---------- */
+Object.assign(BA, {'309900105':{artikel:'9900100002', menge:3000, charge:'CH-26-133', gut:2200, fq:1.1}, '309900106':{artikel:'9900100003', menge:1200, charge:'CH-26-135', gut:300, fq:1.9}});
+const KUNDEN = ['Muster Automotive GmbH','Beispiel Elektrotechnik AG','Probe Maschinenbau KG','Beispiel USA Inc.','Muster Medizintechnik GmbH','Probe Hydraulik AG','Beispiel Sensorik GmbH'];
+const LIEFERANTEN = ['Muster Metall GmbH','Beispiel Edelstahl KG','Beispiel Stahlhandel','Probe Buntmetall','Beispiel Galvanik KG','Muster Oberflächen GmbH'];
+function ext3(s){
+ if (s.r2) return s; s.r2 = true; s.more = s.more || {}; s.lv = s.lv || {}; s.rec = [];
+ const TEILE = ['Kontaktstift Ø3 × 14','Hülse Ø10 × 20','Bolzen M6 × 30','Steckerbuchse Ø4','Distanzrolle Ø8','Gewindestift M5','Achse Ø6 × 48','Lagerbuchse Ø16','Crimphülse 16 mm²','Zapfen Ø5 × 12','Nippel M8','Anschlagbolzen Ø10'];
+ const WST = ['CuZn39Pb3','11SMnPb30','1.4305','Cu-ETP','CuZn39Pb3','1.0718'];
+ const dist = ['entschieden','entschieden','entschieden','entschieden','entschieden','angebot','angebot','kalk','technik','neu','einkauf','entschieden'];
+ for (let i = 0; i < 36; i++){
+  const stt = dist[i % dist.length], age = 3 + (i*7) % 58;
+  const a = {id:'A-26-0' + String(330 + i).padStart(3,'0'), kunde:KUNDEN[i % KUNDEN.length], teil:TEILE[i % TEILE.length], werkstoff:WST[i % WST.length], art:['serie','preis','projekt'][i % 3], mengen:[[1000,5000],[500],[2000,10000,20000]][i % 3], quelle:i % 4 ? 'Mail' : 'Kundenportal', status:stt, eingang:D(-age, 9),
+   warten:{neu:'vt', technik:'tech', einkauf:'ek', kalk:'vt', angebot:'vt', entschieden:''}[stt], herst:{pe:stt!=='neu'&&stt!=='technik'?true:null, qs:stt!=='neu'?true:null}, hk:0.2 + (i % 9)*0.11, ruest:140 + (i % 5)*40, sim:[], vorschlag:{masch:['603','612','201','607'][i % 4], mat:WST[i % WST.length], pm:'Bügelmessschraube'}, komm:[], erg:null};
+  if (stt === 'angebot') a.angebot = D(-Math.max(1, age - 5), 15);
+  if (stt === 'entschieden') a.erg = i % 10 < 3 ? {g:true, grund:''} : {g:false, grund:['Preis','Lieferzeit','kein Feedback','Preis','Technik'][i % 5]};
+  s.vt.anfragen.push(a);
+ }
+ for (let i = 0; i < 24; i++){
+  const aid = ARTIKEL[i % 4].id, ar = ARTIKEL[i % 4];
+  s.ak.best.push({id:'BX' + i, nr:'45001183' + String(10 + i).padStart(2,'0'), kunde:KUNDEN[(i*3) % KUNDEN.length], quelle:['PDF per Mail','Kundenportal','Mail'][i % 3], artikel:aid, menge:[1000,2500,4000,6000,800][i % 5], preis:ar.vk, soll:ar.vk, sollQ:'Rahmen R-26-0' + (i % 9 + 1), zgsB:ar.zgs.split(' · ')[0], termin:D(2 + (i*5) % 34), t:i % 2 ? 'lager' : 'kap', tTxt:i % 2 ? 'Lagerbestand reicht' : 'Rüster frei, Material am Lager', mat:'ok', st:i < 21 ? 'ab' : 'neu', abAm:H(-(30 + i*9)), eingang:H(-(34 + i*9))});
+ }
+ s.ek.we.chargen = [{ch:'', kg:'', z:[]}];
+ s.ek.we.liste[0].zg = [{nr:'MPZ-26-3101', charge:'S-88240', best:'EK-26-0661'},{nr:'MPZ-26-3102', charge:'S-88241', best:'EK-26-0661'},{nr:'MPZ-26-2977', charge:'S-88241', best:'EK-26-0598'}];
+ s.ek.we.liste[0].digital = null;
+ s.fe.gsel = null;
+ return s;
+}
+function ext4(s){ if (s.r3) return s; s.r3 = true; s.ek.we.liste[0].zg = [{nr:'MPZ-26-3101', charge:'S-88240', best:'EK-26-0661'},{nr:'MPZ-26-3102', charge:'S-88241', best:'EK-26-0661'},{nr:'MPZ-26-2977', charge:'S-88241', best:'EK-26-0598'}]; return s; }
+const _seedAreas2 = seedAreas; seedAreas = () => ext4(ext3(_seedAreas2())); A = ext4(ext3(A)); A.rec = []; saveA();
+
+/* ---------- Verknüpfungen: Erkennung im Text ---------- */
+function recIndex(){
+ const best = new Set([...A.ek.rueck.map(r => r.best), ...A.ek.we.liste.map(l => l.best)]);
+ const auftr = new Set(A.ak.best.map(b => b.nr));
+ const ch = new Set([...Object.values(BA).map(b => b.charge), ...A.ek.zeug.map(z => z.charge).filter(c => c && c !== '—'), ...A.vs.komm.flatMap(k => k.plaetze.map(p => p.ch))]);
+ const anf = new Set(A.vt.anfragen.map(a => a.id)), re = new Set(A.bu.op.map(o => o.re));
+ const qs = new Set([...(S.sk||[]).map(s => s.nr), ...(S.rk||[]).map(r => r.nr)]);
+ return {best, auftr, ch, anf, re, qs};
+}
+const reEsc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function autolink(root){
+ if (!root) return; const ix = recIndex();
+ const names = [...KUNDEN.map(n => ['kunde', n]), ...LIEFERANTEN.map(n => ['lieferant', n])];
+ const parts = ['(?<ba>\\b30990\\d{4}\\b)', '(?<art>\\b99001\\d{5}\\b)', '(?<best>\\bEK-26-\\d{4}\\b)', '(?<re>\\bRE-26-\\d{5}\\b)', '(?<qs>\\b(?:SK|RK)-26-\\d{4}\\b)', '(?<anf>\\bA-26-\\d{4}\\b)',
+  '(?<ma>Maschine\\s(?:603|612|201|607|605|220))', `(?<auf>\\b(?:${[...ix.auftr].map(reEsc).join('|')})\\b)`, `(?<ch>(?:${[...ix.ch].map(reEsc).join('|')})(?![\\w-]))`, `(?<nm>${names.map(n => reEsc(n[1])).join('|')})`];
+ const rx = new RegExp(parts.join('|'), 'g');
+ const skip = el => el.closest('button,a,label,select,option,textarea,input,svg,.lnk,[data-a],[data-action],[data-rec],.draft,.mailbox,header,h1,.crumbs,.noln');
+ const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode: n => n.nodeValue.trim().length > 3 && !skip(n.parentElement) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT});
+ const nodes = []; while (w.nextNode()) nodes.push(w.currentNode);
+ nodes.forEach(n => {
+  const txt = n.nodeValue; rx.lastIndex = 0; let m, last = 0, frag = null;
+  while ((m = rx.exec(txt))){
+   const g = m.groups; let rec = null;
+   if (g.ba && BA[g.ba]) rec = 'ba:' + g.ba; else if (g.art && art(g.art)) rec = 'artikel:' + g.art; else if (g.best && ix.best.has(g.best)) rec = 'bestellung:' + g.best;
+   else if (g.re && ix.re.has(g.re)) rec = 'rechnung:' + g.re; else if (g.qs && ix.qs.has(g.qs)) rec = 'qs:' + g.qs; else if (g.anf && ix.anf.has(g.anf)) rec = 'anfrage:' + g.anf;
+   else if (g.ma) rec = 'maschine:' + g.ma.slice(-3); else if (g.auf) rec = 'auftrag:' + g.auf; else if (g.ch) rec = 'charge:' + g.ch; else if (g.nm) rec = (KUNDEN.includes(g.nm) ? 'kunde:' : 'lieferant:') + g.nm;
+   if (!rec) continue;
+   frag = frag || document.createDocumentFragment();
+   frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+   const sp = document.createElement('span'); sp.className = 'lnk'; sp.dataset.rec = rec; sp.tabIndex = 0; sp.setAttribute('role','link'); sp.textContent = m[0]; frag.appendChild(sp);
+   last = m.index + m[0].length;
+  }
+  if (frag){ frag.appendChild(document.createTextNode(txt.slice(last))); n.parentNode.replaceChild(frag, n); }
+ });
+ applyQ();
+}
+
+/* ---------- Datensatz-Ansicht (Seitenblatt mit Verlauf) ---------- */
+const recEl = (() => { const d = document.createElement('div'); d.id = 'rec'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); document.body.appendChild(d); return d; })();
+const RT = {artikel:'Artikel', kunde:'Kunde', lieferant:'Lieferant', ba:'Betriebsauftrag', auftrag:'Kundenauftrag', bestellung:'Bestellung', charge:'Charge', rechnung:'Rechnung', qs:'QS', anfrage:'Anfrage', maschine:'Maschine'};
+const kv = rows => `<dl class="kv">${rows.filter(Boolean).map(([k,v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('')}</dl>`;
+const relList = (title, items) => `<div class="panel"><div class="row between"><h3>${esc(title)}</h3><span class="count">${items.length}</span></div>${items.length ? `<div class="list">${items.join('')}</div>` : '<span class="muted small">keine</span>'}</div>`;
+const li = (rec, main, sub, right) => `<div class="card clickable" data-rec="${esc(rec)}" role="button" tabindex="0"><div class="row between"><b>${main}</b>${right||''}</div>${sub?`<span class="small muted">${sub}</span>`:''}</div>`;
+function recTitle(r){ const [t, ...rest] = r.split(':'); const id = rest.join(':'); if (t==='artikel'){ const a = art(id); return a ? a.de : id; } if (t==='maschine') return 'Maschine ' + id; return id; }
+function recView(r){
+ const [t, ...rest] = r.split(':'), id = rest.join(':');
+ const head = (sub) => `<div class="row"><span class="ic2">${esc(RT[t].slice(0,3).toUpperCase())}</span><div><span class="small muted">${esc(RT[t])}</span><h2 class="noln">${esc(recTitle(r))}</h2>${sub?`<span class="small muted">${sub}</span>`:''}</div></div>`;
+ const bas = Object.entries(BA);
+ if (t === 'artikel'){ const a = art(id); if (!a) return head('nicht im Probebau');
+  const auf = A.ak.best.filter(b => b.artikel===id), sk = (S.sk||[]).filter(s => s.artikel===id), rk = (S.rk||[]).filter(x => x.artikel===id);
+  return head(`<span class="mono">${a.id}</span> · ${esc(a.zgs)}`) + `<div class="panel">${kv([['Werkstoff', esc(a.werkstoff)],['Verkaufspreis', eur(a.vk)+' / Stk.'],['Hauptkunde', esc(a.kunde)],['Zeichnungsstand', esc(a.zgs)]])}</div>
+   <div class="panel"><h3>Prüfplan</h3><div class="drawing">${drawing(a, null).replace(/data-action="pickM"/g,'')}</div><div class="tbl-wrap"><table class="fit"><tbody>${a.merkmale.map(m => `<tr><td><span class="pp-pos">${m.pos}</span></td><td>${esc(m.de)}</td><td class="mono small">${esc(tolTxt(m))}</td><td class="small muted">${esc(m.pm)}</td></tr>`).join('')}</tbody></table></div></div>
+   ${relList('Betriebsaufträge', bas.filter(([k,v]) => v.artikel===id).map(([k,v]) => li('ba:'+k, 'BA '+k, `Charge ${v.charge} · ${nf(v.gut,0)} / ${nf(v.menge,0)} Stk. · Fehlerquote ${nf(v.fq,1)} %`)))}
+   ${relList('Kundenaufträge', auf.map(b => li('auftrag:'+b.nr, b.nr, `${esc(b.kunde)} · ${nf(b.menge,0)} Stk. · Termin ${dd(b.termin)}`, `<span class="chip ${b.st==='ab'?'ok':''}">${b.st==='ab'?'bestätigt':'neu'}</span>`)))}
+   ${relList('Sperrkarten und Reklamationen', [...sk.map(s => li('qs:'+s.nr, s.nr, `Pos. ${s.merkmal} · ${nf(s.menge,0)} Stk. · ${dd(s.erstellt)}`, stChip(s.status))), ...rk.map(x => li('qs:'+x.nr, x.nr, `${esc(x.beschr||'').slice(0,70)}`, `<span class="chip kat">K${x.kat}</span>`))])}`; }
+ if (t === 'kunde' || t === 'lieferant'){ const n = id;
+  if (t === 'kunde'){ const auf = A.ak.best.filter(b => b.kunde===n), anf = A.vt.anfragen.filter(a => a.kunde===n), op = A.bu.op.filter(o => o.kunde===n && !o.bez), rk = (S.rk||[]).filter(x => x.partner===n), ent = anf.filter(a => a.erg);
+   return head(`${ent.length ? Math.round(ent.filter(a=>a.erg.g).length/ent.length*100) + ' % Trefferquote' : ''}`) + `<div class="panel">${kv([['Artikel', ARTIKEL.filter(a => a.kunde===n).map(a => `${a.id} ${esc(a.de)}`).join('<br>') || '—'],['Offene Posten', eur(op.reduce((s,o)=>s+o.betrag,0))],['Transport', n.includes('USA') ? 'Kunde holt ab (Export USA)' : 'Spedition Nord']])}</div>
+    ${relList('Aufträge', auf.slice(0,12).map(b => li('auftrag:'+b.nr, b.nr, `${esc(art(b.artikel).de)} · ${nf(b.menge,0)} Stk. · ${dd(b.termin)}`)))}
+    ${relList('Anfragen', anf.slice(0,12).map(a => li('anfrage:'+a.id, a.id+' · '+esc(a.teil), VT_ST.find(s=>s[0]===a.status)[1], a.erg?`<span class="chip ${a.erg.g?'ok':'bad'}">${a.erg.g?'gewonnen':'verloren'}</span>`:'')))}
+    ${relList('Offene Rechnungen', op.map(o => li('rechnung:'+o.re, o.re, `${eur(o.betrag)} · fällig ${dd(o.faellig)}`, amp(fristAmp(o.faellig)))))}
+    ${relList('Reklamationen', rk.map(x => li('qs:'+x.nr, x.nr, esc((x.beschr||'').slice(0,70)), `<span class="chip kat">K${x.kat}</span>`)))}`; }
+  const deck = A.ek.deck.filter(d => d.lief===n), bst = [...A.ek.rueck.filter(r => r.lief===n).map(r => r.best), ...A.ek.we.liste.filter(l => l.lief===n).map(l => l.best)], z = A.ek.zeug.filter(x => x.lief===n), ver = A.vs.ver.filter(e => e.vered===n);
+  return head(ver.length ? 'Veredler' : 'Materiallieferant') + `<div class="panel">${kv([['Werkstoffe', [...new Set(deck.map(d => d.wst + ' ' + d.abm))].join('<br>') || '—'],['Zeugnisse', `${z.length} · davon ${z.filter(x=>x.st==='auto').length} automatisch zugeordnet`],['Termintreue (12 Mon.)', ver.length ? '82 %' : '91 %']])}</div>
+   ${relList('Bestellungen', [...new Set(bst)].map(b => li('bestellung:'+b, b, '')))}
+   ${ver.length ? relList('Veredelungsaufträge', ver.map(e => li('artikel:'+e.artikel, esc(art(e.artikel).de)+' · '+nf(e.menge,0)+' Stk.', `${e.art} · zurück ${dd(e.zurueck)}`, amp(fristAmp(e.zurueck))))) : ''}
+   ${relList('Zeugnisse', z.map(x => li('charge:'+x.charge, 'Charge '+x.charge, `${esc(x.wst)} · ${x.we}`, `<span class="chip ${x.st==='auto'||x.st==='ok'?'ok':x.st==='fehlt'?'bad':'warn'}">${x.st}</span>`)))}`; }
+ if (t === 'ba'){ const b = BA[id]; if (!b) return head(''); const a = art(b.artikel);
+  const masch = (MASCH.find(m => m.ba===id) || {}).nr || (G_RUN.find(g => g.ba===id) || {}).m || (A.fe.vorschl.find(v => v.ba===id) || {}).masch || '';
+  const ab = A.fe.abn.find(x => x.ba===id), zb = A.vs.zb.find(x => x.ba===id), sk = (S.sk||[]).filter(s => s.ba===id);
+  return head(`${esc(a.de)} · Maschine ${masch}`) + `<div class="panel">${kv([['Artikel', `${a.id} ${esc(a.de)}`],['Maschine', masch ? 'Maschine '+masch : '—'],['Charge', b.charge],['Menge', `${nf(b.gut,0)} gut von ${nf(b.menge,0)} Stk. ${src('s_mde')}`],['Fehlerquote', `<span class="chip ${b.fq>=4?'bad':b.fq>=2?'warn':'ok'}">${nf(b.fq,1)} %</span>`]])}</div>
+   <div class="panel"><h3>Abnahmen</h3>${ab ? kv([['Erstabnahme', ab.erst ? `${esc(ab.erst.r)} · ${dt(ab.erst.t)}` : 'offen'],['Zweitabnahme', ab.zweit ? `${esc(ab.zweit.r)} · ${dt(ab.zweit.t)}` : '<span class="chip warn">offen</span>'],['Letztteil', ab.letzt ? dt(ab.letzt.t) : '—']]) : '<span class="muted small">noch nicht gerüstet</span>'}</div>
+   ${zb ? `<div class="panel"><h3>Zubuchung</h3>${kv([['Körbe', zb.korb.map(k => nf(k.n,0)).join(' + ')],['Summe', nf(zb.korb.reduce((s,k)=>s+k.n,0),0)+' Stk.'],['Lagerplatz', zb.lp]])}</div>` : ''}
+   ${relList('Sperrkarten', sk.map(s => li('qs:'+s.nr, s.nr, `Pos. ${s.merkmal} · ${nf(s.menge,0)} Stk.`, stChip(s.status))))}`; }
+ if (t === 'auftrag'){ const b = A.ak.best.find(x => x.nr===id); if (!b) return head(''); const a = art(b.artikel);
+  return head(`${esc(b.kunde)} · ${esc(b.quelle)}`) + `<div class="panel">${kv([['Kunde', esc(b.kunde)],['Artikel', `${a.id} ${esc(a.de)}`],['Menge', nf(b.menge,0)+' Stk.'],['Preis', `${nf(b.preis)} € (${esc(b.sollQ)})`],['Zeichnungsstand', esc(b.zgsB)],['Wunschtermin', dd(b.termin)],['Status', b.st==='ab' ? `<span class="chip ok">AB versendet ${dt(b.abAm)}</span>` : b.st==='rf' ? '<span class="chip warn">Rückfrage</span>' : '<span class="chip">neu</span>']])}</div>
+   ${relList('Betriebsaufträge zum Artikel', Object.entries(BA).filter(([k,v]) => v.artikel===b.artikel).map(([k,v]) => li('ba:'+k, 'BA '+k, `Charge ${v.charge} · ${nf(v.gut,0)} Stk. gut`)))}
+   ${relList('Kommissionen', A.vs.komm.filter(k => k.artikel===b.artikel && k.kunde===b.kunde).map(k => `<div class="card"><b class="mono">${k.nr}</b><span class="small muted">${nf(k.menge,0)} Stk. · ${k.st}</span></div>`))}`; }
+ if (t === 'bestellung'){ const r = A.ek.rueck.find(x => x.best===id), l = A.ek.we.liste.find(x => x.best===id), lief = (r||l).lief; const done = l && A.ek.we.done[l.id];
+  const chs = l && l.chargenIst ? l.chargenIst : [];
+  return head(esc(lief)) + `<div class="panel">${kv([['Lieferant', esc(lief)],['Position', esc(r ? r.pos : l.pos + ' · ' + nf(l.soll,0) + ' kg')],['Liefertermin', r ? `<span class="chip ${atage(r.soll)<0?'bad':''}">${dd(r.soll)}</span>` : 'heute erwartet'],['Status', done ? '<span class="chip ok">geliefert</span>' : r && r.st==='nachgefragt' ? '<span class="chip warn">nachgefragt</span>' : 'offen'],['für BA', r && r.ba.length ? r.ba.join(', ') : '—'],['Zeugnispflicht', l ? (l.pflicht ? `ja (${esc(l.kunde)})` : 'nein') : '—']])}</div>
+   ${relList('Chargen', chs.map(c => li('charge:'+c.ch, 'Charge '+c.ch, `${nf(+c.kg,0)} kg · MPZ ${c.z.length ? c.z[0] : 'fehlt'}`, chk(c.z.length ? true : false))))}`; }
+ if (t === 'charge'){ const ba = Object.entries(BA).find(([k,v]) => v.charge===id), z = A.ek.zeug.filter(x => x.charge===id), kp = A.vs.komm.flatMap(k => k.plaetze.filter(p => p.ch===id).map(p => ({...p, k})));
+  const weCh = A.ek.we.liste.flatMap(l => (l.chargenIst||[]).filter(c => c.ch===id).map(c => ({...c, l})));
+  return head('Rückverfolgung mit einem Klick') + `<div class="panel">${kv([ba && ['Betriebsauftrag', 'BA '+ba[0]], ba && ['Artikel', `${BA[ba[0]].artikel} ${esc(art(BA[ba[0]].artikel).de)}`], z[0] && ['Lieferant', esc(z[0].lief)], z[0] && ['Werkstoff', esc(z[0].wst)], weCh[0] && ['Bestellung', weCh[0].l.best], weCh[0] && ['MPZ', weCh[0].z[0] || 'fehlt'], ['Ursprungsland Schmelze', z[0] || weCh[0] ? 'DE (laut Zeugnis)' : '—']])}</div>
+   ${relList('Lagerplätze', kp.map(p => `<div class="card"><b class="mono">${p.lp}</b><span class="small muted">${nf(p.m,0)} Stk. · ${p.alter} Tage · Kommission ${p.k.nr}</span></div>`))}
+   ${relList('Zeugnisse', z.map(x => `<div class="card"><div class="row between"><b>${x.we}</b><span class="chip ${x.st==='auto'||x.st==='ok'?'ok':x.st==='fehlt'?'bad':'warn'}">${x.st}</span></div><span class="small muted">${esc(x.wst)} · ${dd(x.ein)}</span></div>`))}`; }
+ if (t === 'rechnung'){ const o = A.bu.op.find(x => x.re===id); return head(esc(o.kunde)) + `<div class="panel">${kv([['Kunde', esc(o.kunde)],['Betrag', eur(o.betrag)],['fällig', `${amp(fristAmp(o.faellig))} ${dd(o.faellig)}`],['erwarteter Eingang', dd(o.erw)+' '+src('s_calc')],['Status', o.bez ? '<span class="chip ok">bezahlt</span>' : o.mahn ? `<span class="chip warn">${o.mahn}. Mahnung</span>` : 'offen']])}</div>`; }
+ if (t === 'qs'){ const s = (S.sk||[]).find(x => x.nr===id), x = (S.rk||[]).find(y => y.nr===id), o = s || x, a = art(o.artikel), m = mm(a, o.merkmal);
+  return head(s ? 'Sperrkarte' : 'Reklamation · Kategorie ' + x.kat) + `<div class="panel">${kv([['Artikel', `${a.id} ${esc(a.de)}`], o.ba && ['Betriebsauftrag', o.ba], o.charge && ['Charge', o.charge], m && ['Merkmal', `Pos. ${m.pos} ${esc(m.de)} (${esc(tolTxt(m))})${o.ist!=null?' · Ist '+nf(o.ist, dec(m)):''}`], ['Menge', nf(o.menge,0)+' Stk.'], x && x.partner && ['Partner', esc(x.partner)], ['Status', s ? stChip(s.status) : esc(t('rk'+x.status))]])}${m ? `<div class="drawing">${drawing(a, o.merkmal).replace(/data-action="pickM"/g,'')}</div>` : ''}
+   <div class="actions"><button class="btn primary" data-a="rec:qs" data-v="${esc(s ? 'sk:'+s.id : 'rk:'+x.id)}">In QS öffnen</button></div></div>`; }
+ if (t === 'anfrage'){ const a = A.vt.anfragen.find(y => y.id===id); return head(esc(a.kunde)) + `<div class="panel">${kv([['Kunde', esc(a.kunde)],['Teil', esc(a.teil)],['Werkstoff', esc(a.werkstoff)],['Mengen', a.mengen.map(x=>nf(x,0)).join(' / ')],['Stand', VT_ST.find(s=>s[0]===a.status)[1]],a.erg && ['Ergebnis', `<span class="chip ${a.erg.g?'ok':'bad'}">${a.erg.g?'gewonnen':'verloren: '+esc(a.erg.grund)}</span>`]])}<div class="actions"><button class="btn primary" data-a="rec:anf" data-v="${a.id}">In Anfragen öffnen</button></div></div>`; }
+ if (t === 'maschine'){ const run = MASCH.find(m => m.nr===id) || G_RUN.find(g => g.m===id) || {}; const ba = run.ba; const st2 = A.ih.stoer.filter(s => s.masch===id && s.st!=='erledigt'), w = A.ih.wart.filter(x => x.masch===id && x.st!=='erledigt'), h = A.ih.hist.find(x => x.masch===id);
+  return head(esc(run.typ || 'CNC')) + `<div class="panel">${kv([['läuft', ba ? `BA ${ba} · ${esc(art(BA[ba].artikel).de)}` : '—'],['Störungen offen', st2.length ? st2.map(s => esc(s.txt)).join('<br>') : 'keine'],['Wartung fällig', w.length ? w.map(x => `${esc(x.was)} (${relTxt(x.faellig)})`).join('<br>') : '—'], h && ['MTBF / MTTR', `${nf(h.betrieb*8/h.n/24,0)} Tage / ${nf(h.h/h.n,1)} h`]])}</div>
+   ${relList('Geplant (Rüstplan)', A.fe.plan.filter(p => p.masch===id).map(p => li('ba:'+p.ba, 'BA '+p.ba, `${esc(art(p.artikel).de)} · Rüsten ${nf(p.ruest,1)} h`)))}
+   ${relList('Schichtbuch', A.fe.buch.filter(e => e.masch===id).slice(-5).reverse().map(e => `<div class="card"><span class="small muted">${dt(e.t)} · ${esc(e.kat)}</span><span>${esc(e.txt)}</span></div>`))}`; }
+ return head('');
+}
+function renderRec(){
+ const st = A.rec || [];
+ if (!st.length){ recEl.className = ''; recEl.innerHTML = ''; return; }
+ const cur = st[st.length-1];
+ recEl.className = 'on';
+ recEl.innerHTML = `<div class="bd" data-a="rec:close"></div><div class="sheet"><div class="sh">${st.length>1?'<button class="btn small" data-a="rec:back" aria-label="Zurück">←</button>':''}<nav class="crumbs" aria-label="Verlauf">${st.map((r,i) => i < st.length-1 ? `<button data-a="rec:to" data-v="${i}">${esc(recTitle(r))}</button><span class="muted">›</span>` : `<b>${esc(recTitle(r))}</b>`).join('')}</nav><button class="btn small" data-a="rec:close" aria-label="Schließen">✕</button></div><div class="sb">${recView(cur)}<span class="hint">Jeder blaue Begriff öffnet seinen Datensatz – oben führt der Verlauf zurück.</span></div></div>`;
+ autolink(recEl.querySelector('.sb'));
+}
+document.addEventListener('click', e => { const el = e.target.closest('[data-rec]'); if (!el || e.defaultPrevented) return; e.preventDefault(); A.rec = [...(A.rec||[]), el.dataset.rec].slice(-8); renderRec(); recEl.querySelector('.sheet .sb')?.scrollTo(0,0); }, true);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && A.rec && A.rec.length){ A.rec = []; renderRec(); } if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-rec]')){ e.preventDefault(); e.target.click(); } });
+
+/* ---------- Übersichten: Kacheln oder Tabelle, Ansichten, Suche ---------- */
+function applyQ(){ const k = S.area; const q = ((A.lv||{})[k]||{}).q; if (!q) return; const ql = q.toLowerCase();
+ document.querySelectorAll('#main .board .card, #main tr[data-row], #main .list > .card').forEach(el => { el.hidden = !el.textContent.toLowerCase().includes(ql); }); }
+function lvBar(key, views, total){
+ const lv = A.lv[key] = A.lv[key] || {mode:'kachel', view:views[0].k, q:''};
+ return `<div class="lvbar"><div class="seg" role="group" aria-label="Darstellung"><button data-a="lv:mode" data-v="kachel" aria-pressed="${lv.mode==='kachel'}">Kacheln</button><button data-a="lv:mode" data-v="tabelle" aria-pressed="${lv.mode==='tabelle'}">Tabelle</button></div>
+  <div class="decide">${views.map(v => `<button data-a="lv:view" data-v="${v.k}" aria-pressed="${lv.view===v.k}">${esc(v.l)} <span class="count">${v.n}</span></button>`).join('')}</div>
+  <input type="search" data-lvq="${key}" value="${esc(lv.q)}" placeholder="Suchen (Kunde, Teil, Nummer …)" aria-label="Suchen"></div>`;
+}
+function lvTable(key, rows, cols, rowAttr){
+ const lv = A.lv[key]; const s = lv.sort || {k:cols[0].k, dir:1}; const c = cols.find(x => x.k===s.k) || cols[0];
+ const sorted = rows.slice().sort((a,b) => { const x = c.v(a), y = c.v(b); return (x > y ? 1 : x < y ? -1 : 0) * s.dir; });
+ return `<div class="tbl-wrap"><table><thead><tr>${cols.map(x => `<th data-a="lv:sort" data-v="${x.k}" class="${x.num?'num':''}" aria-sort="${x.k===s.k?(s.dir>0?'ascending':'descending'):'none'}">${esc(x.l)}</th>`).join('')}</tr></thead><tbody>${sorted.map(r => `<tr data-row="1" class="rowlink" ${rowAttr(r)}>${cols.map(x => `<td class="${x.num?'num':''}">${x.h(r)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><span class="small muted">${sorted.length} Einträge · Spaltenkopf antippen zum Sortieren</span>`;
+}
+const vtView1 = MOD('vt').view;
+MOD('vt').view = function(st, tab){
+ if (tab !== 'board' || A.open.vt) return vtView1.call(this, st, tab);
+ const L = st.anfragen, ov = a => a.status!=='entschieden' && fristAmp(vtFrist(a))==='bad';
+ const views = [{k:'offen', l:'Offen', f:a => a.status!=='entschieden'},{k:'meine', l:'Wartet auf Vertrieb', f:a => a.warten==='vt'},{k:'frist', l:'Über Frist', f:ov},{k:'nachfassen', l:'Nachfassen', f:a => a.status==='angebot'},{k:'alle', l:'Alle', f:() => true}];
+ views.forEach(v => v.n = L.filter(v.f).length);
+ if (!A.lv.vt) A.lv.vt = {mode:'kachel', view:'offen', q:''};
+ const lv = A.lv.vt, f = (views.find(v => v.k===lv.view) || views[0]).f, rows = L.filter(f);
+ const bar = lvBar('vt', views, L.length);
+ if (lv.mode === 'kachel') return bar + vtView1.call(this, {...st, anfragen:rows}, tab);
+ return bar + lvTable('vt', rows, [
+  {k:'id', l:'Nr.', v:a => a.id, h:a => `<span class="mono">${a.id}</span>`},{k:'kunde', l:'Kunde', v:a => a.kunde, h:a => esc(a.kunde)},{k:'teil', l:'Teil', v:a => a.teil, h:a => `<b>${esc(a.teil)}</b>`},
+  {k:'art', l:'Art', v:a => a.art, h:a => VT_ART[a.art][0]},{k:'status', l:'Stand', v:a => VT_ST.findIndex(s => s[0]===a.status), h:a => VT_ST.find(s=>s[0]===a.status)[1]},
+  {k:'warten', l:'wartet auf', v:a => a.warten||'', h:a => a.warten ? RO[a.warten] : '—'},{k:'frist', l:'Frist', v:a => a.erg ? 9e15 : new Date(vtFrist(a)).getTime(), h:a => a.erg ? `<span class="chip ${a.erg.g?'ok':'bad'}">${a.erg.g?'gewonnen':'verloren'}</span>` : `<span class="row small">${amp(fristAmp(vtFrist(a)))}${relTxt(vtFrist(a))}</span>`},
+  {k:'eingang', l:'Eingang', v:a => a.eingang, h:a => `<span class="small mono">${dd(a.eingang)}</span>`}], a => `data-a="vt:open" data-id="${a.id}"`);
+};
+const akView1 = MOD('ak').view;
+MOD('ak').view = function(st, tab){
+ if (tab !== 'eingang') return akView1.call(this, st, tab);
+ const B = st.best, views = [{k:'neu', l:'Zu prüfen', f:b => b.st!=='ab'},{k:'gruen', l:'Sofort bestätigbar', f:b => b.st==='neu' && akAmp(b)===''},{k:'rf', l:'Mit Rückfrage', f:b => b.st!=='ab' && akAmp(b)!==''},{k:'ab', l:'AB versendet', f:b => b.st==='ab'},{k:'alle', l:'Alle', f:() => true}];
+ views.forEach(v => v.n = B.filter(v.f).length);
+ if (!A.lv.ak) A.lv.ak = {mode:'kachel', view:'neu', q:''};
+ const lv = A.lv.ak, rows = B.filter((views.find(v => v.k===lv.view) || views[0]).f);
+ const bar = lvBar('ak', views, B.length);
+ if (lv.mode === 'kachel') return bar + akView1.call(this, {...st, best:rows}, tab);
+ return bar + lvTable('ak', rows, [
+  {k:'amp', l:'', v:b => b.st==='ab' ? 3 : akAmp(b)==='bad' ? 0 : akAmp(b)==='warn' ? 1 : 2, h:b => amp(b.st==='ab'?'off':akAmp(b))},{k:'nr', l:'Bestellung', v:b => b.nr, h:b => `<span class="mono">${b.nr}</span>`},{k:'kunde', l:'Kunde', v:b => b.kunde, h:b => esc(b.kunde)},
+  {k:'art', l:'Artikel', v:b => b.artikel, h:b => `${esc(art(b.artikel).de)}`},{k:'menge', l:'Menge', num:true, v:b => b.menge, h:b => nf(b.menge,0)},{k:'termin', l:'Wunsch', v:b => b.termin, h:b => `<span class="mono small">${dd(b.termin)}</span>`},
+  {k:'st', l:'Status', v:b => b.st, h:b => b.st==='ab' ? '<span class="chip ok">AB</span>' : b.st==='rf' ? '<span class="chip warn">Rückfrage</span>' : '<span class="chip">neu</span>'}], b => `data-rec="auftrag:${b.nr}"`);
+};
+
+/* ---------- Maschinenbelegung (Gantt) mit Rüster als Engpass ---------- */
+const G_RUN = [{m:'603', ba:'309900101', rate:160, typ:'CNC-Langdreher'},{m:'612', ba:'309900102', rate:60, typ:'CNC-Langdreher'},{m:'201', ba:'309900103', rate:45, typ:'Star SR20'},{m:'607', ba:'309900104', rate:250, typ:'Mehrspindler'},{m:'605', ba:'309900105', rate:70, typ:'CNC-Langdreher'},{m:'220', ba:'309900106', rate:40, typ:'Star SR32'}];
+const FERT = {V1:14, V2:10, V3:18, V4:30, P0:8};
+const G_PX = 9, G_H = 120;
+function gT0(){ const d = new Date(now0); d.setHours(6,0,0,0); return d.getTime(); }
+const hOf = ms => (ms - gT0()) / 3600000;
+function nextRuest(h){ const d = Math.floor(h/24), r = h - d*24; return r < 16 ? h : (d+1)*24; }   /* Früh 06–14 (0–8), Spät 14–22 (8–16), Nacht ohne Rüster */
+function gModel(st){
+ const items = [], free = {}, nowH = hOf(Date.now());
+ G_RUN.forEach(g => { const b = BA[g.ba]; const rem = Math.max(0, b.menge - b.gut) / g.rate; items.push({key:'run-'+g.m, m:g.m, ba:g.ba, artikel:b.artikel, typ:'run', rs:nowH, re:nowH, fe:nowH+rem}); free[g.m] = nowH + rem; });
+ const plan = st.plan.slice().sort((a,b) => (a.tag*2+(a.sch==='S'?1:0)) - (b.tag*2+(b.sch==='S'?1:0)));
+ plan.forEach(p => { const slot = p.tag*24 + (p.sch==='S'?8:0); const f0 = free[p.m||p.masch] ?? nowH; let rs = nextRuest(Math.max(slot, f0)); const v = st.vorschl.find(x => x.id===p.id);
+  items.push({key:p.id, m:p.masch, ba:p.ba, artikel:p.artikel, typ:'plan', ws:f0, rs, re:rs+p.ruest, fe:rs+p.ruest+(FERT[p.id]||10), termin:v && v.termin, p}); free[p.masch] = rs+p.ruest+(FERT[p.id]||10); });
+ st.vorschl.filter(v => v.st==='vorschlag').forEach(v => { const f0 = free[v.masch] ?? nowH; const rs = nextRuest(f0);
+  items.push({key:v.id, m:v.masch, ba:v.ba, artikel:v.artikel, typ:'ghost', ws:f0, rs, re:rs+v.ruest, fe:rs+v.ruest+(FERT[v.id]||10), termin:v.termin, v}); free[v.masch] = rs+v.ruest+(FERT[v.id]||10); });
+ const shifts = []; for (let d = 0; d < 5; d++) [['F',0,st.ruester.F],['S',8,st.ruester.S]].forEach(([s,o,n]) => { const a = d*24+o, b = a+8; const need = items.filter(i => i.typ!=='run').reduce((sum,i) => sum + Math.max(0, Math.min(b, i.re) - Math.max(a, i.rs)), 0); shifts.push({d, s, a, b, cap:n*7.5, need}); });
+ return {items, shifts, nowH};
+}
+function shiftOf(h){ const d = Math.floor(h/24), r = h - d*24; return {tag:d, sch: r < 8 ? 'F' : 'S'}; }
+MOD('fe').tabs.unshift(['gantt','Maschinenbelegung']);
+const feView1 = MOD('fe').view;
+MOD('fe').view = function(st, tab){
+ if (tab !== 'gantt') return feView1.call(this, st, tab);
+ const {items, shifts, nowH} = gModel(st), W = G_H*G_PX, x = h => Math.max(0, Math.min(W, h*G_PX));
+ const late = i => i.termin && (gT0() + i.fe*3600000) > new Date(i.termin).getTime();
+ const nights = [...Array(5)].map((_,d) => `<div class="gnight" style="left:${x(d*24+16)}px;width:${8*G_PX}px"></div>`).join('');
+ const bar = i => { const L = i.typ==='run' ? x(0) : x(i.ws), wait = i.typ==='run' ? 0 : Math.max(0, i.rs - i.ws), w0 = x(i.fe) - L; if (w0 <= 1) return '';
+  const lab = `${i.typ==='ghost'?'Vorschlag · ':''}BA ${i.ba} · ${art(i.artikel).de}`;
+  return `<div class="gbar ${i.typ==='run'?'run':''} ${i.typ==='ghost'?'ghost':''} ${late(i)?'late':''} ${st.gsel===i.key?'sel':''}" style="left:${L}px;width:${w0}px" data-a="fe:gsel" data-id="${i.key}" title="${esc(lab)}">${wait>0?`<i class="wt" style="width:${wait*G_PX}px"></i>`:''}${i.typ!=='run'?`<i class="rs" style="width:${(i.re-i.rs)*G_PX}px"></i>`:''}<i class="fg">${esc(lab)}</i></div>`; };
+ const days = [...Array(5)].map((_,d) => { const dat = new Date(gT0() + d*86400000); return `<div class="gday" style="left:${x(d*24)}px">${d===0?'Heute':dat.toLocaleDateString('de-DE',{weekday:'short', day:'2-digit', month:'2-digit'})} · Früh · Spät · Nacht</div>`; }).join('');
+ const sel = items.find(i => i.key===st.gsel);
+ const over = shifts.filter(s => s.need > s.cap + 0.01);
+ let info = '';
+ if (sel){ const a = art(sel.artikel), endD = new Date(gT0() + sel.fe*3600000), rsD = new Date(gT0() + sel.rs*3600000);
+  const sh = shifts.find(s => sel.rs >= s.a && sel.rs < s.b);
+  info = `<div class="panel"><div class="row between"><h3>BA ${sel.ba} · ${esc(a.de)}</h3><span class="chip ${sel.typ==='ghost'?'info':sel.typ==='run'?'':'ok'}">${sel.typ==='ghost'?'Vorschlag':sel.typ==='run'?'läuft':'eingeplant'}</span></div>
+   ${kv([['Maschine', 'Maschine '+sel.m],['Artikel', `${a.id} ${esc(a.de)}`], sel.typ!=='run' && ['Rüsten', `${dt(rsD.toISOString())} · ${nf(sel.re-sel.rs,1)} h ${sel.rs>sel.ws+0.1?`<span class="chip warn">wartet ${nf(sel.rs-sel.ws,1)} h auf Rüster</span>`:''}`], ['fertig', dt(endD.toISOString()) + ' ' + src('s_calc')], sel.termin && ['Liefertermin', `${dd(sel.termin)} ${late(sel)?'<span class="chip bad">wird verfehlt</span>':'<span class="chip ok">passt</span>'}`], sh && ['Rüster in dieser Schicht', `${nf(sh.need,1)} / ${nf(sh.cap,1)} h ${sh.need>sh.cap+0.01?'<span class="chip bad">überlastet</span>':''}`]])}
+   <div class="actions">${sel.typ==='ghost' ? `<button class="btn primary" data-a="fe:ok" data-id="${sel.key}">Übernehmen</button><button class="btn" data-a="fe:no" data-id="${sel.key}">Ablehnen …</button>` : sel.typ==='plan' && !sel.p.fix ? `<button class="btn" data-a="fe:mv" data-id="${sel.key}" data-v="-1">◀ eine Schicht früher</button><button class="btn" data-a="fe:mv" data-id="${sel.key}" data-v="1">eine Schicht später ▶</button><button class="btn" data-a="fe:undo" data-id="${sel.key}">Zurücknehmen</button>` : ''}</div>
+   ${A.open.feNo===sel.key?`<div class="decide">${['Termin passt nicht','Werkzeug fehlt','Material fehlt','Rüster anders einplanen'].map(g => `<button data-a="fe:grund" data-id="${sel.key}" data-v="${g}">${g}</button>`).join('')}</div>`:''}</div>`; }
+ return `<div class="note info">Balken = Betriebsaufträge je Maschine: <b>schraffiert = Rüsten</b>, grün = Fertigung, gestrichelt = Vorschlag des Assistenten. Rüsten geht nur in Früh- und Spätschicht – nachts wartet die Maschine auf den Rüster. Die untere Zeile zeigt, ob die Rüster reichen. ${src('s_mde')} ${src('s_plan')}</div>
+  ${over.length ? `<div class="note bad">Rüster überlastet: ${over.map(s => `${s.d===0?'heute':s.d===1?'morgen':'Tag +'+s.d} ${s.s==='F'?'Früh':'Spät'} (${nf(s.need,1)} / ${nf(s.cap,1)} h)`).join(', ')} – Vorschlag verschieben oder zweiten Rüster einplanen.</div>` : ''}
+  <div class="legend2"><span><i style="background:var(--accent-2)"></i>läuft</span><span><i style="background:var(--accent)"></i>eingeplant</span><span><i style="background:repeating-linear-gradient(135deg,var(--warn) 0 4px,transparent 4px 8px)"></i>Rüsten</span><span><i style="border:2px dashed var(--accent)"></i>Vorschlag</span><span><i style="background:repeating-linear-gradient(90deg,var(--line) 0 3px,transparent 3px 6px)"></i>wartet auf Rüster</span><span><i style="background:var(--bad);width:3px"></i>jetzt</span></div>
+  <div class="gantt"><div class="gin" style="width:${W+96}px">
+   <div class="ghead grow" style="min-height:28px"><div class="glab"><b>Maschine</b></div><div class="gtrack" style="width:${W}px">${days}</div></div>
+   ${G_RUN.map(g => `<div class="grow"><div class="glab"><span class="lnk" data-rec="maschine:${g.m}" role="link" tabindex="0"><b>${g.m}</b></span><span class="tiny muted">${esc(g.typ)}</span></div><div class="gtrack" style="width:${W}px">${nights}${items.filter(i => i.m===g.m).map(bar).join('')}<div class="gnow" style="left:${x(nowH)}px"></div></div></div>`).join('')}
+   <div class="grow" style="background:var(--surface-2)"><div class="glab"><b>Rüster</b><span class="tiny muted">Bedarf inkl. Vorschläge / Kapazität</span></div><div class="gtrack" style="width:${W}px">${shifts.map(s => `<div class="gshift ${s.need>s.cap+0.01?'over':s.need<0.01?'none':''}" style="left:${x(s.a)+2}px;width:${8*G_PX-4}px">${nf(s.need,1)} / ${nf(s.cap,1)} h</div>`).join('')}</div></div>
+  </div></div>${info || '<span class="hint">Balken antippen für Details, Übernehmen oder Verschieben.</span>'}`;
+};
+
+/* ---------- Wareneingang: Bestellposition → Chargen → je Charge ein MPZ ---------- */
+const ekView2 = MOD('ek').view;
+MOD('ek').view = function(st, tab){
+ if (tab !== 'we') return ekView2.call(this, st, tab);
+ const w = st.we, l = w.liste.find(x => x.id===w.sel), done = w.done[l.id];
+ const zFor = ch => (l.zg||[]).filter(z => z.charge===ch.trim().toUpperCase() && z.best===l.best).slice(0,1).map(z => z.nr);
+ const sum = w.chargen.reduce((s,c) => s + (+c.kg||0), 0);
+ const opt = (k, v, lab) => `<button data-a="ek:w" data-v="${k}=${v}" aria-pressed="${w[k]===v}">${lab}</button>`;
+ return `<div class="note info">Läuft am Galaxy Tab im Browser. Erwartete Lieferungen kommen aus den offenen Bestellungen ${src('s_m4')}. Hierarchie: <b>Bestellposition → Chargen → je Charge genau ein Materialprüfzeugnis (MPZ)</b>. Kommt dieselbe Schmelze später mit einer anderen Bestellung, gehört dazu ein eigenes MPZ.</div>
+ <div class="big2">${w.liste.map(x => `<button data-a="ek:wsel" data-v="${x.id}" aria-pressed="${x.id===w.sel}">${esc(x.lief)}<br><span class="small" style="font-weight:400">${esc(x.pos)}</span>${w.done[x.id]?'<br><span class="small">✓ zugebucht</span>':''}</button>`).join('')}</div>
+ <div class="panel">${kv([['Bestellung', `${l.best} · ${nf(l.soll,0)} kg ${src('s_m4')}`],['Lieferant', esc(l.lief)],['Zeugnis 3.1', `${l.pflicht?'<b>Pflicht</b>':'nicht gefordert'} (${esc(l.kunde)}) ${src('s_kanf')}`], (l.zg||[]).length && ['Im Zeugnis-Postfach', l.zg.map(z => `${z.nr} → Charge ${z.charge}${z.best!==l.best?` <span class="muted small">(zu ${z.best}, nicht verwendbar)</span>`:''}`).join('<br>') + ' ' + src('s_zeug')]])}
+  ${done ? `<div class="note ok">Zugebucht: ${(l.chargenIst||[]).map(c => `Charge ${c.ch} (${nf(+c.kg,0)} kg, ${c.z.length ? c.z.join(' + ') : 'Zeugnis angefordert'})`).join(' · ')} auf Lagerplatz ${l.lp}. Freigabeschein entfällt.</div>` : `
+  <div class="grid2"><div class="step"><span class="lbl">Sichtprüfung ${srcIn()}</span><div class="big2">${opt('sicht','io','In Ordnung')}${opt('sicht','krumm','Zu krumm → QS')}${opt('sicht','schaden','Beschädigt')}</div></div>
+   <div class="step"><label class="lbl" for="weM">Menge laut Lieferschein (kg) ${srcIn()}</label><input id="weM" class="bignum" type="number" data-we="menge" value="${esc(w.menge)}"></div></div>
+  <div class="step"><span class="lbl">Chargen ${srcIn()}</span>
+   ${w.chargen.map((c,i) => { const zs = zFor(c.ch); return `<div class="chrow"><input type="text" data-wc="${i}.ch" value="${esc(c.ch)}" placeholder="Charge / Schmelze, z. B. S-88240" aria-label="Charge ${i+1}"><input type="number" data-wc="${i}.kg" value="${esc(c.kg)}" placeholder="kg" aria-label="Menge Charge ${i+1}">
+    <div class="row small">${zs.length ? zs.map(z => `<span class="chip ok">${z}</span>`).join('') : c.foto ? '<span class="chip warn">Foto – Einkauf prüft</span>' : c.fehlt ? '<span class="chip bad">angefordert</span>' : c.ch ? `<button class="btn small" data-a="ek:cf" data-id="${i}" data-v="foto">Papier → Foto</button><button class="btn small" data-a="ek:cf" data-id="${i}" data-v="fehlt">fehlt</button>` : '<span class="muted">Zeugnis ordnet sich über die Charge zu</span>'}</div>
+    ${w.chargen.length>1?`<button class="btn small" data-a="ek:cdel" data-id="${i}" aria-label="Charge entfernen">✕</button>`:'<span></span>'}</div>`; }).join('')}
+   <div class="row between"><button class="btn small" data-a="ek:cadd">+ weitere Charge</button><span class="small">Σ Chargen <b class="mono">${nf(sum,0)} kg</b> ${w.menge!=='' ? (Math.abs(sum - +w.menge) <= +w.menge*0.01 ? '<span class="chip ok">= Lieferschein</span>' : `<span class="chip warn">Lieferschein ${nf(+w.menge,0)} kg</span>`) : ''}</span></div></div>
+  <div class="row between"><span>Lagerplatz-Vorschlag: <b class="mono">${l.lp}</b> ${src('s_lager')}</span><button class="btn primary" data-a="ek:wbook2">Zubuchen</button></div>`}</div>`;
+};
+
+/* ---------- Aktionen ---------- */
+const _actArea2 = actArea;
+actArea = function(act, id, v, el){
+ const st = A[act.split(':')[0]];
+ switch (act){
+  case 'rec:close': A.rec = []; renderRec(); return;
+  case 'rec:back': A.rec.pop(); renderRec(); return;
+  case 'rec:to': A.rec = A.rec.slice(0, +v + 1); renderRec(); return;
+  case 'rec:qs': { const [ty, rid] = v.split(':'); A.rec = []; renderRec(); S.area = 'qs'; S.view = 'qs'; S.open = {type:ty, id:rid}; S.sub = 'erf'; S.force = true; render(); return; }
+  case 'rec:anf': A.rec = []; renderRec(); S.area = 'vt'; A.tab.vt = 'board'; A.open.vt = v; break;
+  case 'lv:mode': A.lv[S.area].mode = v; break;
+  case 'lv:view': A.lv[S.area].view = v; break;
+  case 'lv:sort': { const lv = A.lv[S.area]; lv.sort = lv.sort && lv.sort.k===v ? {k:v, dir:-lv.sort.dir} : {k:v, dir:1}; break; }
+  case 'lv:more': A.more[v] = true; break;
+  case 'fe:gsel': A.fe.gsel = A.fe.gsel===id ? null : id; A.open.feNo = null; break;
+  case 'fe:mv': { const p = A.fe.plan.find(x => x.id===id); let k = p.tag*2 + (p.sch==='S'?1:0) + (+v); k = Math.max(0, Math.min(9, k)); p.tag = Math.floor(k/2); p.sch = k%2 ? 'S' : 'F'; break; }
+  case 'ek:cadd': A.ek.we.chargen.push({ch:'', kg:'', z:[]}); break;
+  case 'ek:cdel': A.ek.we.chargen.splice(+id, 1); break;
+  case 'ek:cf': { const c = A.ek.we.chargen[+id]; c[v] = true; break; }
+  case 'ek:wsel': A.ek.we.sel = v; Object.assign(A.ek.we, {menge:'', sicht:'', chargen:[{ch:'', kg:'', z:[]}]}); break;
+  case 'ek:wbook2': { document.activeElement?.blur?.(); const w = A.ek.we, l = w.liste.find(x => x.id===w.sel);
+    const zFor = ch => (l.zg||[]).filter(z => z.charge===ch.trim().toUpperCase() && z.best===l.best).slice(0,1).map(z => z.nr);
+    const cs = w.chargen.filter(c => c.ch.trim()); const sum = cs.reduce((s,c) => s + (+c.kg||0), 0);
+    const miss = [w.sicht!=='io' && 'Sichtprüfung i. O.', w.menge==='' && 'Menge', !cs.length && 'Charge', cs.some(c => !(+c.kg)) && 'Menge je Charge', w.menge!=='' && Math.abs(sum - +w.menge) > +w.menge*0.01 && 'Σ Chargen = Lieferschein', cs.some(c => !zFor(c.ch).length && !c.foto && !c.fehlt) && 'MPZ je Charge', new Set(cs.map(c => c.ch.trim().toUpperCase())).size < cs.length && 'jede Charge nur einmal'].filter(Boolean);
+    if (miss.length){ flash('Noch offen: ' + miss.join(', ')); return; }
+    l.chargenIst = cs.map(c => ({ch:c.ch.trim().toUpperCase(), kg:c.kg, z: zFor(c.ch).length ? zFor(c.ch) : c.foto ? ['Foto'] : []}));
+    w.done[l.id] = 'multi'; const d = A.ek.deck.find(x => x.id===l.deck); if (d){ d.bestand += sum; d.bestellt = Math.max(0, d.bestellt - l.soll); }
+    l.chargenIst.forEach(c => A.ek.zeug.unshift({id:'Z'+Date.now()+c.ch, charge:c.ch, lief:l.lief, wst:l.pos.split(' · ')[0], we:'WE-26-'+(1120+A.ek.zeug.length), ein:new Date().toISOString(), st: c.z.length && c.z[0]!=='Foto' ? 'auto' : c.z[0]==='Foto' ? 'hersteller' : 'fehlt', ba:'—'}));
+    const rr = A.ek.rueck.find(x => x.best===l.best); if (rr) rr.st = 'geliefert'; flash('Zugebucht – Chargen und Zeugnisse verknüpft'); break; }
+  default: return _actArea2(act, id, v, el);
+ }
+ saveA(); S.force = true; render();
+};
+document.addEventListener('input', e => { const el = e.target;
+ if (el.dataset.lvq){ A.lv[el.dataset.lvq].q = el.value; saveA(); const ql = el.value.toLowerCase(); document.querySelectorAll('#main .board .card, #main tr[data-row], #main .list > .card').forEach(x => { x.hidden = !!ql && !x.textContent.toLowerCase().includes(ql); }); }
+ if (el.dataset.wc){ const [i, f] = el.dataset.wc.split('.'); A.ek.we.chargen[+i][f] = el.value; saveA(); }
+});
+document.addEventListener('change', e => { const el = e.target; if (el.dataset.wc) setTimeout(render, 0); });
+
+/* ---------- nach jedem Zeichnen: verlinken ---------- */
+const _render0 = render;
+render = function(){ _render0(); autolink(document.getElementById('main')); };
 
 /* ---------- Start ---------- */
 render();
