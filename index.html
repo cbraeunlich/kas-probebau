@@ -1949,26 +1949,32 @@ document.addEventListener('change', e => { const el = e.target; if (el.dataset.w
 const _render0 = render;
 render = function(){ _render0(); autolink(document.getElementById('main')); };
 
-/* ===================== Schichtübergabe mit Schichtbesetzung (Drag & Drop) ===================== */
+/* ===================== Schichtübergabe: Maschinen und Rüstvorgänge den anwesenden Personen zuordnen ===================== */
 (function(){ const st = document.createElement('style'); st.textContent = `
-.sb-grid{display:grid;grid-template-columns:240px 1fr;gap:14px;align-items:start}
-@media (max-width:820px){.sb-grid{grid-template-columns:1fr}}
-.pool{position:sticky;top:110px;display:grid;gap:8px;align-content:start}
-.pchip{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px 6px 6px;font-size:.88rem;cursor:grab;touch-action:none;user-select:none;min-height:40px}
-.pchip .av{width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:700 .72rem var(--f-mono);flex:none}
-.pchip.sel{outline:3px solid var(--info);outline-offset:1px}
-.pchip.warn{border-color:var(--warn);background:var(--warn-soft)}
-.pchip .x{margin-left:auto;border:0;background:none;color:var(--muted);font-size:1rem;padding:0 2px;cursor:pointer}
-.pchip.off{opacity:.5;cursor:default}
-.mgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-.mcard{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px;display:grid;gap:8px;align-content:start;transition:border-color .12s,background .12s}
-.mcard.hot{border-color:var(--info);background:var(--info-soft)}
-.mcard.need{border-color:var(--bad)}
-.mcard .drop{min-height:44px;border:1px dashed var(--line);border-radius:10px;padding:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.mcard .drop:empty::before{content:"Person hierher ziehen oder antippen";color:var(--muted);font-size:.8rem;padding:4px}
-.stz{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600}
-.stz i{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--ok)}.stz.steht i{background:var(--warn)}.stz.alarm i{background:var(--bad)}.stz.unbekannt i{background:var(--line)}
-.ghostdrag{position:fixed;z-index:50;pointer-events:none;opacity:.9;transform:translate(-50%,-50%) scale(1.05);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.tpool{display:flex;flex-wrap:wrap;gap:8px;min-height:52px;align-items:center;border:1px dashed var(--line);border-radius:12px;padding:10px;background:var(--surface-2)}
+.tpool.hot{border-color:var(--info);background:var(--info-soft)}
+.tchip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 10px;font-size:.85rem;cursor:grab;touch-action:none;user-select:none;min-height:42px;max-width:100%}
+.tchip b{font-family:var(--f-mono)}
+.tchip .dot{width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none}.tchip .dot.steht{background:var(--warn)}.tchip .dot.unbekannt{background:var(--line)}
+.tchip.ru{border-style:dashed}.tchip.ru .dot{background:repeating-linear-gradient(135deg,var(--warn) 0 3px,transparent 3px 6px)}
+.tchip.sel{outline:3px solid var(--info);outline-offset:1px}
+.tchip.warn{border-color:var(--warn);background:var(--warn-soft)}
+.tchip .x{border:0;background:none;color:var(--muted);font-size:1rem;padding:0 2px;cursor:pointer}
+.pgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.pcard{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px;display:grid;gap:8px;align-content:start;transition:border-color .12s,background .12s}
+.pcard.hot{border-color:var(--info);background:var(--info-soft)}
+.pcard.over{border-color:var(--warn)}
+.pcard .ph{display:flex;gap:10px;align-items:center}
+.pcard .av{width:38px;height:38px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:700 .8rem var(--f-mono);flex:none}
+.pcard .qs{display:flex;flex-wrap:wrap;gap:4px}.pcard .qs span{font:600 .68rem var(--f-mono);padding:1px 5px;border-radius:4px;background:var(--surface-2);color:var(--muted)}
+.pcard .drop{min-height:50px;border:1px dashed var(--line);border-radius:10px;padding:6px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.pcard .drop:empty::before{content:"Maschine hierher ziehen oder antippen";color:var(--muted);font-size:.8rem;padding:6px}
+.load{display:flex;gap:3px}.load i{width:16px;height:6px;border-radius:3px;background:var(--line)}.load i.on{background:var(--accent)}.load i.on.hi{background:var(--warn)}
+.ghostdrag{position:fixed;z-index:50;pointer-events:none;opacity:.92;transform:translate(-50%,-50%) scale(1.05);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.mcard{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;display:grid;gap:8px;transition:border-color .12s,background .12s}
+.mcard.hot{border-color:var(--info);background:var(--info-soft)}.mcard.need{border-left:5px solid var(--bad)}
+.stz{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:var(--muted)}
+.stz i{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--ok)}.stz.steht i{background:var(--warn)}.stz.unbekannt i{background:var(--line)}
 .sign{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:640px){.sign{grid-template-columns:1fr}}
 `; document.head.appendChild(st); })();
 
@@ -1978,84 +1984,121 @@ const PERS = [
  {ma:'MA 071', rolle:'Auszubildende/r', q:['603'], pate:true}, {ma:'MA 088', rolle:'Bediener', q:['612','607']}, {ma:'MA 095', rolle:'Schichtführer', q:['603','612','201','607','605','220']},
  {ma:'MA 109', rolle:'Bediener', q:['201','220','605']}];
 const SB_ZUST = {'603':'läuft','612':'steht','201':'läuft','607':'läuft','605':'läuft','220':'unbekannt'};
+const SB_MAX = 4;   /* Richtwert Maschinen je Person – im Echtbetrieb je Maschine/Artikel einstellbar */
 function ext5(s){
- if (s.r4) return s; s.r4 = true;
+ if (s.r5) return s; s.r5 = true;
  s.fe.sb = {anwesend:['MA 014','MA 022','MA 031','MA 047','MA 052','MA 063','MA 071','MA 088','MA 095'],
-  vorschicht:{'603':['MA 063'],'612':['MA 088'],'201':['MA 022'],'607':['MA 052'],'605':['MA 063'],'220':['MA 022'],'ruest':['MA 047']},
+  vor:{'m:603':'MA 063','m:605':'MA 063','m:612':'MA 088','m:607':'MA 088','m:201':'MA 022','m:220':'MA 022','r:P0':'MA 047'},
   zu:{}, sel:null, aus:null, ein:null};
  return s;
 }
 const _seedAreas3 = seedAreas; seedAreas = () => ext5(_seedAreas3()); A = ext5(A); saveA();
 const pers = ma => PERS.find(p => p.ma === ma);
-function sbChip(ma, where){
- const p = pers(ma), sb = A.fe.sb, unq = where && where !== 'ruest' && !p.q.includes(where);
- return `<div class="pchip ${sb.sel===ma?'sel':''} ${unq?'warn':''}" data-pdrag="${ma}" data-a="sb:sel" data-id="${ma}" role="button" tabindex="0" title="${esc(p.rolle)}"><span class="av">${ma.slice(3)}</span><span><b>${ma}</b><br><span class="tiny muted">${esc(p.rolle)}${unq?' · nicht qualifiziert':''}${p.pate&&where&&where!=='ruest'?' · nur mit Pate':''}</span></span>${where?`<button class="x" data-a="sb:rm" data-id="${ma}" data-v="${where}" aria-label="${ma} entfernen">✕</button>`:''}</div>`;
+function sbTasks(st){
+ const m = G_RUN.map(g => ({t:'m:'+g.m, m:g.m, ba:g.ba, z:SB_ZUST[g.m]}));
+ const r = st.plan.filter(p => p.tag <= 1).map(p => ({t:'r:'+p.id, m:p.masch, ba:p.ba, artikel:p.artikel, h:p.ruest, tag:p.tag, sch:p.sch}));
+ return [...m, ...r];
 }
-MOD('fe').tabs.splice(1, 0, ['ueber','Schichtübergabe']);
+function sbWarn(task, ma){
+ if (!ma) return ''; const p = pers(ma);
+ if (task.t.startsWith('r:')) return p.rolle==='Rüster' || p.rolle==='Schichtführer' ? (p.q.includes(task.m) ? '' : 'Maschine nicht in Qualifikation') : 'kein Rüster';
+ if (!p.q.includes(task.m)) return 'nicht qualifiziert';
+ if (p.pate) return 'nur mit Pate';
+ return '';
+}
+function sbChip(task, ma){
+ const sb = A.fe.sb, w = sbWarn(task, ma), a = art(task.artikel || BA[task.ba].artikel);
+ const isR = task.t.startsWith('r:');
+ return `<div class="tchip ${isR?'ru':''} ${sb.sel===task.t?'sel':''} ${w?'warn':''}" data-pdrag="${task.t}" data-a="sb:sel" data-id="${task.t}" role="button" tabindex="0">
+  <span class="dot ${isR?'':task.z==='läuft'?'':task.z==='steht'?'steht':'unbekannt'}"></span>
+  <span><b>${isR?'Rüsten ':''}${task.m}</b> <span class="muted">${isR?`BA ${task.ba} · ${nf(task.h,1)} h · ${task.tag===0?'heute':'morgen'} ${task.sch==='F'?'Früh':'Spät'}`:`${task.z} · ${esc(a.de)}`}</span>${w?`<br><span class="tiny">${w}</span>`:''}</span>
+  ${ma?`<button class="x" data-a="sb:rm" data-id="${task.t}" aria-label="Zuordnung lösen">✕</button>`:''}</div>`;
+}
+MOD('fe').tabs.splice(1, 0, ['ueber','Schichtübergabe & Schichtbuch']);
+MOD('fe').tabs = MOD('fe').tabs.filter(t => t[0] !== 'buch');
+const SB_VOR = {'603':{stk:1040, lauf:92}, '612':{stk:705, lauf:61}, '201':{stk:610, lauf:88}, '607':{stk:1450, lauf:95}, '605':{stk:540, lauf:90}, '220':null};
 const feView2 = MOD('fe').view;
 MOD('fe').view = function(st, tab){
  if (tab !== 'ueber') return feView2.call(this, st, tab);
- const sb = st.sb, zu = sb.zu, assigned = new Set(Object.values(zu).flat());
+ const sb = st.sb, zu = sb.zu, tasks = sbTasks(st); sb.done = sb.done || {}; sb.kat = sb.kat || {};
  const sch = schichtNow(), naechste = sch==='Früh' ? 'Spät' : sch==='Spät' ? 'Nacht' : 'Früh';
- const ruestHeute = st.plan.filter(p => p.tag===0 || p.tag===1);
- const cards = G_RUN.map(g => { const b = BA[g.ba], a = art(b.artikel), z = SB_ZUST[g.m], ps = zu[g.m] || [];
-  const stoer = A.ih.stoer.find(s => s.masch===g.m && s.st!=='erledigt'), buch = st.buch.filter(e => e.masch===g.m).slice(-1)[0];
-  const need = z !== 'unbekannt' && !ps.length;
-  return `<div class="mcard ${need?'need':''}" data-drop="${g.m}"><div class="row between"><b class="noln">Maschine ${g.m}</b><span class="stz ${z==='läuft'?'':z==='steht'?'steht':'unbekannt'}"><i></i>${z}</span></div>
-   <span class="small">BA ${g.ba} · ${esc(a.de)} <span class="muted">${nf(b.gut,0)} / ${nf(b.menge,0)} Stk.</span></span>
-   ${stoer?`<span class="chip bad" style="justify-self:start">${esc(stoer.txt)}</span>`:''}${buch?`<span class="small muted">Vorschicht: ${esc(buch.txt)}</span>`:''}
-   <div class="drop" data-drop="${g.m}">${ps.map(m => sbChip(m, g.m)).join('')}</div></div>`; }).join('');
- const rcard = `<div class="mcard ${!(zu.ruest||[]).length&&ruestHeute.length?'need':''}" data-drop="ruest"><div class="row between"><b>Rüsten</b><span class="small muted">${ruestHeute.length} Rüstvorgänge geplant</span></div>
-   ${ruestHeute.map(p => `<span class="small">Maschine ${p.masch} · BA ${p.ba} · ${nf(p.ruest,1)} h</span>`).join('') || '<span class="small muted">nichts geplant</span>'}
-   <div class="drop" data-drop="ruest">${(zu.ruest||[]).map(m => sbChip(m, 'ruest')).join('')}</div></div>`;
- const offen = G_RUN.filter(g => SB_ZUST[g.m]!=='unbekannt' && !(zu[g.m]||[]).length).length;
- const unq = Object.entries(zu).flatMap(([m, l]) => m==='ruest' ? [] : l.filter(x => !pers(x).q.includes(m)).map(x => `${x} an ${m}`));
- return `<div class="note info">Übergabe vom Schichtführer der ${esc(sch)}schicht an die ${esc(naechste)}schicht. Der BA bleibt an der Maschine (angemeldet beim Rüsten); hier wird nur zugeordnet, <b>wer</b> welche Maschine betreut. Anwesenheit kommt aus der Zeiterfassung ${src('s_term')}, Maschinenzustand aus dem FreeMachine Connector ${src('s_mde')}. Person auf eine Maschine ziehen – oder antippen und dann die Maschine antippen.</div>
-  <div class="kpis"><div class="kpi ${offen?'alert':''}"><b>${offen}</b><span>laufende Maschinen ohne Person</span></div><div class="kpi"><b>${sb.anwesend.length - [...assigned].filter(x => sb.anwesend.includes(x)).length}</b><span>Anwesende ohne Zuordnung</span></div><div class="kpi ${unq.length?'alert':''}"><b>${unq.length}</b><span>Zuordnung ohne Qualifikation</span></div></div>
-  <div class="actions"><button class="btn" data-a="sb:vor">Wie Vorschicht übernehmen</button><button class="btn" data-a="sb:leer">Leeren</button></div>
-  <div class="sb-grid"><div class="panel pool" data-drop="pool"><h3>Anwesend (${sb.anwesend.length})</h3>${sb.anwesend.filter(x => !assigned.has(x)).map(m => sbChip(m, null)).join('') || '<span class="muted small">alle zugeordnet</span>'}
-   <span class="hint">Qualifikation aus der Qualifikationsmatrix (A236). Abwesende erscheinen nicht – ohne Grund.</span></div>
-   <div class="mgrid">${cards}${rcard}</div></div>
-  ${unq.length?`<div class="note warn">Nicht qualifiziert laut Matrix: ${unq.join(', ')} – bewusst so? (Einweisung/Pate)</div>`:''}
+ const mt = tasks.filter(t => t.t.startsWith('m:')), rt = tasks.filter(t => t.t.startsWith('r:'));
+ const cnt = ma => mt.filter(t => zu[t.t]===ma).length, rcnt = ma => rt.filter(t => zu[t.t]===ma).length;
+ const done = mt.filter(t => sb.done[t.m]).length;
+ const offen = mt.filter(t => t.z!=='unbekannt' && !(zu[t.t] && sb.anwesend.includes(zu[t.t]))).length;
+ const warnings = tasks.filter(t => zu[t.t] && sbWarn(t, zu[t.t])).map(t => `${t.t.startsWith('r:')?'Rüsten ':''}${t.m} → ${zu[t.t]}: ${sbWarn(t, zu[t.t])}`);
+ const pbar = `<div class="tpool" data-drop="none">${sb.anwesend.map(ma => { const p = pers(ma), n = cnt(ma), r = rcnt(ma);
+   return `<div class="tchip ${sb.hl===ma?'sel':''}" data-pdrag="p:${ma}" data-a="sb:hl" data-id="${ma}" role="button" tabindex="0"><span class="av" style="width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:700 .7rem var(--f-mono)">${ma.slice(3)}</span><span><b>${ma}</b> <span class="muted">${esc(p.rolle)}</span><br><span class="load">${[...Array(SB_MAX)].map((_,i) => `<i class="${i<n?'on':''} ${i<n&&n>=SB_MAX?'hi':''}"></i>`).join('')}</span> <span class="tiny muted">${n} Masch.${r?` · ${r} Rüsten`:''}</span></span></div>`; }).join('')}</div>`;
+ const opts = (t) => `<option value="">— niemand —</option>${sb.anwesend.map(ma => { const w = sbWarn(t, ma); return `<option value="${ma}" ${zu[t.t]===ma?'selected':''}>${ma} · ${esc(pers(ma).rolle)}${w?' ('+w+')':''}</option>`; }).join('')}`;
+ const row = t => { const b = BA[t.ba], a = art(b.artikel), v = SB_VOR[t.m], ma = zu[t.t], w = sbWarn(t, ma);
+  const stoer = A.ih.stoer.filter(s => s.masch===t.m && s.st!=='erledigt'), wart = A.ih.wart.filter(x => x.masch===t.m && x.st!=='erledigt' && atage(x.faellig) <= 1);
+  const sk = (S.sk||[]).filter(s => s.ba===t.ba && ['offen','nacharbeit'].includes(s.status));
+  const ru = rt.filter(r => r.m===t.m), eintr = st.buch.filter(e => e.masch===t.m).slice(-3).reverse();
+  return `<div class="mcard ${sb.hl&&sb.hl===ma?'hot':''} ${!ma && t.z!=='unbekannt'?'need':''}" data-drop="${t.t}" style="grid-template-columns:1fr;gap:10px">
+   <div class="row between"><span class="row"><b class="noln" style="font-size:1.1rem">Maschine ${t.m}</b><span class="stz ${t.z==='läuft'?'':t.z==='steht'?'steht':'unbekannt'}"><i></i>${t.z}</span></span>
+    <label class="row small" style="cursor:pointer"><input type="checkbox" data-sbdone="${t.m}" ${sb.done[t.m]?'checked':''} style="width:22px;height:22px;accent-color:var(--accent)"> durchgesprochen</label></div>
+   <div class="grid3" style="align-items:start">
+    <div class="small"><b>BA ${t.ba}</b> · ${esc(a.de)}<br><span class="muted">${nf(b.gut,0)} / ${nf(b.menge,0)} Stk. gut</span>${v?`<br>Vorschicht: <b class="mono">${nf(v.stk,0)} Stk.</b> · Laufzeit ${v.lauf} % ${src('s_mde')}`:'<br><span class="muted">keine Maschinendaten (noch nicht angebunden)</span>'}
+     ${stoer.map(s => `<br><span class="chip bad">${esc(s.txt)}</span>`).join('')}${wart.map(x => `<br><span class="chip warn">Wartung: ${esc(x.was)}</span>`).join('')}${sk.map(s => `<br><span class="chip warn">${s.nr} ${esc(t2stat(s.status))}</span>`).join('')}${ru.map(r => `<br><span class="chip info">Rüsten BA ${r.ba} · ${nf(r.h,1)} h · ${r.tag===0?'heute':'morgen'} ${r.sch==='F'?'Früh':'Spät'}</span>`).join('')}</div>
+    <div class="small">${eintr.length ? eintr.map(e => `<div><span class="mono muted">${dt(e.t)}</span> <span class="chip ${e.kat==='Störung'?'bad':e.kat==='Qualität'?'warn':'info'}">${esc(e.kat)}</span> ${esc(e.txt)}</div>`).join('') : '<span class="muted">keine Einträge</span>'}
+     <div class="row" style="flex-wrap:nowrap;margin-top:6px"><select data-sbkat="${t.m}" aria-label="Art" style="width:auto">${['Info','Störung','Qualität','Material'].map(k => `<option ${(sb.kat[t.m]||'Info')===k?'selected':''}>${k}</option>`).join('')}</select><input type="text" id="sbt-${t.m}" placeholder="Besonderheit erfassen …" aria-label="Besonderheit Maschine ${t.m}"><button class="btn small" data-a="sb:buch" data-id="${t.m}">+</button></div></div>
+    <div class="step"><label class="lbl" for="sbp-${t.m}">Betreut von</label><select id="sbp-${t.m}" data-sbp="${t.t}">${opts(t)}</select>${w?`<span class="chip warn" style="justify-self:start">${esc(w)}</span>`:''}
+     ${ru.map(r => `<label class="lbl small" for="sbr-${r.t}">Rüsten durch</label><select id="sbr-${r.t}" data-sbp="${r.t}">${opts(r)}</select>${zu[r.t]&&sbWarn(r, zu[r.t])?`<span class="chip warn" style="justify-self:start">${esc(sbWarn(r, zu[r.t]))}</span>`:''}`).join('')}</div>
+   </div></div>`; };
+ return `<div class="note info">Übergabe vom Schichtführer der ${esc(sch)}schicht an die ${esc(naechste)}schicht – <b>Maschine für Maschine durchsprechen</b>: Besonderheiten gleich hier ins Schichtbuch, Betreuung zuordnen (eine Person kann mehrere Maschinen haben), abhaken. Personen auch aus der Leiste auf eine Maschine ziehen. Anwesenheit ${src('s_term')}, Maschinendaten aus dem FreeMachine Connector ${src('s_mde')}, Qualifikation aus der Matrix.</div>
+  <div class="kpis"><div class="kpi"><b>${done} / ${mt.length}</b><span>Maschinen durchgesprochen</span></div><div class="kpi ${offen?'alert':''}"><b>${offen}</b><span>laufende Maschinen ohne Betreuung</span></div><div class="kpi ${rt.some(r=>!zu[r.t])?'alert':''}"><b>${rt.filter(r=>!zu[r.t]).length}</b><span>Rüstvorgänge ohne Rüster</span></div><div class="kpi ${warnings.length?'alert':''}"><b>${warnings.length}</b><span>Hinweise Qualifikation</span></div></div>
+  <div class="row between"><h3>Anwesend (${sb.anwesend.length}) · Maschinen je Person</h3><span class="actions" style="margin:0"><button class="btn small" data-a="sb:vor">Wie Vorschicht</button><button class="btn small" data-a="sb:leer">Alles lösen</button></span></div>${pbar}
+  <div class="list" style="margin-top:12px">${mt.map(row).join('')}</div>
+  ${warnings.length?`<div class="note warn">${warnings.map(esc).join('<br>')}</div>`:''}
   <div class="panel"><h3>Übergabe bestätigen</h3><div class="sign">
-   <div class="step"><span class="lbl">Schichtführer ${esc(sch)} (abgebend)</span>${sb.aus?`<span class="chip ok" style="justify-self:start">bestätigt ${dt(sb.aus)}</span>`:`<button class="btn" data-a="sb:aus">Übergabe bestätigen</button>`}</div>
+   <div class="step"><span class="lbl">Schichtführer ${esc(sch)} (abgebend)</span>${sb.aus?`<span class="chip ok" style="justify-self:start">bestätigt ${dt(sb.aus)}</span>`:`<button class="btn" data-a="sb:aus">Übergabe bestätigen</button>`}${done<mt.length&&!sb.aus?`<span class="hint">${mt.length-done} Maschine(n) noch nicht abgehakt</span>`:''}</div>
    <div class="step"><span class="lbl">Schichtführer ${esc(naechste)} (übernehmend)</span>${sb.ein?`<span class="chip ok" style="justify-self:start">übernommen ${dt(sb.ein)}</span>`:`<button class="btn primary" data-a="sb:ein" ${sb.aus?'':'disabled'}>Schicht übernehmen</button>`}</div></div>
-   <span class="hint">Nach der Übernahme kennt jedes Maschinentablet seine Personen: Sperrkarte, Erstabnahme und Quittungen werden mit einem Antippen des eigenen Namens zugeordnet – ohne RFID an der Maschine. Personen gehen nie an den FreeMachine Connector.</span></div>`;
+   <span class="hint">Nach der Übernahme kennt jedes Maschinentablet die betreuende Person; Besonderheiten erscheinen dort beim Schichtbeginn. Personen gehen nie an den FreeMachine Connector. Richtwert ${SB_MAX} Maschinen je Person (einstellbar).</span></div>`;
 };
-
+const t2stat = s => t('st_'+s);
 /* Ziehen mit Finger oder Maus (Pointer-Events), Antippen als Alternative */
-let sbDrag = null;
-document.addEventListener('pointerdown', e => { const c = e.target.closest('[data-pdrag]'); if (!c || e.target.closest('.x')) return; sbDrag = {ma:c.dataset.pdrag, x:e.clientX, y:e.clientY, el:c, g:null}; });
+let sbDrag = null, sbSuppress = false;
+document.addEventListener('pointerdown', e => { const c = e.target.closest('[data-pdrag]'); if (!c || e.target.closest('.x')) return; sbDrag = {t:c.dataset.pdrag, x:e.clientX, y:e.clientY, el:c, g:null}; });
 document.addEventListener('pointermove', e => { if (!sbDrag) return; if (!sbDrag.g && Math.hypot(e.clientX - sbDrag.x, e.clientY - sbDrag.y) < 8) return;
  if (!sbDrag.g){ sbDrag.g = sbDrag.el.cloneNode(true); sbDrag.g.classList.add('ghostdrag'); document.body.appendChild(sbDrag.g); }
  e.preventDefault(); sbDrag.g.style.left = e.clientX + 'px'; sbDrag.g.style.top = e.clientY + 'px';
- document.querySelectorAll('.mcard.hot').forEach(x => x.classList.remove('hot')); const t = document.elementFromPoint(e.clientX, e.clientY)?.closest('.mcard[data-drop]'); if (t) t.classList.add('hot'); }, {passive:false});
-document.addEventListener('pointerup', e => { if (!sbDrag) return; const d = sbDrag; sbDrag = null; if (!d.g) return; d.g.remove(); document.querySelectorAll('.mcard.hot').forEach(x => x.classList.remove('hot'));
- const t = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-drop]'); if (t){ sbPlace(d.ma, t.dataset.drop); } sbSuppress = true; setTimeout(() => sbSuppress = false, 50); });
+ document.querySelectorAll('.pcard.hot,.tpool.hot,.mcard.hot').forEach(x => x.classList.remove('hot'));
+ const t = document.elementFromPoint(e.clientX, e.clientY)?.closest('.pcard[data-drop], .tpool[data-drop], .mcard[data-drop]'); if (t && t.dataset.drop !== 'none') t.classList.add('hot'); }, {passive:false});
+document.addEventListener('pointerup', e => { if (!sbDrag) return; const d = sbDrag; sbDrag = null; if (!d.g) return; d.g.remove(); document.querySelectorAll('.pcard.hot,.tpool.hot,.mcard.hot').forEach(x => x.classList.remove('hot'));
+ const t = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-drop]'); if (t) sbPlace(d.t, t.dataset.drop); sbSuppress = true; setTimeout(() => sbSuppress = false, 50); });
 document.addEventListener('pointercancel', () => { if (sbDrag?.g) sbDrag.g.remove(); sbDrag = null; });
-let sbSuppress = false;
 document.addEventListener('click', e => { if (sbSuppress && e.target.closest('[data-pdrag],[data-drop]')){ e.stopPropagation(); e.preventDefault(); return; }
- const sb = A.fe && A.fe.sb; if (!sb || !sb.sel || S.area!=='fe') return; const t = e.target.closest('.mcard[data-drop], .pool[data-drop]'); if (!t || e.target.closest('[data-pdrag]')) return;
- sbPlace(sb.sel, t.dataset.drop); }, true);
-function sbPlace(ma, where){
- const zu = A.fe.sb.zu; Object.keys(zu).forEach(k => zu[k] = zu[k].filter(x => x !== ma));
- if (where && where !== 'pool'){ zu[where] = [...(zu[where]||[]), ma]; }
- A.fe.sb.sel = null; A.fe.sb.aus = null; A.fe.sb.ein = null; saveA(); S.force = true; render();
+ const sb = A.fe && A.fe.sb; if (!sb || !sb.hl || S.area!=='fe') return; const t = e.target.closest('.mcard[data-drop]'); if (!t || e.target.closest('[data-pdrag],select,input,button,label')) return;
+ sbPlace('p:' + sb.hl, t.dataset.drop); }, true);
+function sbPlace(token, where){
+ const sb = A.fe.sb;
+ if (token.startsWith('p:')){ if (!where || !/^[mr]:/.test(where)) return; sb.zu[where] = token.slice(2); }
+ else if (where && where.startsWith('p:')) sb.zu[token] = where.slice(2); else delete sb.zu[token];
+ sb.sel = null; sb.aus = null; sb.ein = null; saveA(); S.force = true; render();
 }
 const _actArea3 = actArea;
 actArea = function(act, id, v, el){
  const sb = A.fe.sb;
  switch (act){
   case 'sb:sel': sb.sel = sb.sel===id ? null : id; break;
-  case 'sb:rm': sb.zu[v] = (sb.zu[v]||[]).filter(x => x !== id); sb.aus = sb.ein = null; break;
-  case 'sb:vor': sb.zu = JSON.parse(JSON.stringify(sb.vorschicht)); Object.keys(sb.zu).forEach(k => sb.zu[k] = sb.zu[k].filter(x => sb.anwesend.includes(x))); sb.aus = sb.ein = null; flash('Zuordnung der Vorschicht übernommen – Anwesenheit berücksichtigt'); break;
-  case 'sb:leer': sb.zu = {}; sb.aus = sb.ein = null; break;
+  case 'sb:hl': sb.hl = sb.hl===id ? null : id; break;
+  case 'sb:buch': { const i = document.getElementById('sbt-'+id); if (!i || !i.value.trim()) return; A.fe.buch.push({t:new Date().toISOString(), masch:id, kat:(sb.kat||{})[id]||'Info', txt:i.value.trim()}); sb.done[id] = true; break; }
+  case 'sb:rm': delete sb.zu[id]; sb.aus = sb.ein = null; break;
+  case 'sb:vor': sb.zu = {}; Object.entries(sb.vor).forEach(([k, ma]) => { if (sb.anwesend.includes(ma)) sb.zu[k] = ma; }); sb.aus = sb.ein = null;
+   flash('Zuordnung der Vorschicht übernommen – nicht Anwesende ausgelassen'); break;
+  case 'sb:leer': sb.zu = {}; sb.done = {}; sb.aus = sb.ein = null; break;
   case 'sb:aus': sb.aus = new Date().toISOString(); break;
-  case 'sb:ein': sb.ein = new Date().toISOString(); flash('Schicht übernommen – Maschinentablets kennen jetzt ihre Personen'); break;
+  case 'sb:ein': sb.ein = new Date().toISOString(); flash('Schicht übernommen – Maschinentablets kennen jetzt die betreuenden Personen'); break;
   default: return _actArea3(act, id, v, el);
  }
  saveA(); S.force = true; render();
 };
+
+document.addEventListener('change', e => { const el = e.target; if (!A.fe || !A.fe.sb) return; const sb = A.fe.sb;
+ if (el.dataset.sbp){ if (el.value) sb.zu[el.dataset.sbp] = el.value; else delete sb.zu[el.dataset.sbp]; sb.aus = sb.ein = null; saveA(); setTimeout(() => { S.force = true; render(); }, 0); }
+ if (el.dataset.sbdone){ sb.done = sb.done || {}; sb.done[el.dataset.sbdone] = el.checked; saveA(); setTimeout(() => { S.force = true; render(); }, 0); }
+ if (el.dataset.sbkat){ sb.kat = sb.kat || {}; sb.kat[el.dataset.sbkat] = el.value; saveA(); }
+});
 
 /* ---------- Start ---------- */
 render();
