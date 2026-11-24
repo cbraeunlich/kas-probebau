@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>KAS Sperrkarte &amp; Reklamation</title>
+<title>KAS-ERP Probebau</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -176,6 +176,7 @@ input.bignum{font:600 1.8rem var(--f-mono);text-align:center;min-height:64px}
 .ishikawa{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
 .photo{max-width:220px;border-radius:8px;border:1px solid var(--line)}
 @media (prefers-reduced-motion:no-preference){.card,.opt,.btn,.pp-row{transition:border-color .15s,background .15s}}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -183,7 +184,7 @@ input.bignum{font:600 1.8rem var(--f-mono);text-align:center;min-height:64px}
 
 <header class="top">
   <div class="toprow">
-    <div class="brand">
+    <div class="brand"><button class="areabtn" id="areaBtn" data-a="home:go" data-v="" hidden>☰ Bereiche</button>
       <img class="mark logo-light" alt="KAS" src="data:image/png;base64,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"><img class="mark logo-dark" alt="KAS" src="data:image/png;base64,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">
       <div><h1 id="appTitle">Sperrkarte &amp; Reklamation</h1><span class="sub" id="appSub"></span></div>
     </div>
@@ -224,14 +225,14 @@ const ARTIKEL = [
     merkmale:[
       {pos:1, de:'Gewinde M8-6g', cs:'Závit M8-6g', typ:'attr', pm:'Gewindelehrring', pmcs:'Závitový kroužek', b:{t:'dia', seg:0}},
       {pos:2, de:'Schaft-Ø 10 f7', cs:'Ø dříku 10 f7', typ:'num', nenn:10, lo:9.972, hi:9.987, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:1}},
-      {pos:3, de:'Kopf-Ø 14 ±0,05', cs:'Ø hlavy 14 ±0,05', typ:'num', nenn:14, lo:13.95, hi:14.05, dp:2, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:2}},
+      {pos:3, de:'Kopf-Ø 14 ±0,05', cs:'Ø hlavy 14 ±0,05', typ:'num', nenn:14, lo:13.95, hi:14.05, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:2}},
       {pos:4, de:'Länge 42 ±0,2', cs:'Délka 42 ±0,2', typ:'num', nenn:42, lo:41.8, hi:42.2, pm:'Messschieber', pmcs:'Posuvné měřidlo', b:{t:'len'}},
       {pos:5, de:'Rundlauf 0,05', cs:'Házivost 0,05', typ:'num', nenn:0, lo:0, hi:0.05, pm:'Messuhr', pmcs:'Úchylkoměr', b:{t:'surf', seg:1}}]},
   { id:'9900100003', de:'Crimphülse 50 mm²', cs:'Krimpovací dutinka 50 mm²', werkstoff:'Cu-ETP verzinnt', vk:2.10, zgs:'Index 02 · 20.02.2023', kunde:'Muster Automotive GmbH',
     stufen:[{l:22,d:14},{l:8,d:11}], bohrung:9.5,
     merkmale:[
-      {pos:1, de:'Bohrung Ø 9,5 +0,1', cs:'Otvor Ø 9,5 +0,1', typ:'num', nenn:9.5, lo:9.5, hi:9.6, dp:2, pm:'Grenzlehrdorn', pmcs:'Mezní kalibr', b:{t:'bore'}},
-      {pos:2, de:'Außen-Ø 14 ±0,05', cs:'Vnější Ø 14 ±0,05', typ:'num', nenn:14, lo:13.95, hi:14.05, dp:2, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:0}},
+      {pos:1, de:'Bohrung Ø 9,5 +0,1', cs:'Otvor Ø 9,5 +0,1', typ:'num', nenn:9.5, lo:9.5, hi:9.6, pm:'Grenzlehrdorn', pmcs:'Mezní kalibr', b:{t:'bore'}},
+      {pos:2, de:'Außen-Ø 14 ±0,05', cs:'Vnější Ø 14 ±0,05', typ:'num', nenn:14, lo:13.95, hi:14.05, pm:'Bügelmessschraube', pmcs:'Mikrometr', b:{t:'dia', seg:0}},
       {pos:3, de:'Länge 30 ±0,1', cs:'Délka 30 ±0,1', typ:'num', nenn:30, lo:29.9, hi:30.1, pm:'Messschieber', pmcs:'Posuvné měřidlo', b:{t:'len'}},
       {pos:4, de:'Schichtdicke Sn 4–8 µm', cs:'Tloušťka vrstvy Sn 4–8 µm', typ:'num', nenn:6, lo:4, hi:8, pm:'Schichtdickenmessgerät', pmcs:'Měřič tloušťky vrstvy', b:{t:'surf', seg:0}}]},
   { id:'9900100004', de:'Gewindebuchse M6', cs:'Závitové pouzdro M6', werkstoff:'1.4305', vk:0.62, zgs:'Index B · 05.05.2025', kunde:'Beispiel Elektrotechnik AG',
@@ -343,7 +344,7 @@ cs:{ title:'Karta blokace & reklamace', sub:'Zkušební verze KAS-ERP · verze 2
 const S = { lang:'de', view:'halle', tab:'tif', showSrc:true, sk:[], rk:[], jf:[], db:null, user:null, me:null, names:{}, mode:'loading', canWrite:true,
   d:null, confirm:null, open:null, sub:'erf', msg:'', pending:false, force:false, slow:false, photo:null, rkFilter:'alle', rkNew:null, jfOpen:{}, out:'8d' };
 const LS = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
-const pref = LS.get('kas-pref2'); if (pref){ S.lang = pref.lang||'de'; S.view = pref.view||'halle'; S.showSrc = pref.src!==false; S.tab = S.view==='halle' ? 'tif' : 'ueb'; }
+const pref = LS.get('kas-pref2'); S.area = pref && 'area' in pref ? pref.area : null; if (pref){ S.lang = pref.lang||'de'; S.view = pref.view||'halle'; S.showSrc = pref.src!==false; S.tab = S.view==='halle' ? 'tif' : 'ueb'; }
 const t = k => (T[S.lang][k] || T.de[k] || k);
 const L = o => o ? (o[S.lang] || o.de) : '';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -422,6 +423,7 @@ function drawing(a, sel){
 
 /* ---------- Kopf und Rahmen ---------- */
 function setHead(){
+  document.querySelectorAll('.seg').forEach(x => x.hidden = false); { const ab = document.getElementById('areaBtn'); if (ab) ab.hidden = false; }
   document.documentElement.lang = S.lang;
   const $ = id => document.getElementById(id);
   $('appTitle').textContent = t('title'); $('appSub').textContent = t('sub'); $('testBadge').textContent = t('test');
@@ -435,6 +437,7 @@ function setHead(){
   $('tabs').innerHTML = tabs.map(([k,l,c]) => `<button data-action="tab" data-v="${k}" ${S.tab===k && !S.open?'aria-current="page"':''}>${esc(t(l))}${c?`<span class="count">${c}</span>`:''}</button>`).join('');
 }
 function render(){
+  if (S.area !== 'qs') return renderArea();
   const a = document.activeElement;
   if (!S.force && a && a.closest && a.closest('#main') && /INPUT|TEXTAREA|SELECT/.test(a.tagName)){ S.pending = true; setHead(); return; }
   S.force = false; S.pending = false; setHead();
@@ -449,6 +452,7 @@ function render(){
   else if (S.open?.type === 'na') h += viewNa(S.sk.find(x => x.id === S.open.id));
   else if (S.open?.type === 'rk') h += viewRk(S.rk.find(x => x.id === S.open.id));
   else h += ({tif:viewTif, na:viewNaList, mine:viewMine, ueb:viewUeb, rk:viewRkList, jf:viewJf, stat:viewStat}[S.tab] || viewUeb)();
+  if (!S.open) h += fbBox('qs');
   document.getElementById('main').innerHTML = h;
   if (S.photo){ const img = document.getElementById('photoPrev'); if (img) img.src = S.photo; }
 }
@@ -856,7 +860,7 @@ document.addEventListener('click', async e => {
     case 'jfClose': return jfClose();
     default: return;
   }
-  LS.set('kas-pref2', {lang:S.lang, view:S.view, src:S.showSrc});
+  LS.set('kas-pref2', {lang:S.lang, view:S.view, src:S.showSrc, area:S.area});
   S.force = true; render();
   if (['pickM','pickMa'].includes(A)) document.querySelector(A==='pickMa' ? '.machine-head' : '#fIst, .chip.bad')?.scrollIntoView({behavior:'smooth', block:'center'});
 });
@@ -911,6 +915,698 @@ async function jfClose(){
 function loadExamplesLocal(){ const s = clone(SEED); S.sk = s.sk; S.rk = s.rk; S.jf = s.jf; S.open = null; S.d = null; try{ localStorage.removeItem('kas-demo2'); }catch(e){} flash('Beispieldaten wiederhergestellt'); }
 
 const SEED = {"sk": [{"id": "ex-sk1", "nr": "SK-26-0001", "erstellt": "2026-11-05T09:40:00Z", "maschine": "612", "ba": "309900102", "artikel": "9900100002", "charge": "CH-26-121", "zgs": "Index A · 02.09.2024", "schicht": "Früh", "merkmal": 3, "ist": 14.08, "abw": "gross", "fkat": "mass", "menge": 200, "kisten": 1, "bem": "", "lagerplatz": "S", "status": "erledigt", "na": {"erg": {"io": 190, "nio": 0, "schrott": 10, "am": "2026-11-06T11:00:00Z"}}, "verlauf": [{"t": "2026-11-05T09:40:00Z", "u": "", "e": "e_create", "x": ""}, {"t": "2026-11-05T13:10:00Z", "u": "", "e": "e_dec", "x": "st_nacharbeit"}, {"t": "2026-11-06T11:00:00Z", "u": "", "e": "e_na", "x": "i. O. 190 · n. i. O. 0 · Schrott 10"}], "beispiel": true, "sprache": "de"}, {"id": "ex-sk2", "nr": "SK-26-0002", "erstellt": "2026-11-12T19:15:00Z", "maschine": "612", "ba": "309900102", "artikel": "9900100002", "charge": "CH-26-121", "zgs": "Index A · 02.09.2024", "schicht": "Spät", "merkmal": 2, "ist": 9.965, "abw": "klein", "fkat": "mass", "menge": 300, "kisten": 2, "bem": "Werkzeugwechsel kurz vorher", "lagerplatz": "S", "status": "nacharbeit", "verlauf": [{"t": "2026-11-12T19:15:00Z", "u": "", "e": "e_create", "x": ""}, {"t": "2026-11-13T07:30:00Z", "u": "", "e": "e_dec", "x": "st_nacharbeit"}], "beispiel": true, "sprache": "de"}, {"id": "ex-sk3", "nr": "SK-26-0003", "erstellt": "2026-11-17T06:50:00Z", "maschine": "607", "ba": "309900104", "artikel": "9900100004", "charge": "CH-26-130", "zgs": "Index B · 05.05.2025", "schicht": "Nacht", "merkmal": 1, "ist": null, "abw": "nio", "fkat": "gewinde", "menge": 1200, "kisten": 4, "bem": "Gutlehrdorn geht nicht durch", "lagerplatz": "S", "status": "rekla", "rk": "ex-rk1", "verlauf": [{"t": "2026-11-17T06:50:00Z", "u": "", "e": "e_create", "x": ""}, {"t": "2026-11-17T08:05:00Z", "u": "", "e": "e_dec", "x": "st_qs"}, {"t": "2026-11-17T08:05:00Z", "u": "", "e": "e_rk", "x": "RK-26-0001"}], "beispiel": true, "sprache": "de"}, {"id": "ex-sk4", "nr": "SK-26-0004", "erstellt": "2026-11-20T10:20:00Z", "maschine": "603", "ba": "309900101", "artikel": "9900100001", "charge": "CH-26-117", "zgs": "Index C · 12.03.2025", "schicht": "Früh", "merkmal": 1, "ist": 12.031, "abw": "gross", "fkat": "mass", "menge": 450, "kisten": 2, "bem": "", "lagerplatz": "S", "status": "offen", "verlauf": [{"t": "2026-11-20T10:20:00Z", "u": "", "e": "e_create", "x": ""}], "beispiel": true, "sprache": "de"}, {"id": "ex-sk5", "nr": "SK-26-0005", "erstellt": "2026-11-23T05:35:00Z", "maschine": "201", "ba": "309900103", "artikel": "9900100003", "charge": "CH-26-125", "zgs": "Index 02 · 20.02.2023", "schicht": "Früh", "merkmal": 1, "ist": 9.62, "abw": "gross", "fkat": "mass", "menge": 180, "kisten": 1, "bem": "", "lagerplatz": "S", "status": "offen", "verlauf": [{"t": "2026-11-23T05:35:00Z", "u": "", "e": "e_create", "x": ""}], "beispiel": true, "sprache": "de"}], "rk": [{"sofort": [{"k": "aussortieren", "anz": "1200", "gut": "1150", "schl": "50", "h": "6", "kost": "240", "rolle": "prod", "dat": "2026-11-18", "st": "E"}, {"k": "bestandspruefung", "anz": "", "gut": "", "schl": "", "h": "1", "kost": "", "rolle": "qs", "dat": "2026-11-18", "st": "E"}], "dok": {"x": {"einrichtblatt": true}, "bem": "Standzeit Gewindebohrer fehlt im Einrichtblatt", "st": "B"}, "bespr": [{"datum": "2026-11-19T08:00:00Z", "anw": ["qs", "prod", "tech", "vs", "gf_t"], "dec": ["dec_sort"], "notiz": "Sortierung abgeschlossen, 50 Stk. Schrott. Technologie prüft Standzeit."}], "ana": {"problem": "Innengewinde M6 zu eng, Gutlehrdorn geht nicht durch, Nachtschicht BA 309900104", "ishi": {"maschine": "Gewindebohrer verschlissen", "methode": "Standzeit nicht festgelegt", "messung": "Lehrenprüfung nur stündlich"}, "warum": ["Gewinde zu eng", "Gewindebohrer verschlissen", "Werkzeug zu spät gewechselt", "Standzeit nicht im Einrichtblatt", "Einrichtblatt seit Werkzeugumstellung nicht aktualisiert"], "ursache": "Standzeit des Gewindebohrers nicht im Einrichtblatt hinterlegt", "massn": [{"t": "Standzeit 2.000 Stk. ins Einrichtblatt", "r": "tech", "d": "2026-11-27"}, {"t": "Lehrenprüfung alle 250 Stk. im Prüfplan", "r": "qs", "d": "2026-11-27"}]}, "wirk": {"on": true, "erg": ""}, "docsDone": {"sk": true}, "id": "ex-rk1", "nr": "RK-26-0001", "erstellt": "2026-11-17T08:05:00Z", "art": "intern", "artikel": "9900100004", "menge": 1200, "wert": 744.0, "fkat": "gewinde", "beschr": "Gewindefehler – Pos. 1 Innengewinde M6-6H, Gutlehrdorn geht nicht durch (SK-26-0003)", "partner": "", "kref": "", "ba": "309900104", "charge": "CH-26-130", "merkmal": 1, "ist": null, "sk": "ex-sk3", "kat": 3, "why": "intern · Wert 744,00 € (500–1.999 €) · Auftreten 1×", "frist": "2026-11-24T08:05:00Z", "status": "B", "verlauf": [{"t": "2026-11-17T08:05:00Z", "u": "", "e": "e_rk", "x": "Kategorie 3"}, {"t": "2026-11-19T09:00:00Z", "u": "", "e": "e_jf", "x": "Aussortieren"}], "beispiel": true}, {"sofort": [{"k": "rueckholung", "anz": "800", "gut": "", "schl": "", "h": "", "kost": "85", "rolle": "vs", "dat": "2026-11-24", "st": "B"}, {"k": "bestandspruefung", "anz": "1450", "gut": "", "schl": "", "h": "", "kost": "", "rolle": "qs", "dat": "2026-11-23", "st": "B"}, {"k": "ersatzlieferung", "anz": "800", "gut": "", "schl": "", "h": "", "kost": "", "rolle": "prod", "dat": "2026-11-25", "st": "B"}], "dok": {"x": {}, "bem": "", "st": "B"}, "bespr": [], "ana": {"problem": "", "ishi": {}, "warum": ["", "", "", "", ""], "ursache": "", "massn": []}, "wirk": {"on": true, "erg": ""}, "docsDone": {}, "id": "ex-rk2", "nr": "RK-26-0002", "erstellt": "2026-11-23T07:30:00Z", "art": "extern", "artikel": "9900100002", "menge": 800, "wert": 1120.0, "fkat": "mass", "beschr": "Kunde meldet Schaft-Ø zu klein, Teile lassen sich nicht einpressen. Wareneingang Kunde, Lieferung KW 47.", "partner": "Beispiel Elektrotechnik AG", "kref": "QN-26-0815", "ba": "309900102", "charge": "CH-26-121", "merkmal": 2, "ist": 9.969, "kat": 6, "why": "extern", "frist": "2026-11-24T07:30:00Z", "status": "B", "verlauf": [{"t": "2026-11-23T07:30:00Z", "u": "", "e": "e_rk", "x": "Kategorie 6"}], "beispiel": true}, {"sofort": [{"k": "lieferantenrekla", "anz": "1500", "gut": "", "schl": "", "h": "", "kost": "", "rolle": "ek", "dat": "2026-11-10", "st": "E"}, {"k": "neuveredelung", "anz": "1500", "gut": "1500", "schl": "0", "h": "", "kost": "0", "rolle": "ek", "dat": "2026-11-14", "st": "E"}], "dok": {"x": {}, "bem": "", "st": "E"}, "bespr": [{"datum": "2026-11-12T08:00:00Z", "anw": ["qs", "ek", "prod", "gf_k"], "dec": ["dec_lief"], "notiz": "8D vom Lieferanten angefordert"}, {"datum": "2026-11-19T08:00:00Z", "anw": ["qs", "prod", "tech", "vs", "gf_t"], "dec": [], "notiz": "8D eingegangen, Neuveredelung i. O."}], "ana": {"problem": "Schichtdicke Sn unter Spezifikation", "ishi": {"material": "Badkonzentration zu niedrig", "methode": "Expositionszeit verkürzt"}, "warum": ["Schicht zu dünn", "Badzeit verkürzt", "Durchsatz erhöht", "Kapazitätsengpass Galvanik", ""], "ursache": "Lieferant hat Badzeit wegen Kapazitätsengpass verkürzt", "massn": [{"t": "Schichtdickenprotokoll je Lieferung fordern", "r": "ek", "d": "2026-11-20"}]}, "wirk": {"on": true, "erg": ""}, "docsDone": {}, "id": "ex-rk3", "nr": "RK-26-0003", "erstellt": "2026-11-10T13:00:00Z", "art": "lieferant", "artikel": "9900100003", "menge": 1500, "wert": 3150.0, "fkat": "schicht", "beschr": "Zinnschicht 2–3 µm statt 4–8 µm, ganze Lieferung Galvanik", "partner": "Beispiel Galvanik KG", "kref": "", "merkmal": 4, "ist": 2.6, "kat": 9, "why": "Lieferant", "frist": "2026-11-17T13:00:00Z", "status": "B", "verlauf": [{"t": "2026-11-10T13:00:00Z", "u": "", "e": "e_rk", "x": "Kategorie 9"}], "beispiel": true}, {"sofort": [{"k": "verschrottung", "anz": "90", "gut": "0", "schl": "90", "h": "", "kost": "76.5", "rolle": "prod", "dat": "2026-10-15", "st": "E"}], "dok": {"x": {}, "bem": "", "st": "B"}, "bespr": [], "ana": {"problem": "Rattermarken", "ishi": {"maschine": "Lünette ausgeschlagen"}, "warum": ["", "", "", "", ""], "ursache": "Lünette verschlissen", "massn": [{"t": "Lünette getauscht", "r": "prod", "d": "2026-10-16"}]}, "wirk": {"on": true, "erg": "ok"}, "docsDone": {}, "id": "ex-rk4", "nr": "RK-26-0004", "erstellt": "2026-10-14T11:00:00Z", "art": "intern", "artikel": "9900100001", "menge": 90, "wert": 76.5, "fkat": "oberfl", "beschr": "Rattermarken Außen-Ø", "kat": 1, "why": "intern · Wert 76,50 € (0–99 €) · Auftreten 1×", "frist": "2026-10-21T11:00:00Z", "status": "E", "merkmal": 5, "verlauf": [], "beispiel": true}, {"sofort": [], "dok": {"x": {}, "bem": "", "st": "B"}, "bespr": [], "ana": {"problem": "", "ishi": {}, "warum": ["", "", "", "", ""], "ursache": "", "massn": []}, "wirk": {"on": true, "erg": ""}, "docsDone": {}, "id": "ex-rk5", "nr": "RK-26-0005", "erstellt": "2026-09-30T08:00:00Z", "art": "hinweis", "artikel": "9900100001", "menge": 20, "wert": 17.0, "fkat": "grat", "beschr": "Kunde weist auf leichten Grat hin, kein Ausfall", "partner": "Muster Automotive GmbH", "kat": 5, "why": "Hinweis extern", "frist": "2026-10-01T08:00:00Z", "status": "E", "verlauf": [], "beispiel": true}, {"sofort": [{"k": "nacharbeit", "anz": "250", "gut": "240", "schl": "10", "h": "4", "kost": "160", "rolle": "prod", "dat": "2026-08-21", "st": "E"}], "dok": {"x": {}, "bem": "", "st": "B"}, "bespr": [], "ana": {"problem": "", "ishi": {}, "warum": ["", "", "", "", ""], "ursache": "", "massn": []}, "wirk": {"on": true, "erg": ""}, "docsDone": {}, "id": "ex-rk6", "nr": "RK-26-0006", "erstellt": "2026-08-20T08:00:00Z", "art": "intern", "artikel": "9900100002", "menge": 250, "wert": 350.0, "fkat": "mass", "beschr": "Kopf-Ø zu groß", "kat": 2, "why": "intern · Wert 350,00 € (100–499 €) · Auftreten 1×", "frist": "2026-08-27T08:00:00Z", "status": "E", "merkmal": 3, "verlauf": [], "beispiel": true}], "jf": [{"id": "jf-2026-11-19", "datum": "2026-11-19T08:00:00Z", "anw": ["qs", "prod", "tech", "vs", "gf_t"], "punkte": {"ex-rk1": {"dec": ["dec_sort"], "notiz": "Sortierung abgeschlossen, 50 Stk. Schrott. Technologie prüft Standzeit."}, "ex-rk3": {"dec": [], "notiz": "8D eingegangen, Neuveredelung i. O."}}, "notiz": "", "zu": true, "beispiel": true}]};
+/* ===================== Bereichs-Entwürfe (Probebau, nur erfundene Daten) ===================== */
+Object.assign(T.de, { s_mail:'Mail', s_m4:'M4', s_ninox:'Ninox', s_hist:'Historie', s_nk:'Nachkalkulation', s_rahmen:'Rahmen/Angebot', s_plan:'Planung',
+  s_zeug:'Zeugnis-Postfach', s_term:'Zeiterfassung', s_bank:'Kontoauszug', s_kanf:'Kundenanforderung', s_wart:'Wartungsplan', s_cera:'Werkzeugautomat' });
+(function(){ const st = document.createElement('style'); st.textContent = `
+.areas{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.area{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:6px;align-content:start}
+.area:hover{border-color:var(--accent)} .area:focus-visible{outline:3px solid var(--accent-2)}
+.area .ic{width:42px;height:42px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:700 1.05rem var(--f-head)}
+.area h3{font-size:1.2rem} .area .who{font-size:.8rem;color:var(--muted)} .area p{margin:0;font-size:.9rem}
+.area .gain{font-size:.82rem;color:var(--ok);font-weight:600}
+.area.done{border-color:var(--accent);background:linear-gradient(var(--accent-soft),var(--surface) 70%)}
+.ck{display:flex;gap:8px;align-items:flex-start}.ck>.chk{flex:none;margin-top:1px}
+.areabtn{white-space:nowrap;border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:8px 14px;font-weight:600;min-height:40px}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(148px,1fr);gap:10px;overflow-x:auto;padding-bottom:6px}
+.col{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);padding:8px;display:grid;gap:8px;align-content:start;min-height:120px}
+.col .card{min-width:0;overflow-wrap:break-word;hyphens:auto}.col .chip{white-space:normal}
+.col>h4{display:flex;justify-content:space-between;align-items:center;padding:2px 4px}
+.amp{width:11px;height:11px;border-radius:50%;display:inline-block;background:var(--ok);flex:none} .amp.warn{background:var(--warn)} .amp.bad{background:var(--bad)} .amp.off{background:var(--line)}
+.chk{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:.8rem;font-weight:700;background:var(--ok-soft);color:var(--ok)}
+.chk.bad{background:var(--bad-soft);color:var(--bad)} .chk.warn{background:var(--warn-soft);color:var(--warn)}
+.slot{border:1px dashed var(--line);border-radius:8px;padding:8px;display:grid;gap:6px;background:var(--surface)}
+.slot .cap{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.slot .cap>i{display:block;height:100%;background:var(--accent)}
+.slot .cap>i.over{background:var(--bad)}
+.mini{display:flex;gap:10px;align-items:center}.mini svg{flex:none;width:86px;height:40px}
+.draft{white-space:pre-wrap;font-family:var(--f-mono);font-size:.82rem;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px}
+.fb{border:1px dashed var(--accent);background:var(--accent-soft)}
+.pv{display:grid;grid-template-columns:120px 1fr 1fr;gap:6px 10px;align-items:center;font-size:.88rem}
+.pv .track{height:10px;border-radius:5px;background:var(--line);position:relative}.pv .track>i{position:absolute;inset:0 auto 0 0;border-radius:5px;background:var(--accent-2)}
+.pv .track.ist>i{background:var(--accent)}.pv .track.ist.bad>i{background:var(--bad)}
+@media (max-width:640px){.board{grid-auto-columns:minmax(78vw,1fr)}}
+`; document.head.appendChild(st); })();
+
+const now0 = new Date();
+const D = (n, h=8, m=0) => { const d = new Date(now0); d.setDate(d.getDate()+n); d.setHours(h, m, 0, 0); return d.toISOString(); };
+const H = n => new Date(now0.getTime() + n*3600000).toISOString();
+const amp = c => `<span class="amp ${c||''}" aria-hidden="true"></span>`;
+const chk = (ok, w) => `<span class="chk ${ok===true?'':ok==='warn'?'warn':'bad'}" aria-label="${ok===true?'in Ordnung':'Abweichung'}">${ok===true?'✓':ok==='warn'?'!':'✗'}</span>`;
+const fristAmp = iso => { const d = (new Date(iso) - Date.now())/86400000; return d < 0 ? 'bad' : d < 2 ? 'warn' : ''; };
+const atage = iso => Math.round((new Date(iso) - Date.now())/86400000);
+const relTxt = iso => { const n = atage(iso); return n === 0 ? 'heute' : n === 1 ? 'morgen' : n === -1 ? 'gestern' : n > 0 ? `in ${n} Tagen` : `vor ${-n} Tagen`; };
+const RO = {vt:'Vertrieb', tech:'Technologie', qs:'QS', ek:'Einkauf', prod:'Produktion', vs:'Versand', ak:'Auftragskoordination', gf:'Geschäftsführung', bu:'Buchhaltung', ih:'Instandhaltung', pers:'Personal', mt:'Messtechnik', ruest:'Rüster'};
+const kgf = n => nf(n, 0) + ' kg';
+function partSvg(seed){ const s = [...String(seed)].reduce((a,c)=>a+c.charCodeAt(0),0); const n = 2 + s%3; let x = 4, out = ''; for (let i = 0; i < n; i++){ const w = 18 + (s*(i+3))%22, h = 10 + (s*(i+5))%22; out += `<rect x="${x}" y="${20-h/2}" width="${w}" height="${h}" fill="none" stroke="var(--draw)" stroke-width="1.5"/>`; x += w; } return `<svg viewBox="0 0 ${x+4} 40" aria-hidden="true">${out}<line x1="0" y1="20" x2="${x+4}" y2="20" stroke="var(--muted)" stroke-dasharray="6 3 2 3" stroke-width=".7"/></svg>`; }
+
+/* ---------- Beispieldaten aller Bereiche ---------- */
+function seedAreas(){ return {
+ fb:{}, tab:{}, open:{},
+ vt:{ anfragen:[
+  {id:'A-26-0412', kunde:'Muster Automotive GmbH', teil:'Kontaktstift Ø4 × 22', werkstoff:'CuZn39Pb3', art:'serie', mengen:[1000,5000,10000], quelle:'Mail mit Zeichnung (PDF)', status:'neu', eingang:H(-3), warten:'vt', herst:{pe:null, qs:null}, hk:0.31, ruest:160,
+   sim:[{nr:'9900100088', teil:'Kontaktstift Ø4 × 18', match:94, preis:0.38, db:31},{nr:'9900100102', teil:'Prüfstift Ø4 × 25', match:81, preis:0.44, db:12},{nr:'9900100015', teil:'Steckerstift Ø3,5', match:72, preis:0.29, db:24}],
+   vorschlag:{masch:'201 (Star SR20)', mat:'CuZn39Pb3 Ø4 h9', pm:'Bügelmessschraube, Lehre Ø1,2'}, komm:[], erg:null},
+  {id:'A-26-0409', kunde:'Beispiel Elektrotechnik AG', teil:'Gewindebolzen M10 × 45', werkstoff:'11SMnPb30', art:'preis', mengen:[2000,8000], quelle:'Kundenportal', status:'technik', eingang:D(-2,9), warten:'tech', herst:{pe:null, qs:true}, hk:0.58, ruest:220,
+   sim:[{nr:'9900100002', teil:'Anschlussbolzen M8', match:88, preis:1.40, db:28},{nr:'9900100140', teil:'Gewindebolzen M10 × 30', match:85, preis:1.12, db:9}],
+   vorschlag:{masch:'612 (CNC-Langdreher)', mat:'11SMnPb30 Ø14', pm:'Gewindelehrring M10'}, komm:[{r:'vt', txt:'@Technologie Kunde fragt, ob verzinkt möglich ist.', t:D(-2,10)}], erg:null},
+  {id:'A-26-0405', kunde:'Probe Maschinenbau KG', teil:'Hülse Ø18 × 40 mit Querbohrung', werkstoff:'1.4305', art:'projekt', mengen:[500,2000], quelle:'Mail', status:'einkauf', eingang:D(-4,11), warten:'ek', herst:{pe:true, qs:true}, hk:1.95, ruest:340,
+   sim:[{nr:'9900100004', teil:'Gewindebuchse M6', match:63, preis:0.62, db:18}], vorschlag:{masch:'607 (Mehrspindler)', mat:'1.4305 Ø20', pm:'Grenzlehrdorn Ø6'}, komm:[{r:'tech', txt:'Querbohrung auf 607 möglich, Rüsten ca. 5 h. @Einkauf bitte Preis 1.4305 Ø20.', t:D(-3,14)}], erg:null},
+  {id:'A-26-0398', kunde:'Muster Automotive GmbH', teil:'Distanzhülse Ø12 (Variante L=24)', werkstoff:'CuZn39Pb3', art:'serie', mengen:[5000,20000], quelle:'Mail', status:'kalk', eingang:D(-6,8), warten:'vt', herst:{pe:true, qs:true}, hk:0.49, ruest:180,
+   sim:[{nr:'9900100001', teil:'Distanzhülse Ø12', match:97, preis:0.85, db:26}], vorschlag:{masch:'603 (CNC-Langdreher)', mat:'CuZn39Pb3 Ø12', pm:'Bügelmessschraube'}, komm:[], erg:null, meld:true},
+  {id:'A-26-0391', kunde:'Beispiel Elektrotechnik AG', teil:'Crimphülse 35 mm²', werkstoff:'Cu-ETP', art:'serie', mengen:[3000], quelle:'Mail', status:'angebot', eingang:D(-12,9), angebot:D(-5,15), warten:'vt', herst:{pe:true, qs:true}, hk:1.21, ruest:200,
+   sim:[{nr:'9900100003', teil:'Crimphülse 50 mm²', match:92, preis:2.10, db:22}], vorschlag:{masch:'201 (Star SR20)', mat:'Cu-ETP Ø12', pm:'Grenzlehrdorn'}, komm:[], erg:null},
+  {id:'A-26-0377', kunde:'Probe Maschinenbau KG', teil:'Achse Ø8 × 60', werkstoff:'1.0718', art:'preis', mengen:[1000], quelle:'Mail', status:'entschieden', eingang:D(-25,9), warten:'', herst:{pe:true, qs:true}, hk:0.66, ruest:150, sim:[], vorschlag:{masch:'612 (CNC-Langdreher)', mat:'1.0718 Ø8', pm:'Bügelmessschraube'}, komm:[], erg:{g:false, grund:'Preis'}},
+  {id:'A-26-0370', kunde:'Muster Automotive GmbH', teil:'Kontaktbuchse Ø6', werkstoff:'CuZn39Pb3', art:'serie', mengen:[10000], quelle:'Mail', status:'entschieden', eingang:D(-30,9), warten:'', herst:{pe:true, qs:true}, hk:0.22, ruest:150, sim:[{nr:'9900100088', teil:'Kontaktstift Ø4 × 18', match:76, preis:0.38, db:31}], vorschlag:{masch:'201 (Star SR20)', mat:'CuZn39Pb3 Ø6 h9', pm:'Grenzlehrdorn Ø3'}, komm:[], erg:{g:true, grund:''}}
+ ]},
+ ak:{ best:[
+  {id:'B1', nr:'4500118272', kunde:'Muster Automotive GmbH', quelle:'PDF per Mail', artikel:'9900100001', menge:6000, preis:0.85, soll:0.85, sollQ:'Rahmen R-26-03', zgsB:'Index C', termin:D(18), t:'kap', tTxt:'Rüster frei KW +2, Material am Lager', mat:'ok', st:'neu', eingang:H(-2)},
+  {id:'B2', nr:'PO-77310', kunde:'Beispiel Elektrotechnik AG', quelle:'Kundenportal', artikel:'9900100002', menge:1200, preis:1.29, soll:1.40, sollQ:'Angebot AN-26-0311', zgsB:'Index A', termin:D(12), t:'lager', tTxt:'Lagerbestand 1.450 Stk. reicht', mat:'ok', st:'neu', eingang:H(-5)},
+  {id:'B3', nr:'4500118301', kunde:'Muster Automotive GmbH', quelle:'PDF per Mail', artikel:'9900100003', menge:3000, preis:2.10, soll:2.10, sollQ:'Rahmen R-26-07', zgsB:'Index 01', termin:D(10), t:'eng', tTxt:'Rüster-Engpass: frühestens 6 Tage nach Wunschtermin', mat:'bestellt', st:'neu', eingang:H(-20)},
+  {id:'B4', nr:'2026-1187', kunde:'Probe Maschinenbau KG', quelle:'Mail', artikel:'9900100004', menge:15000, preis:0.62, soll:0.62, sollQ:'Angebot AN-26-0298', zgsB:'Index B', termin:D(14), t:'mat', tTxt:'Material 1.4305 Ø12 fehlt, Lieferzeit 6 Wochen', mat:'fehlt', st:'neu', eingang:H(-26)},
+  {id:'B5', nr:'4500118255', kunde:'Muster Automotive GmbH', quelle:'PDF per Mail', artikel:'9900100001', menge:4000, preis:0.85, soll:0.85, sollQ:'Rahmen R-26-03', zgsB:'Index C', termin:D(25), t:'kap', tTxt:'Rüster frei, Material am Lager', mat:'ok', st:'ab', abAm:H(-40), eingang:H(-44)}
+ ]},
+ fe:{ ruester:{F:2, S:1}, vorschl:[
+  {id:'V1', ba:'309900120', artikel:'9900100001', masch:'603', fam:'Ø12 CuZn · Spannzange 12', ruest:1.5, std:4, termin:D(6), grund:'Gleiche Rüstfamilie wie laufender BA 309900101: Spannzange und Stangenlader bleiben.', st:'vorschlag'},
+  {id:'V2', ba:'309900121', artikel:'9900100002', masch:'612', fam:'Ø14 Automatenstahl · Gewinde', ruest:2.5, std:3.5, termin:D(4), grund:'Liefertermin in 4 Tagen, Werkzeuge im Automaten vorrätig.', st:'vorschlag'},
+  {id:'V3', ba:'309900122', artikel:'9900100003', masch:'201', fam:'Cu-ETP · Bohren tief', ruest:3, std:3, termin:D(9), grund:'Maschine 201 ab Mittwoch frei (BA 309900103 endet laut MDE).', st:'vorschlag'},
+  {id:'V4', ba:'309900123', artikel:'9900100004', masch:'607', fam:'1.4305 · Gewindebuchsen', ruest:5, std:5, termin:D(15), grund:'Material reserviert; langes Rüsten → Frühschicht mit 2 Rüstern empfohlen.', st:'vorschlag'}
+ ], plan:[{id:'P0', ba:'309900119', artikel:'9900100002', masch:'612', ruest:2, tag:0, sch:'F', fix:true}],
+ abn:[
+  {ba:'309900101', artikel:'9900100001', masch:'603', erst:{r:'Rüster A', t:D(-1,6,40), m:5}, zweit:{r:'Messtechnik', t:D(-1,7,15), m:5}, letzt:null},
+  {ba:'309900102', artikel:'9900100002', masch:'612', erst:{r:'Rüster B', t:H(-2), m:5}, zweit:null, letzt:null},
+  {ba:'309900104', artikel:'9900100004', masch:'607', erst:{r:'Rüster A', t:D(-2,10), m:4}, zweit:{r:'Rüster B', t:D(-2,10,40), m:4}, letzt:null}
+ ], buch:[
+  {t:H(-9), masch:'612', kat:'Störung', txt:'Stangenlader 2× ausgefallen, Instandhaltung informiert.'},
+  {t:H(-6), masch:'603', kat:'Qualität', txt:'Außen-Ø an oberer Toleranz, Korrekturwert −0,005 gesetzt.'},
+  {t:H(-3), masch:'201', kat:'Info', txt:'BA 309900103 endet voraussichtlich Mittwoch Mittag.'}]},
+ ek:{ deck:[
+  {id:'M1', wst:'CuZn39Pb3', abm:'Ø12 h9 · Stange 3 m', bedarf:1850, bestand:620, bestellt:800, liefer:D(5), ba:['309900120','309900131'], lief:'Muster Metall GmbH', preis:7.85},
+  {id:'M2', wst:'1.4305', abm:'Ø12 h9 · Stange 3 m', bedarf:960, bestand:140, bestellt:0, liefer:null, ba:['309900123'], lief:'Beispiel Edelstahl KG', preis:5.40, schwer:true},
+  {id:'M3', wst:'11SMnPb30', abm:'Ø14 · Stange 3 m', bedarf:700, bestand:910, bestellt:0, liefer:null, ba:['309900121'], lief:'Beispiel Stahlhandel', preis:1.62},
+  {id:'M4', wst:'Cu-ETP', abm:'Ø14 · Stange 3 m', bedarf:1200, bestand:380, bestellt:900, liefer:D(-2), ba:['309900122'], lief:'Probe Buntmetall', preis:9.10},
+  {id:'M5', wst:'CuZn39Pb3', abm:'Ø4 h9 · Stange 3 m', bedarf:150, bestand:0, bestellt:0, liefer:null, ba:[], lief:'Muster Metall GmbH', preis:8.05, hinweis:'nur Anfrage A-26-0412'}
+ ], zeug:[
+  {id:'Z1', charge:'S-88213', lief:'Muster Metall GmbH', wst:'CuZn39Pb3 Ø12', we:'WE-26-1102', ein:D(-1,9), st:'auto', ba:'309900101'},
+  {id:'Z2', charge:'H-4471-2', lief:'Probe Buntmetall', wst:'Cu-ETP Ø14', we:'WE-26-1098', ein:D(-3,9), st:'auto', ba:'309900103'},
+  {id:'Z3', charge:'—', lief:'Beispiel Stahlhandel', wst:'11SMnPb30 Ø14', we:'WE-26-1105', ein:D(-2,13), st:'fehlt', ba:'309900121'},
+  {id:'Z4', charge:'88-0317', lief:'Beispiel Edelstahl KG', wst:'1.4305 Ø12', we:'WE-26-1090', ein:D(-6,10), st:'hersteller', ba:'309900104'}
+ ], rueck:[
+  {id:'R1', best:'EK-26-0644', lief:'Probe Buntmetall', pos:'Cu-ETP Ø14 · 900 kg', soll:D(-2), ba:['309900122'], st:'offen'},
+  {id:'R2', best:'EK-26-0652', lief:'Muster Metall GmbH', pos:'CuZn39Pb3 Ø8 · 400 kg', soll:D(-1), ba:[], st:'offen'}
+ ], spiegel:null},
+ vs:{ komm:[
+  {id:'K1', nr:'KO-26-2210', kunde:'Muster Automotive GmbH', land:'DE', artikel:'9900100001', menge:4000, lieferung:D(1), st:'offen',
+   anf:['Sonderetikett Kunde (Vorlage KL-2)','3.1-Zeugnis beilegen','Stückzahlgenau liefern (Erstbelieferung)'], hak:{}, plaetze:[{lp:'KB-14-03', ch:'CH-26-102', m:1500, alter:41},{lp:'KB-14-05', ch:'CH-26-117', m:3120, alter:3}], ist:''},
+  {id:'K2', nr:'KO-26-2211', kunde:'Beispiel Elektrotechnik AG', land:'CH', artikel:'9900100002', menge:1200, lieferung:D(2), st:'offen',
+   anf:['Ursprungserklärung auf der Rechnung','Warennummer und Ursprungsland auf Lieferschein','Rechnungsempfänger: Zentraleinkauf (abweichend)','Spedition: Exportspedition Süd (Kunde zahlt Fracht)'], hak:{}, plaetze:[{lp:'KB-02-01', ch:'CH-26-099', m:1450, alter:22}], ist:''},
+  {id:'K3', nr:'KO-26-2207', kunde:'Probe Maschinenbau KG', land:'DE', artikel:'9900100004', menge:5000, lieferung:D(0), st:'gepackt', anf:['Kartons max. 15 kg'], hak:{0:true}, plaetze:[{lp:'KB-07-02', ch:'CH-26-130', m:5200, alter:5}], ist:'5000'}
+ ], ver:[
+  {id:'E1', vered:'Beispiel Galvanik KG', art:'Verzinnen', artikel:'9900100003', menge:1500, raus:D(-9), zurueck:D(-2), st:'aus'},
+  {id:'E2', vered:'Beispiel Galvanik KG', art:'Verzinnen', artikel:'9900100003', menge:800, raus:D(-3), zurueck:D(4), st:'aus'},
+  {id:'E3', vered:'Muster Oberflächen GmbH', art:'Verzinken', artikel:'9900100002', menge:2000, raus:D(-5), zurueck:D(2), st:'aus'}
+ ], vorschlag:[{id:'VV1', artikel:'9900100002', menge:1200, lp:'KB-02-04', art:'Verzinken', vered:'Muster Oberflächen GmbH', bedarf:D(9), grund:'KO-26-2230 braucht verzinkte Ware in 9 Tagen, Durchlauf Veredler 7 Tage.'}],
+ board:[{tag:0, kunde:'Probe Maschinenbau KG', pk:'3 Paletten', sped:'Spedition Nord', st:'gepackt', ex:false},{tag:1, kunde:'Muster Automotive GmbH', pk:'2 Paletten', sped:'Spedition Nord', st:'offen', ex:false},{tag:2, kunde:'Beispiel Elektrotechnik AG', pk:'1 Palette', sped:'Exportspedition Süd', st:'offen', ex:true},{tag:3, kunde:'Muster Automotive GmbH', pk:'4 Paletten', sped:'Spedition Nord', st:'offen', ex:false},{tag:4, kunde:'Beispiel USA Inc.', pk:'6 Kartons', sped:'Paketdienst Express', st:'offen', ex:true}]},
+ ih:{ stoer:[
+  {id:'S1', masch:'612', seit:H(-0.75), quelle:'MDE-Status „Störung“', txt:'Stangenlader meldet Störung', st:'offen', vert:true},
+  {id:'S2', masch:'607', seit:H(-3.2), quelle:'Meldung vom Bediener (1 Klick)', txt:'Kühlschmierstoff tritt an Spindel 3 aus', st:'in Arbeit', von:'Instandhaltung', vert:true}
+ ], hist:[{masch:'603', n:3, h:5.5, betrieb:620},{masch:'612', n:9, h:21, betrieb:600},{masch:'201', n:2, h:3, betrieb:640},{masch:'607', n:5, h:16, betrieb:610}],
+ teile:[{nr:'ET-0112', txt:'Näherungsschalter M12', fach:'E-03', best:4, min:2},{nr:'ET-0240', txt:'Dichtungssatz Spindel 607', fach:'M-11', best:1, min:2},{nr:'ET-0301', txt:'Riemen Stangenlader', fach:'M-02', best:2, min:1}],
+ wart:[
+  {id:'W1', masch:'607', was:'Spindelstock Ölwechsel (500 h)', faellig:D(2), slot:'BA 309900104 endet laut MDE übermorgen 13:40 → Spätschicht', st:'offen'},
+  {id:'W2', masch:'603', was:'Werkerwartung wöchentlich', faellig:D(0), slot:'Schichtende Früh, 15 min', st:'offen', werker:true},
+  {id:'W3', masch:'201', was:'Kugelgewindetrieb prüfen (Jahr)', faellig:D(9), slot:'Maschine ab Mittwoch frei → Donnerstag Früh', st:'offen'}],
+ pruef:[{id:'PF1', was:'Elektroprüfung ortsveränderlich (DGUV V3)', faellig:D(-4)},{id:'PF2', was:'Hallenkran 2 t – UVV-Prüfung', faellig:D(12)},{id:'PF3', was:'Druckbehälter Kompressor – innere Prüfung', faellig:D(40)},{id:'PF4', was:'Leitern und Tritte – Sichtprüfung', faellig:D(3)}]},
+ pe:{ auff:[
+  {id:'X1', ma:'MA 014', abt:'Fertigung Früh', art:'Kommen ohne Gehen', det:'Kommen 05:52, kein Gehen gebucht', vor:'Gehen 14:05 (Schichtende)', st:'offen'},
+  {id:'X2', ma:'MA 087', abt:'Versand', art:'Über 10 Stunden', det:'06:01 – 16:48, Pause 30 min', vor:'Arbeitszeit prüfen (ArbZG)', st:'offen'},
+  {id:'X3', ma:'MA 102', abt:'Fertigung Spät', art:'Abwesend ohne Grund', det:'Keine Buchung, kein Abwesenheitsgrund', vor:'Abteilungsleitung fragen', st:'offen'},
+  {id:'X4', ma:'MA 033', abt:'Instandhaltung', art:'Pause fehlt', det:'07:00 – 16:10, keine Pause gebucht', vor:'30 min Pause abziehen', st:'offen'}],
+ antr:[{id:'KA1', ma:'MA 056', txt:'Gehen vergessen am Freitag, war bis 14:00 da', st:'offen'},{id:'KA2', ma:'MA 121', txt:'Dienstgang zum Veredler 10:00–11:30 als Arbeitszeit', st:'offen'}],
+ ohne:126, krank:3, abschluss:false},
+ gf:{ pc:[{k:'Langdreher', u:412, p:436},{k:'Mehrspindler', u:268, p:251},{k:'Star', u:174, p:188},{k:'Kleinserie', u:58, p:61},{k:'Montage', u:44, p:40}],
+  kunden:[{k:'Muster Automotive GmbH', abc:'A', u:388, hr:4510},{k:'Beispiel Elektrotechnik AG', abc:'A', u:241, hr:2760},{k:'Probe Maschinenbau KG', abc:'B', u:96, hr:1180},{k:'Beispiel USA Inc.', abc:'B', u:71, hr:790},{k:'übrige (38)', abc:'C', u:160, hr:1890}],
+  nk:[
+   {ba:'309900088', artikel:'9900100001', kunde:'Muster Automotive GmbH', menge:20000, vk:0.85, plan:{Material:0.21, Rüsten:0.012, Maschinenzeit:0.24, Werkzeug:0.03, Veredelung:0, Ausschuss:0.01}, ist:{Material:0.21, Rüsten:0.010, Maschinenzeit:0.23, Werkzeug:0.028, Veredelung:0, Ausschuss:0.008}},
+   {ba:'309900091', artikel:'9900100002', kunde:'Beispiel Elektrotechnik AG', menge:3000, vk:1.40, plan:{Material:0.29, Rüsten:0.07, Maschinenzeit:0.41, Werkzeug:0.05, Veredelung:0.12, Ausschuss:0.02}, ist:{Material:0.30, Rüsten:0.13, Maschinenzeit:0.52, Werkzeug:0.09, Veredelung:0.12, Ausschuss:0.07}},
+   {ba:'309900095', artikel:'9900100003', kunde:'Muster Automotive GmbH', menge:1500, vk:2.10, plan:{Material:0.62, Rüsten:0.12, Maschinenzeit:0.48, Werkzeug:0.04, Veredelung:0.21, Ausschuss:0.03}, ist:{Material:0.63, Rüsten:0.12, Maschinenzeit:0.50, Werkzeug:0.04, Veredelung:0.58, Ausschuss:0.03}},
+   {ba:'309900097', artikel:'9900100004', kunde:'Probe Maschinenbau KG', menge:8000, vk:0.62, plan:{Material:0.14, Rüsten:0.04, Maschinenzeit:0.18, Werkzeug:0.03, Veredelung:0, Ausschuss:0.01}, ist:{Material:0.14, Rüsten:0.035, Maschinenzeit:0.17, Werkzeug:0.03, Veredelung:0, Ausschuss:0.006}}],
+  best:[{k:'Rohmaterial', v:418}, {k:'Fertigteile (Lager)', v:612}, {k:'Ware beim Veredler', v:57}, {k:'Sperrbestand', v:1.2}, {k:'Späne (theoretisch)', v:23.4}],
+  liq:[{w:'KW +1', v:384},{w:'KW +2', v:352},{w:'KW +3', v:401},{w:'KW +4', v:366},{w:'KW +5', v:342},{w:'KW +6', v:390},{w:'KW +7', v:415},{w:'KW +8', v:398}]},
+ bu:{ kto:[
+  {id:'K1', dat:D(0), betrag:3400.00, text:'RE 26-10433 MUSTER AUTOMOTIVE GMBH', vor:['RE-26-10433'], sicher:100, hinweis:'Betrag und Rechnungsnummer stimmen', st:'offen'},
+  {id:'K2', dat:D(0), betrag:2352.00, text:'BEISPIEL ELEKTROTECHNIK AG RECHNUNG 10421 ABZ 2 PROZ SKONTO', vor:['RE-26-10421'], sicher:85, hinweis:'2 % Skonto abgezogen, Zahlung 3 Tage nach Skontofrist → 48,00 € nicht berechtigt', st:'offen', skonto:48},
+  {id:'K3', dat:D(-1), betrag:5180.40, text:'PROBE MASCHINENBAU SAMMELZAHLUNG', vor:['RE-26-10388','RE-26-10397','RE-26-10402'], sicher:70, hinweis:'Kombination aus 3 offenen Rechnungen ergibt genau den Betrag', st:'offen'},
+  {id:'K4', dat:D(-1), betrag:119.00, text:'GUTSCHRIFT LIEFERANT BONUS 2026', vor:[], sicher:0, hinweis:'Kein offener Posten gefunden → bitte zuordnen', st:'offen'}],
+ op:[{re:'RE-26-10433', kunde:'Muster Automotive GmbH', betrag:3400, faellig:D(5), erw:D(0)},{re:'RE-26-10421', kunde:'Beispiel Elektrotechnik AG', betrag:2400, faellig:D(-3), erw:D(0)},
+  {re:'RE-26-10388', kunde:'Probe Maschinenbau KG', betrag:1785, faellig:D(-6), erw:D(-1)},{re:'RE-26-10397', kunde:'Probe Maschinenbau KG', betrag:2142, faellig:D(-2), erw:D(-1)},{re:'RE-26-10402', kunde:'Probe Maschinenbau KG', betrag:1253.40, faellig:D(1), erw:D(-1)},
+  {re:'RE-26-10350', kunde:'Beispiel USA Inc.', betrag:6820, faellig:D(-19), erw:D(-4), mahn:1},{re:'RE-26-10444', kunde:'Muster Automotive GmbH', betrag:9120, faellig:D(24), erw:D(22)}]}
+}; }
+let A = LS.get('kas-areas2') || seedAreas();
+const saveA = () => LS.set('kas-areas2', A);
+const tabOf = k => A.tab[k] || MODS.find(m => m.k === k).tabs[0][0];
+
+/* ---------- Anwendungen ---------- */
+const VT_ST = [['neu','Neu'],['technik','Technik prüft'],['einkauf','Einkauf'],['kalk','Kalkulation'],['angebot','Angebot raus'],['entschieden','Entschieden']];
+const VT_ART = {serie:['Serie',7], preis:['Preisabfrage',14], projekt:['Projekt',30]};
+const vtFrist = a => new Date(new Date(a.eingang).getTime() + ({neu:1, technik:3, einkauf:4, kalk:5, angebot:VT_ART[a.art][1]+5}[a.status]||99)*86400000).toISOString();
+
+const MODS = [
+{ k:'vt', ic:'VT', name:'Anfragen', who:'Vertrieb · Technologie · Einkauf', step:'Prozess 1', kurz:'Anfrage-Board mit Ampel, Ähnlichkeitssuche und Herstellbarkeit zum Bestätigen statt Ausfüllen.', gain:'Meldung „HSA fertig“ automatisch · Nachfassen mit Entwurf',
+ tabs:[['board','Anfrage-Board'],['kenn','Auswertung']],
+ view(st, tab){
+  const L = st.anfragen, open = A.open.vt && L.find(a => a.id === A.open.vt);
+  if (open) return vtDetail(open);
+  if (tab === 'kenn'){
+   const ent = L.filter(a => a.erg); const g = ent.filter(a => a.erg.g).length;
+   const by = {}; ent.filter(a => !a.erg.g).forEach(a => by[a.erg.grund] = (by[a.erg.grund]||0)+1);
+   return `<div class="kpis"><div class="kpi"><b>27 %</b><span>Trefferquote 12 Monate ${src('s_hist')}</span></div><div class="kpi"><b>4,2 AT</b><span>Ø Anfrage → Angebot</span></div><div class="kpi"><b>${g} / ${ent.length}</b><span>gewonnen (Beispiel)</span></div></div>
+    <div class="grid2" style="align-items:start"><div class="panel"><h3>Verlustgründe</h3><div class="bars">${[['Preis',14],['Lieferzeit',6],['Technik',3],['kein Feedback',9]].map(([k,v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v/14*100}%"></div></div><span class="num">${v}</span></div>`).join('')}</div><span class="hint">Ergebnis ist Pflicht beim Abschluss – so entsteht die Lernschleife.</span></div>
+    <div class="panel"><h3>Trefferquote je Anfrageart</h3><div class="bars">${[['Serie',38],['Preisabfrage',11],['Projekt',29]].map(([k,v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v}%"></div></div><span class="num">${v} %</span></div>`).join('')}</div></div></div>`;
+  }
+  const off = L.filter(a => a.status !== 'entschieden'), nf2 = L.filter(a => a.status==='angebot' && atage(a.angebot) <= -VT_ART[a.art][1]+2).length;
+  return `<div class="kpis"><div class="kpi"><b>${off.length}</b><span>offene Anfragen</span></div><div class="kpi ${off.some(a=>fristAmp(vtFrist(a))==='bad')?'alert':''}"><b>${off.filter(a=>fristAmp(vtFrist(a))==='bad').length}</b><span>über Frist</span></div><div class="kpi"><b>${L.filter(a=>a.meld).length}</b><span>„HSA fertig“ gemeldet</span></div><div class="kpi"><b>${nf2}</b><span>Nachfassen fällig</span></div></div>
+   <div class="board">${VT_ST.map(([k,l]) => { const c = L.filter(a => a.status===k); return `<div class="col"><h4>${l}<span class="count">${c.length}</span></h4>${c.map(a => `<button class="card clickable" data-a="vt:open" data-id="${a.id}">
+     <div class="row between"><span class="mono small"><b>${a.id}</b></span>${a.erg ? `<span class="chip ${a.erg.g?'ok':'bad'}">${a.erg.g?'gewonnen':'verloren'}</span>` : `<span class="row small">${amp(fristAmp(vtFrist(a)))}${relTxt(vtFrist(a))}</span>`}</div>
+     <b>${esc(a.teil)}</b><span class="small muted">${esc(a.kunde)}</span>
+     <div class="row between small"><span class="chip">${VT_ART[a.art][0]}</span>${a.warten?`<span class="muted">wartet: ${RO[a.warten]}</span>`:''}</div>${a.meld?'<span class="chip ok" style="justify-self:start">HSA fertig ✓</span>':''}</button>`).join('')}</div>`; }).join('')}</div>`;
+ }},
+{ k:'ak', ic:'AK', name:'Auftragseingang', who:'Auftragskoordination · Produktion', step:'Prozess 2', kurz:'Jede Bestellung wird automatisch gegen Preis, Zeichnungsstand, Kapazität und Material geprüft. Grün wird sofort bestätigt.', gain:'AB bei Fertigung: ≥ 5 Tage → Regelfall 1 Tag',
+ tabs:[['eingang','Eingang prüfen'],['delivery','Delivery-Board']],
+ view(st, tab){
+  const B = st.best;
+  if (tab === 'delivery'){
+   const wk = [0,1,2,3].map(i => ({i, l: i===0?'diese Woche':'KW +'+i}));
+   const rows = [...B.map(b => ({kunde:b.kunde, artikel:b.artikel, menge:b.menge, termin:b.termin, c: akAmp(b)})),
+     {kunde:'Beispiel USA Inc.', artikel:'9900100002', menge:3000, termin:D(3), c:''},{kunde:'Muster Automotive GmbH', artikel:'9900100003', menge:2500, termin:D(-2), c:'bad', alt:true}];
+   return `<div class="note info">Ersetzt die Kommissionsliste im Montags-Meeting: offene Positionen je Woche mit Ampel. Rot = Termin gefährdet oder überfällig. ${src('s_m4')}</div>
+    <div class="board">${wk.map(w => { const r = rows.filter(x => { const k = Math.max(0, Math.floor(atage(x.termin)/7)); return k===w.i || (w.i===3 && k>3); }); return `<div class="col"><h4>${w.l}<span class="count">${r.length}</span></h4>${r.map(x => { const a = art(x.artikel); return `<div class="card"><div class="row between">${amp(x.c)}<span class="small mono">${dd(x.termin)}</span></div><b>${esc(a.de)}</b><span class="small muted">${esc(x.kunde)} · ${nf(x.menge,0)} Stk.</span>${x.alt?'<span class="chip bad">Termin überschritten</span>':''}</div>`; }).join('')}</div>`; }).join('')}</div>`;
+  }
+  const neu = B.filter(b => b.st==='neu');
+  return `<div class="note info">Übergang Welle 1: Erfasst wird weiter in M4. KAS-ERP liest die Auftragszeilen, prüft und meldet nur Auffälligkeiten – keine Doppelerfassung. ${src('s_m4')}</div>
+   <div class="kpis"><div class="kpi"><b>${neu.length}</b><span>neue Bestellungen</span></div><div class="kpi"><b>${neu.filter(b=>akAmp(b)==='').length}</b><span>sofort bestätigbar</span></div><div class="kpi ${neu.some(b=>akAmp(b)==='bad')?'alert':''}"><b>${neu.filter(b=>akAmp(b)!=='').length}</b><span>mit Rückfrage</span></div><div class="kpi"><b>1,2 Tage</b><span>Ø bis AB (vorher ≥ 5)</span></div></div>
+   <div class="list">${B.map(b => akCard(b)).join('')}</div>`;
+ }},
+{ k:'fe', ic:'FE', name:'Rüstplanung', who:'Fertigungsleitung · Rüster · Messtechnik', step:'Prozess 4', kurz:'Planungsassistent mit dem Rüster als Engpass: Vorschläge nach Rüstfamilie, die Fertigungsleitung bestätigt. Dazu Abnahmen und Schichtbuch.', gain:'Rüstzeit sparen durch Rüstfamilien · Abnahmen ohne Papier',
+ tabs:[['plan','Rüstplan'],['abn','Erst-/Zweitabnahme'],['buch','Schichtbuch']],
+ view(st, tab){
+  if (tab === 'abn') return `<div class="note info">Erst- und Zweitabnahme werden quittiert, die Messwerte stehen im Prüfplan (Welle 2 direkt am Tablet). Daraus entsteht auf Wunsch das Erst-Freigabedokument für den Kunden.</div>
+   <div class="tbl-wrap"><table><thead><tr><th>BA</th><th>Artikel</th><th>Maschine</th><th>Erstabnahme</th><th>Zweitabnahme</th><th>Letztteil</th></tr></thead><tbody>${st.abn.map((x,i) => { const a = art(x.artikel);
+    const cell = (v, k) => v ? `<span class="row">${chk(true)}<span class="small">${esc(v.r)} · ${dt(v.t)}<br><span class="muted">${v.m} Merkmale i. O.</span></span></span>` : `<button class="btn small ${k==='zweit'?'primary':''}" data-a="fe:abn" data-id="${i}" data-v="${k}">${k==='zweit'?'Zweitabnahme quittieren':'Letztteil quittieren'}</button>`;
+    return `<tr><td class="mono">${x.ba} ${src('s_mde')}</td><td>${esc(a.de)}</td><td class="mono">${x.masch}</td><td>${cell(x.erst,'erst')}</td><td>${cell(x.zweit,'zweit')}</td><td>${x.zweit?cell(x.letzt,'letzt'):'<span class="muted small">nach Zweitabnahme</span>'}</td></tr>`; }).join('')}</tbody></table></div>`;
+  if (tab === 'buch') return `<div class="panel"><h3>Neuer Eintrag</h3><div class="grid3"><div class="step"><label class="lbl" for="sbM">Maschine</label><select id="sbM">${MASCH.map(m => `<option>${m.nr}</option>`).join('')}</select></div>
+    <div class="step"><span class="lbl">Art</span><div class="decide">${['Info','Störung','Qualität','Material'].map(k => `<button data-a="fe:kat" data-v="${k}" aria-pressed="${(st.kat||'Info')===k}">${k}</button>`).join('')}</div></div>
+    <div class="step"><span class="lbl">Spracheingabe</span><button class="btn" disabled>🎤 später (lokale KI, Welle 4)</button></div></div>
+    <div class="step"><label class="lbl" for="sbT">Text ${srcIn()}</label><textarea id="sbT"></textarea></div><div class="actions"><button class="btn primary" data-a="fe:buch">Eintragen</button></div>
+    <span class="hint">Schicht, Uhrzeit, Verfasser und laufender BA kommen automatisch ${src('s_login')} ${src('s_mde')}</span></div>
+   <div class="timeline">${st.buch.slice().reverse().map(e => `<div><span class="mono muted">${dt(e.t)}</span><span><span class="chip ${e.kat==='Störung'?'bad':e.kat==='Qualität'?'warn':'info'}">${e.kat}</span> <b class="mono">${e.masch}</b> · ${esc(e.txt)}</span></div>`).join('')}</div>`;
+  const tage = [0,1,2], cap = {F: st.ruester.F*7.5, S: st.ruester.S*7.5};
+  const used = (d, s) => st.plan.filter(p => p.tag===d && p.sch===s).reduce((n,p) => n+p.ruest, 0);
+  const tagL = d => d===0?'Heute':d===1?'Morgen':new Date(now0.getTime()+d*86400000).toLocaleDateString('de-DE',{weekday:'long'});
+  const offen = st.vorschl.filter(v => v.st==='vorschlag'), gespart = st.plan.reduce((n,p) => n + ((st.vorschl.find(v=>v.id===p.id)||{}).std||p.ruest) - p.ruest, 0);
+  return `<div class="kpis"><div class="kpi"><b>${Math.round(used(0,'F')/cap.F*100)} %</b><span>Rüster-Auslastung heute Früh</span></div><div class="kpi"><b>${offen.length}</b><span>Vorschläge offen</span></div><div class="kpi"><b>${nf(gespart,1)} h</b><span>Rüstzeit gespart durch Rüstfamilien ${src('s_calc')}</span></div><div class="kpi"><b>${st.ruester.F} / ${st.ruester.S}</b><span>Rüster Früh / Spät ${src('s_term')}</span></div></div>
+   <div class="grid2" style="align-items:start"><div class="panel"><div class="section-title"><h3>Vorschläge</h3><span class="muted small">Fertigungsleitung entscheidet</span></div>
+    ${offen.length ? offen.map(v => { const a = art(v.artikel); return `<div class="card"><div class="row between"><span class="mono"><b>BA ${v.ba}</b> · ${v.masch}</span><span class="row small">${amp(fristAmp(v.termin))}Liefertermin ${dd(v.termin)}</span></div>
+     <b>${esc(a.de)}</b><span class="small"><span class="chip">${esc(v.fam)}</span> Rüsten ${nf(v.ruest,1)} h${v.std>v.ruest?` <span class="muted">(sonst ${nf(v.std,1)} h)</span>`:''} ${src('s_hist')}</span>
+     <span class="small muted">${esc(v.grund)}</span><div class="actions"><button class="btn primary small" data-a="fe:ok" data-id="${v.id}">Übernehmen</button><button class="btn small" data-a="fe:no" data-id="${v.id}">Ablehnen</button></div>
+     ${A.open.feNo===v.id?`<div class="decide">${['Termin passt nicht','Werkzeug fehlt','Material fehlt','Rüster anders einplanen'].map(g => `<button data-a="fe:grund" data-id="${v.id}" data-v="${g}">${g}</button>`).join('')}</div>`:''}</div>`; }).join('') : '<div class="empty">Alle Vorschläge bearbeitet.</div>'}
+    <span class="hint">Abgelehnte Vorschläge mit Grund verbessern den Assistenten – gemeinsam mit der Fertigungsleitung entwickeln.</span></div>
+   <div class="panel"><h3>Rüstplan</h3>${tage.map(d => `<div class="step"><span class="lbl">${tagL(d)}</span><div class="grid2">${['F','S'].map(s => { const u = used(d,s), p = Math.min(100, u/cap[s]*100); return `<div class="slot"><div class="row between small"><b>${s==='F'?'Früh':'Spät'}</b><span class="mono">${nf(u,1)} / ${nf(cap[s],1)} h</span></div><div class="cap"><i class="${u>cap[s]?'over':''}" style="width:${p}%"></i></div>
+     ${st.plan.filter(x => x.tag===d && x.sch===s).map(x => `<div class="small"><span class="mono">${x.masch}</span> · BA ${x.ba} · ${nf(x.ruest,1)} h${x.fix?'':` <button class="back" style="min-height:0;padding:0 4px" data-a="fe:undo" data-id="${x.id}" aria-label="Zurücknehmen">↺</button>`}</div>`).join('')}</div>`; }).join('')}</div></div>`).join('')}</div></div>`;
+ }},
+{ k:'ek', ic:'EK', name:'Materialdeckung', who:'Einkauf · Wareneingang', step:'Prozess 3', kurz:'Bedarf aus eingeplanten BA, Deckung mit Ampel, Bestellvorschlag mit Preisspiegel – und Zeugnisse ordnen sich über die Chargennummer selbst zu.', gain:'Zeugnis: 3 Handgriffe → nur Ausnahmen · keine Doppelerfassung',
+ tabs:[['deck','Deckung & Bestellvorschlag'],['zeug','Zeugnisse'],['rueck','Rückstände']],
+ view(st, tab){
+  if (tab === 'zeug'){ const auto = st.zeug.filter(z => z.st==='auto').length;
+   return `<div class="kpis"><div class="kpi"><b>${Math.round(auto/st.zeug.length*100)} %</b><span>automatisch zugeordnet ${src('s_zeug')}</span></div><div class="kpi ${st.zeug.some(z=>z.st==='fehlt')?'alert':''}"><b>${st.zeug.filter(z=>z.st!=='auto'&&z.st!=='ok').length}</b><span>Ausnahmen für den Einkauf</span></div></div>
+    <div class="note info">Digitale Zeugnisse kommen über das Zeugnis-Postfach, Papier wird am Wareneingang mit dem Tablet fotografiert. Die Chargennummer verbindet Zeugnis, Wareneingang und BA.</div>
+    <div class="tbl-wrap"><table><thead><tr><th></th><th>Charge</th><th>Werkstoff</th><th>Lieferant</th><th>Wareneingang</th><th>BA</th><th>Status</th></tr></thead><tbody>${st.zeug.map(z => `<tr><td>${chk(z.st==='auto'||z.st==='ok'?true:z.st==='hersteller'?'warn':false)}</td><td class="mono">${z.charge}</td><td>${esc(z.wst)}</td><td>${esc(z.lief)}</td><td class="mono">${z.we} · ${dd(z.ein)}</td><td class="mono">${z.ba}</td>
+     <td>${z.st==='auto'?'<span class="small">über Chargennummer zugeordnet</span>':z.st==='ok'?'<span class="small">geprüft</span>':z.st==='fehlt'?`<span class="chip bad">Zeugnis fehlt</span> <button class="btn small" data-a="ek:anf" data-id="${z.id}">Beim Lieferanten anfordern</button>`:`<span class="chip warn">Herstellerzeugnis statt Händlerzeugnis</span> <button class="btn small" data-a="ek:zok" data-id="${z.id}">Akzeptieren</button>`}</td></tr>`).join('')}</tbody></table></div>
+    ${A.open.ekAnf?`<div class="panel"><h3>Entwurf an ${esc(st.zeug.find(z=>z.id===A.open.ekAnf).lief)}</h3><div class="draft">Guten Tag,\n\nzu unserem Wareneingang ${st.zeug.find(z=>z.id===A.open.ekAnf).we} (${esc(st.zeug.find(z=>z.id===A.open.ekAnf).wst)}) fehlt das Abnahmeprüfzeugnis 3.1.\nBitte senden Sie es an unser Zeugnis-Postfach.\n\nVielen Dank</div><span class="hint">Das System entwirft, ein Mensch sendet.</span></div>`:''}`; }
+  if (tab === 'rueck') return `<div class="tbl-wrap"><table><thead><tr><th>Bestellung</th><th>Lieferant</th><th>Position</th><th>Soll</th><th>betroffene BA</th><th></th></tr></thead><tbody>${st.rueck.map(r => `<tr><td class="mono">${r.best} ${src('s_m4')}</td><td>${esc(r.lief)}</td><td>${esc(r.pos)}</td><td><span class="chip bad">${relTxt(r.soll)}</span></td><td class="mono">${r.ba.join(', ')||'—'}</td><td>${r.st==='offen'?`<button class="btn small" data-a="ek:mahn" data-id="${r.id}">Mahnentwurf</button>`:'<span class="chip ok">nachgefragt</span>'}</td></tr>`).join('')}</tbody></table></div>
+   ${A.open.ekMahn?(r => `<div class="panel"><h3>Mahnentwurf an ${esc(r.lief)}</h3><div class="draft">Guten Tag,\n\nunsere Bestellung ${r.best} (${esc(r.pos)}) war für ${dd(r.soll)} bestätigt und ist noch nicht eingegangen.${r.ba.length?`\nDavon hängt unser Fertigungsauftrag ${r.ba.join(', ')} ab.`:''}\nBitte nennen Sie uns kurzfristig einen verbindlichen Liefertermin.\n\nVielen Dank</div><div class="actions"><button class="btn primary" data-a="ek:sent" data-id="${r.id}">Als nachgefragt markieren</button></div></div>`)(st.rueck.find(x=>x.id===A.open.ekMahn)):''}`;
+  const rows = st.deck.map(m => ({...m, deck: m.bedarf ? (m.bestand + m.bestellt)/m.bedarf : 1}));
+  let h = `<div class="kpis"><div class="kpi alert"><b>${rows.filter(r=>r.deck<1).length}</b><span>Deckung unter 100 %</span></div><div class="kpi"><b>${rows.filter(r=>r.liefer && atage(r.liefer)<0).length}</b><span>Liefertermin überschritten</span></div><div class="kpi"><b>0</b><span>Doppelerfassungen (liest M4)</span></div></div>
+   <div class="tbl-wrap"><table><thead><tr><th></th><th>Werkstoff</th><th>Abmessung</th><th class="num">Bedarf 30 T. ${src('s_plan')}</th><th class="num">Bestand ${src('s_m4')}</th><th class="num">bestellt</th><th class="num">Deckung</th><th>für BA</th><th></th></tr></thead><tbody>
+   ${rows.map(r => `<tr><td>${amp(r.deck<0.8?'bad':r.deck<1?'warn':'')}</td><td><b>${esc(r.wst)}</b>${r.schwer?' <span class="chip warn">schwer beschaffbar</span>':''}</td><td>${esc(r.abm)}</td><td class="num">${kgf(r.bedarf)}</td><td class="num">${kgf(r.bestand)}</td><td class="num">${r.bestellt?kgf(r.bestellt)+`<br><span class="small ${atage(r.liefer)<0?'chip bad':'muted'}">${dd(r.liefer)}</span>`:'—'}</td><td class="num">${Math.round(r.deck*100)} %</td><td class="mono small">${r.ba.join('<br>')||esc(r.hinweis||'')}</td>
+    <td>${r.deck<1?`<button class="btn small primary" data-a="ek:vor" data-id="${r.id}">Bestellvorschlag</button>`:''}</td></tr>`).join('')}</tbody></table></div>`;
+  const v = A.open.ekVor && rows.find(r => r.id===A.open.ekVor);
+  if (v){ const menge = Math.ceil((v.bedarf - v.bestand - v.bestellt)/250)*250 + 250;
+   const sp = [[v.lief, v.preis, 8, true],['Beispiel Stahlhandel', v.preis*1.04, 5, true],['Probe Buntmetall', v.preis*0.97, 15, false]];
+   h += `<div class="panel"><h3>Bestellvorschlag ${esc(v.wst)} ${esc(v.abm)}</h3><dl class="kv"><dt>Menge</dt><dd class="mono">${kgf(menge)} <span class="muted small">(Fehlmenge aufgerundet auf 250-kg-Abschluss)</span> ${src('s_calc')}</dd><dt>letzter Bezug</dt><dd>${esc(v.lief)} · ${nf(v.preis)} €/kg ${src('s_hist')}</dd></dl>
+    ${st.spiegel===v.id ? `<div class="tbl-wrap"><table><thead><tr><th>Lieferant</th><th class="num">€/kg</th><th class="num">Lieferzeit</th><th>Zeugnis 3.1</th><th class="num">Summe</th><th></th></tr></thead><tbody>${sp.map(([l,p,lz,z],i) => `<tr><td>${esc(l)}</td><td class="num">${nf(p)}</td><td class="num">${lz} AT</td><td>${chk(z)}</td><td class="num">${eur(p*menge)}</td><td><button class="btn small ${i===0?'primary':''}" data-a="ek:bestell" data-id="${v.id}">Wählen</button></td></tr>`).join('')}</tbody></table></div><span class="hint">Antworten der Lieferanten (Beispiel). Ab Welle 4 liest die KI Angebote aus Mails.</span>`
+     : `<div class="actions"><button class="btn primary" data-a="ek:bestell" data-id="${v.id}">Bei ${esc(v.lief)} bestellen</button><button class="btn" data-a="ek:spiegel" data-id="${v.id}">Anfrage an 3 Lieferanten</button></div>`}</div>`; }
+  return h;
+ }},
+{ k:'vs', ic:'VS', name:'Versand & Veredler', who:'Versandleitung · Versand', step:'Prozesse 5 und 6', kurz:'Kommission mit Kundenanforderungen als Checkliste und FIFO-Vorschlag; Veredler-Status statt Zuruf; Versandboard.', gain:'Anforderungen nicht mehr überlesen · Lieferschein direkt aus der Kommission',
+ tabs:[['komm','Kommissionieren'],['ver','Veredler'],['board','Versandboard']],
+ view(st, tab){
+  if (tab === 'ver'){ const V = [...new Set(st.ver.map(e => e.vered))];
+   return `<div class="grid2" style="align-items:start">${V.map(n => { const l = st.ver.filter(e => e.vered===n && e.st==='aus'); const ue = l.filter(e => atage(e.zurueck)<0).length;
+    return `<div class="panel"><div class="row between"><h3>${esc(n)}</h3>${ue?`<span class="chip bad">${ue} überfällig</span>`:'<span class="chip ok">im Plan</span>'}</div>${l.map(e => `<div class="row between small" style="border-top:1px solid var(--line);padding-top:8px"><span>${amp(fristAmp(e.zurueck))} ${esc(art(e.artikel).de)} · ${nf(e.menge,0)} Stk. · ${e.art}</span><span class="mono">zurück ${dd(e.zurueck)}</span>${atage(e.zurueck)<0?`<button class="btn small" data-a="vs:hak" data-id="${e.id}">Nachhaken</button>`:''}</div>`).join('')}
+     <span class="hint">Rücktermin aus Standard-Durchlaufzeit des Veredlers ${src('s_calc')}</span></div>`; }).join('')}</div>
+    ${A.open.vsHak?`<div class="panel"><h3>Entwurf Nachhaken</h3><div class="draft">Hallo,\n\nunser Auftrag (${esc(art(st.ver.find(e=>e.id===A.open.vsHak).artikel).de)}, ${nf(st.ver.find(e=>e.id===A.open.vsHak).menge,0)} Stk.) sollte am ${dd(st.ver.find(e=>e.id===A.open.vsHak).zurueck)} zurück sein.\nWann können wir abholen?\n\nDanke</div></div>`:''}
+    <div class="panel"><h3>Vorschlag „zum Veredler“</h3>${st.vorschlag.map(v => `<div class="card"><div class="row between"><b>${esc(art(v.artikel).de)} · ${nf(v.menge,0)} Stk.</b>${v.st?'<span class="chip ok">Auftrag angelegt</span>':`<button class="btn small primary" data-a="vs:ver" data-id="${v.id}">Veredelungsauftrag anlegen</button>`}</div><span class="small">${esc(v.art)} bei ${esc(v.vered)} · Lagerplatz ${v.lp} ${src('s_lager')}</span><span class="small muted">${esc(v.grund)}</span></div>`).join('')}<span class="hint">Lieferantenanweisung entsteht aus den Artikelstammdaten.</span></div>`; }
+  if (tab === 'board'){ const tg = [0,1,2,3,4];
+   return `<div class="board">${tg.map(d => { const l = st.board.filter(b => b.tag===d); const dat = new Date(now0.getTime()+d*86400000); return `<div class="col"><h4>${d===0?'Heute':dat.toLocaleDateString('de-DE',{weekday:'short', day:'2-digit', month:'2-digit'})}<span class="count">${l.length}</span></h4>${l.map(b => `<div class="card"><div class="row between"><b>${esc(b.kunde)}</b>${b.ex?'<span class="chip info">Export</span>':''}</div><span class="small">${b.pk} · ${esc(b.sped)}</span><span class="chip ${b.st==='gepackt'?'ok':''}">${b.st}</span></div>`).join('')}</div>`; }).join('')}</div>
+    <span class="hint">Speditionsanmeldung und Versandavis werden aus dem Board erzeugt (Welle 2).</span>`; }
+  const k = A.open.vs && st.komm.find(x => x.id === A.open.vs);
+  if (k){ const a = art(k.artikel); const sorted = k.plaetze.slice().sort((x,y) => y.alter - x.alter); let rest = k.menge;
+   const fifo = sorted.map(p => { const m = Math.min(p.m, rest); rest -= m; return {...p, nimm:m}; });
+   const alle = k.anf.every((_,i) => k.hak[i]), mengeOk = +k.ist === k.menge;
+   return `<button class="back" data-a="vs:close">← zurück</button><div class="panel"><div class="row between"><h2 class="mono">${k.nr}</h2><span class="chip ${k.st==='gepackt'?'ok':''}">${k.st}</span></div>
+    <dl class="kv"><dt>Kunde</dt><dd>${esc(k.kunde)} ${k.land!=='DE'?`<span class="chip info">Export ${k.land}</span>`:''} ${src('s_kunde')}</dd><dt>Artikel</dt><dd>${esc(a.de)} <span class="mono muted">${a.id}</span> · <b>${nf(k.menge,0)} Stk.</b> ${src('s_m4')}</dd><dt>Lieferung</dt><dd>${dd(k.lieferung)}</dd></dl>
+    <div class="step"><span class="lbl">Kundenanforderungen – abhaken ${src('s_kanf')}</span><div class="checks">${k.anf.map((x,i) => `<label><input type="checkbox" data-vsh="${i}" ${k.hak[i]?'checked':''}> ${esc(x)}</label>`).join('')}</div><span class="hint">Statt Freitext auf dem Kommissionsschein: strukturiert je Kunde gepflegt, nichts wird überlesen.</span></div>
+    <div class="step"><span class="lbl">Entnahme nach FIFO ${src('s_lager')}</span><div class="tbl-wrap"><table><thead><tr><th>Lagerplatz</th><th>Charge</th><th class="num">verfügbar</th><th class="num">Alter</th><th class="num">entnehmen</th></tr></thead><tbody>${fifo.map(p => `<tr><td class="mono">${p.lp}</td><td class="mono">${p.ch}</td><td class="num">${nf(p.m,0)}</td><td class="num">${p.alter} T.</td><td class="num"><b>${nf(p.nimm,0)}</b></td></tr>`).join('')}</tbody></table></div><span class="hint">Älteste Charge zuerst; wer eine jüngere nimmt, bekommt eine Warnung.</span></div>
+    <div class="grid2"><div class="step"><label class="lbl" for="vsIst">Ist-Menge ${srcIn()}</label><input id="vsIst" class="bignum" type="number" data-vsi="1" value="${esc(k.ist)}">${k.ist!=='' && !mengeOk?'<span class="chip warn" style="justify-self:start">weicht von der Bestellung ab</span>':''}</div>
+     <div class="step"><span class="lbl">Dokumentenpaket ${src('s_calc')}</span><ul class="small" style="margin:0;padding-left:18px"><li>Lieferschein</li>${k.anf.some(x=>/Zeugnis/.test(x))?'<li>3.1-Zeugnis Charge '+fifo[0].ch+'</li>':''}${k.land!=='DE'?'<li>Handelsrechnung mit Ursprungserklärung</li><li>Exportbegleitdokument</li>':''}${k.anf.some(x=>/Etikett/.test(x))?'<li>Kundenetiketten (Vorlage KL-2)</li>':''}</ul></div></div>
+    <div class="actions"><button class="btn primary" data-a="vs:ls" data-id="${k.id}" ${alle&&mengeOk&&k.st!=='gepackt'?'':'disabled'}>Lieferschein erzeugen</button>${!alle?'<span class="small muted">erst alle Anforderungen abhaken</span>':''}</div></div>`; }
+  return `<div class="kpis"><div class="kpi"><b>${st.komm.length}</b><span>Kommissionen</span></div><div class="kpi"><b>${st.komm.filter(k=>k.st==='gepackt').length}</b><span>gepackt</span></div><div class="kpi ${st.ver.some(e=>atage(e.zurueck)<0)?'alert':''}"><b>${st.ver.filter(e=>atage(e.zurueck)<0).length}</b><span>Veredler überfällig</span></div></div>
+   <div class="list two">${st.komm.map(k => { const a = art(k.artikel); return `<button class="card clickable" data-a="vs:open" data-id="${k.id}"><div class="row between"><b class="mono">${k.nr}</b><span class="chip ${k.st==='gepackt'?'ok':''}">${k.st}</span></div><b>${esc(k.kunde)}</b>${k.land!=='DE'?`<span class="chip info" style="justify-self:start">Export ${k.land}</span>`:''}<span class="small">${esc(a.de)} · ${nf(k.menge,0)} Stk. · Lieferung ${relTxt(k.lieferung)}</span><span class="small muted">${k.anf.length} Kundenanforderungen</span></button>`; }).join('')}</div>`;
+ }},
+{ k:'ih', ic:'IH', name:'Instandhaltung', who:'Wartungsingenieur · Produktion', step:'U2', kurz:'Störungen per MDE-Status oder einem Klick, Reparatur direkt an der Meldung, fällige Wartungen mit Zeitfenster aus MDE, Prüffristen.', gain:'Zuruf → Meldung mit Zeitstempel · MTBF/MTTR automatisch',
+ tabs:[['stoer','Störungen'],['wart','Wartung'],['pruef','Prüffristen']],
+ view(st, tab){
+  if (tab === 'wart') return `<div class="note info">Das System macht fällige Wartungen nur sichtbar und schlägt ein Zeitfenster vor. Die Abstimmung mit der Produktion bleibt, wie sie ist. ${src('s_wart')}</div><div class="list">${st.wart.map(w => `<div class="card"><div class="row between"><b><span class="mono">${w.masch}</span> · ${esc(w.was)}</b><span class="row small">${amp(fristAmp(w.faellig))}fällig ${relTxt(w.faellig)}</span></div>
+   <span class="small">Vorschlag: ${esc(w.slot)} ${src('s_mde')}</span>${w.werker?'<span class="chip info" style="justify-self:start">Werkerwartung – Checkliste am Terminal</span>':''}
+   <div class="actions">${w.st==='offen'?`<button class="btn small primary" data-a="ih:wok" data-id="${w.id}">Mit Produktion abgestimmt</button>`:w.st==='abgestimmt'?`<span class="chip ok">abgestimmt</span><button class="btn small" data-a="ih:wdone" data-id="${w.id}">Erledigt</button>`:'<span class="chip ok">erledigt – nächste Fälligkeit berechnet</span>'}</div></div>`).join('')}</div>`;
+  if (tab === 'pruef') return `<div class="tbl-wrap"><table><thead><tr><th></th><th>Prüfpflicht</th><th>fällig</th><th></th></tr></thead><tbody>${st.pruef.slice().sort((a,b)=>new Date(a.faellig)-new Date(b.faellig)).map(p => `<tr><td>${amp(fristAmp(p.faellig))}</td><td>${esc(p.was)}</td><td class="mono">${dd(p.faellig)} <span class="small muted">(${relTxt(p.faellig)})</span></td><td><button class="btn small" data-a="ih:pdone" data-id="${p.id}">Erledigt</button></td></tr>`).join('')}</tbody></table></div><span class="hint">Ersetzt die separaten Prüflisten; Erinnerung vor Fälligkeit an die zuständige Rolle.</span>`;
+  const sel = A.open.ih && st.stoer.find(s => s.id===A.open.ih);
+  return `<div class="kpis"><div class="kpi ${st.stoer.some(s=>s.st!=='erledigt')?'alert':''}"><b>${st.stoer.filter(s=>s.st!=='erledigt').length}</b><span>offene Störungen</span></div><div class="kpi"><b>${nf(st.stoer.filter(s=>s.st!=='erledigt').reduce((n,s)=>n+(Date.now()-new Date(s.seit))/3600000,0),1)} h</b><span>Stillstand laufend ${src('s_mde')}</span></div><div class="kpi"><b>${st.wart.filter(w=>atage(w.faellig)<=14 && w.st!=='erledigt').length}</b><span>Wartungen in 14 Tagen</span></div><div class="kpi ${st.pruef.some(p=>atage(p.faellig)<0)?'alert':''}"><b>${st.pruef.filter(p=>atage(p.faellig)<0).length}</b><span>Prüffrist überschritten</span></div></div>
+   <div class="grid2" style="align-items:start"><div class="list">${st.stoer.map(s => `<div class="card ${sel&&sel.id===s.id?'':''}"><div class="row between"><b>Maschine <span class="mono">${s.masch}</span></b><span class="chip ${s.st==='erledigt'?'ok':s.st==='offen'?'bad':'warn'}">${s.st}</span></div><span>${esc(s.txt)}</span>
+    <span class="small muted">${esc(s.quelle)} · seit ${dt(s.seit)}${s.vert?' · Vertretung benachrichtigt':''}</span>${s.erg?`<span class="small">${esc(s.erg)}</span>`:''}
+    <div class="actions">${s.st==='offen'?`<button class="btn small primary" data-a="ih:take" data-id="${s.id}">Übernehmen</button>`:''}${s.st==='in Arbeit'?`<button class="btn small primary" data-a="ih:open" data-id="${s.id}">Reparatur dokumentieren</button>`:''}</div></div>`).join('')}
+    <button class="btn" data-a="ih:new">Testmeldung „1 Klick am Terminal“</button></div>
+   <div class="panel">${sel && sel.st==='in Arbeit' ? `<h3>Reparatur Maschine ${sel.masch}</h3><div class="step"><label class="lbl" for="ihU">Ursache</label><input id="ihU" type="text"></div><div class="step"><label class="lbl" for="ihM">Maßnahme</label><input id="ihM" type="text"></div>
+     <div class="step"><label class="lbl" for="ihE">Ersatzteil ${src('s_lager')}</label><select id="ihE"><option value="">— keins —</option>${st.teile.map(t2 => `<option value="${t2.nr}">${t2.nr} · ${esc(t2.txt)} (Fach ${t2.fach}, Bestand ${t2.best})</option>`).join('')}</select></div>
+     <span class="hint">Servicebericht des Dienstleisters wird hier angehängt statt auf G: abgelegt.</span><div class="actions"><button class="btn primary" data-a="ih:done" data-id="${sel.id}">Abschließen</button></div>`
+    : `<h3>Kennzahlen je Maschine (12 Monate)</h3><div class="tbl-wrap"><table><thead><tr><th>Maschine</th><th class="num">Störungen</th><th class="num">MTTR</th><th class="num">MTBF</th></tr></thead><tbody>${st.hist.map(x => `<tr><td class="mono">${x.masch}</td><td class="num">${x.n}</td><td class="num">${nf(x.h/x.n,1)} h</td><td class="num">${nf(x.betrieb*8/x.n/24,0)} T.</td></tr>`).join('')}</tbody></table></div><span class="hint">${src('s_calc')} aus Meldungen und MDE-Laufzeiten</span>
+     <h3>Ersatzteile unter Mindestbestand</h3>${st.teile.filter(t2=>t2.best<t2.min).map(t2 => `<div class="row small">${amp('warn')}${t2.nr} · ${esc(t2.txt)} – Bestand ${t2.best} / min. ${t2.min}</div>`).join('')||'<span class="muted small">keine</span>'}`}</div></div>`;
+ }},
+{ k:'pe', ic:'PE', name:'Zeiten prüfen', who:'Personalleitung · Abteilungsleitungen', step:'U3', kurz:'Statt Monatsende-Abtippen: täglich nur die Auffälligkeiten prüfen, Korrekturanträge der Mitarbeitenden, Export ans Lohnprogramm.', gain:'Abtippen in VOCUS → Export · Klärung laufend statt am Monatsende',
+ tabs:[['heute','Auffälligkeiten'],['antr','Korrekturanträge'],['monat','Monatsabschluss']],
+ view(st, tab){
+  const off = st.auff.filter(x => x.st==='offen');
+  if (tab === 'antr') return `<div class="note info">Mitarbeitende stellen Korrekturen selbst am Terminal oder Handy, Salden sehen sie dort auch.</div><div class="list">${st.antr.map(a2 => `<div class="card"><div class="row between"><b class="mono">${a2.ma}</b><span class="chip ${a2.st==='offen'?'warn':a2.st==='genehmigt'?'ok':'bad'}">${a2.st}</span></div><span>${esc(a2.txt)}</span>${a2.st==='offen'?`<div class="actions"><button class="btn small primary" data-a="pe:ag" data-id="${a2.id}">Genehmigen</button><button class="btn small" data-a="pe:ar" data-id="${a2.id}">Ablehnen</button></div>`:''}</div>`).join('')}</div>`;
+  if (tab === 'monat'){ const ok = off.length===0 && st.antr.every(a2=>a2.st!=='offen');
+   return `<div class="panel"><h3>Monatsabschluss</h3><dl class="kv"><dt>Mitarbeitende</dt><dd class="mono">${st.ohne + st.auff.length} ${src('s_term')}</dd><dt>offene Auffälligkeiten</dt><dd class="mono">${off.length}</dd><dt>offene Korrekturanträge</dt><dd class="mono">${st.antr.filter(a2=>a2.st==='offen').length}</dd><dt>Krankmeldungen</dt><dd class="mono">${st.krank} – eAU-Abruf erzeugt das Lohnprogramm (offen: Auswahl Lohnprogramm)</dd></dl>
+    <div class="actions"><button class="btn primary" data-a="pe:exp" ${ok&&!st.abschluss?'':'disabled'}>Export ans Lohnprogramm</button>${st.abschluss?'<span class="chip ok">exportiert</span>':''}${!ok?'<span class="small muted">erst alle Auffälligkeiten klären</span>':''}</div><span class="hint">Drüberschauen bleibt ausdrücklich gewünscht – das System zeigt nur, wo es sich lohnt.</span></div>`; }
+  return `<div class="kpis"><div class="kpi"><b>${st.ohne}</b><span>ohne Auffälligkeit – nichts zu tun</span></div><div class="kpi ${off.length?'alert':''}"><b>${off.length}</b><span>zu prüfen (gestern)</span></div></div>
+   <div class="note info">Im Probebau nur Personalnummern, keine Namen. ${src('s_term')}</div>
+   <div class="list">${st.auff.map(x => `<div class="card"><div class="row between"><b><span class="mono">${x.ma}</span> · ${esc(x.abt)}</b><span class="chip ${x.st==='offen'?'warn':'ok'}">${x.st==='offen'?esc(x.art):x.st}</span></div><span class="small">${esc(x.det)}</span><span class="small">Vorschlag: <b>${esc(x.vor)}</b> ${src('s_calc')}</span>
+    ${x.st==='offen'?`<div class="actions"><button class="btn small primary" data-a="pe:ok" data-id="${x.id}">Vorschlag übernehmen</button><button class="btn small" data-a="pe:al" data-id="${x.id}">Abteilungsleitung fragen</button></div>`:''}</div>`).join('')}</div>`;
+ }},
+{ k:'gf', ic:'GF', name:'Monatsauswertung', who:'Geschäftsführung', step:'U6', kurz:'Monatsauswertung auf Knopfdruck: Umsatz und Leistung je Profitcenter, Kunden ABC, Liquidität – und Nachcontrolling je Auftrag.', gain:'~3 h Zusammentragen → Zeit für Analyse',
+ tabs:[['monat','Monat'],['nk','Nachcontrolling'],['best','Bestände']],
+ view(st, tab){
+  const mon = new Date(now0.getFullYear(), now0.getMonth()-1, 1).toLocaleDateString('de-DE', {month:'long', year:'numeric'});
+  if (tab === 'nk'){ const sel = A.open.gf && st.nk.find(n => n.ba===A.open.gf);
+   const sum = o => Object.values(o).reduce((a,b)=>a+b,0);
+   let h = `<div class="note info">Ist-Herstellkosten aus Rückmeldungen, Rüstzeiten, Werkzeugentnahmen und Veredlerrechnungen – je Betriebsauftrag. ${src('s_calc')}</div><div class="tbl-wrap"><table><thead><tr><th></th><th>BA</th><th>Artikel</th><th>Kunde</th><th class="num">Menge</th><th class="num">HK kalk.</th><th class="num">HK ist</th><th class="num">VK</th><th class="num">DB ist</th></tr></thead><tbody>
+    ${st.nk.map(n => { const p = sum(n.plan), i = sum(n.ist), db = (n.vk-i)/n.vk*100; return `<tr data-a="gf:open" data-id="${n.ba}" style="cursor:pointer"><td>${amp(i>p*1.1?'bad':i>p*1.02?'warn':'')}</td><td class="mono">${n.ba}</td><td>${esc(art(n.artikel).de)}</td><td class="small">${esc(n.kunde)}</td><td class="num">${nf(n.menge,0)}</td><td class="num">${nf(p,3)}</td><td class="num">${nf(i,3)}</td><td class="num">${nf(n.vk)}</td><td class="num"><b>${nf(db,1)} %</b></td></tr>`; }).join('')}</tbody></table></div>`;
+   if (sel){ const ks = Object.keys(sel.plan), mx = Math.max(...ks.map(k => Math.max(sel.plan[k], sel.ist[k])));
+    const worst = ks.reduce((a,k) => (sel.ist[k]-sel.plan[k]) > (sel.ist[a]-sel.plan[a]) ? k : a, ks[0]);
+    h += `<div class="panel"><div class="section-title"><h3>BA ${sel.ba} · ${esc(art(sel.artikel).de)}</h3><span class="small muted">je Stück, Kalkulation (hell) gegen Ist (dunkel)</span></div><div class="pv">${ks.map(k => `<span class="small">${k}</span><div class="track"><i style="width:${sel.plan[k]/mx*100}%"></i></div><div class="track ist ${sel.ist[k]>sel.plan[k]*1.1?'bad':''}"><i style="width:${sel.ist[k]/mx*100}%"></i></div>`).join('')}</div>
+     ${sel.ist[worst] > sel.plan[worst]*1.05 ? `<div class="note warn">Größte Abweichung: <b>${worst}</b> (${nf(sel.plan[worst],3)} → ${nf(sel.ist[worst],3)} €/Stk.). <button class="btn small" data-a="gf:kalk">In Kalkulation übernehmen</button></div>` : '<div class="note ok">Im Rahmen der Kalkulation.</div>'}${A.open.gfK?'<span class="chip ok">Für nächste Kalkulation vorgemerkt</span>':''}</div>`; }
+   return h; }
+  if (tab === 'best') return `<div class="note info">Bestandsbewertung zum Monatsende aus Lagerbewegungen ${src('s_m4')} – ohne Excel-Export.</div><div class="tbl-wrap"><table><thead><tr><th>Bestand</th><th class="num">Wert (T€)</th><th>Herkunft</th></tr></thead><tbody>${st.best.map(b => `<tr><td>${b.k}</td><td class="num">${nf(b.v,1)}</td><td class="small">${b.k.startsWith('Späne')?'Materialeinsatz − Fertigteilgewicht, Korrektur nach Wiegen mit Begründung dokumentiert':b.k==='Sperrbestand'?'aus Sperrkarten (QS-Anwendung)':b.k.includes('Veredler')?'Fremdlager':'Lagerbuchungen'}</td></tr>`).join('')}</tbody></table></div>`;
+  const U = st.pc.reduce((n,p)=>n+p.u,0), P = st.pc.reduce((n,p)=>n+p.p,0), mx = Math.max(...st.pc.map(p=>Math.max(p.u,p.p)));
+  return `<div class="row between"><h2>${mon}</h2><span class="chip">Zahlen erfunden</span></div>
+   <div class="kpis"><div class="kpi"><b>${nf(U,0)} T€</b><span>Umsatz ${src('s_m4')}</span></div><div class="kpi"><b>${nf(P,0)} T€</b><span>Produktionsleistung ${src('s_calc')}</span></div><div class="kpi"><b>${nf(P-U,0)} T€</b><span>Bestandsveränderung</span></div><div class="kpi"><b>${nf(Math.min(...st.liq.map(l=>l.v)),0)} T€</b><span>Liquidität Tiefpunkt 8 Wochen</span></div></div>
+   <div class="grid2" style="align-items:start"><div class="panel"><h3>Profitcenter: Umsatz / Leistung</h3><div class="pv">${st.pc.map(p => `<span class="small">${p.k}</span><div class="track"><i style="width:${p.u/mx*100}%"></i></div><div class="track ist"><i style="width:${p.p/mx*100}%"></i></div>`).join('')}</div>
+    <span class="hint">Hell = Umsatz, dunkel = Produktionsleistung. Zuordnung aus BA und Maschine – die Liste mit ~1.500 Zeilen entfällt.</span></div>
+    <div class="panel"><h3>Kunden ABC</h3><div class="tbl-wrap"><table><thead><tr><th>Kunde</th><th></th><th class="num">Monat T€</th><th class="num">Hochrechnung Jahr</th></tr></thead><tbody>${st.kunden.map(k => `<tr><td>${esc(k.k)}</td><td><span class="chip">${k.abc}</span></td><td class="num">${nf(k.u,0)}</td><td class="num">${nf(k.hr,0)}</td></tr>`).join('')}</tbody></table></div>
+    <h3>Liquidität (T€)</h3><div class="bars">${st.liq.map(l => `<div class="bar"><span>${l.w}</span><div class="track"><div class="fill" style="width:${l.v/450*100}%"></div></div><span class="num">${l.v}</span></div>`).join('')}</div></div></div>
+   <div class="actions"><button class="btn" disabled>Quartalspräsentation erzeugen (Entwurf)</button></div>`;
+ }},
+{ k:'bu', ic:'BU', name:'Zahlungseingang', who:'Buchhaltung', step:'Prozess 7', kurz:'Kontoauszug wird automatisch den offenen Posten zugeordnet, Skonto geprüft; Mahnvorschläge mit Vorlage.', gain:'Zahlungen abtragen → bestätigen · Mahnung per Vorlage',
+ tabs:[['kto','Zahlungseingang'],['op','Offene Posten']],
+ view(st, tab){
+  if (tab === 'op'){ const sel = A.open.bu;
+   return `<div class="tbl-wrap"><table><thead><tr><th></th><th>Rechnung</th><th>Kunde</th><th class="num">Betrag</th><th>fällig</th><th>erwartet ${src('s_calc')}</th><th></th></tr></thead><tbody>${st.op.filter(o=>!o.bez).map(o => `<tr><td>${amp(fristAmp(o.faellig))}</td><td class="mono">${o.re}</td><td>${esc(o.kunde)}</td><td class="num">${eur(o.betrag)}</td><td class="mono">${dd(o.faellig)}</td><td class="mono small">${dd(o.erw)}</td><td>${atage(o.faellig)<-10?`<button class="btn small" data-a="bu:mahn" data-id="${o.re}">Mahnung ${ (o.mahn||0)+1 }</button>`:''}</td></tr>`).join('')}</tbody></table></div>
+    <span class="hint">„Erwartet“ aus dem bisherigen Zahlungsverhalten des Kunden – Grundlage der Liquiditätsvorschau.</span>
+    ${sel?(o => `<div class="panel"><h3>Mahnung ${(o.mahn||0)+1}. Stufe – ${esc(o.kunde)}</h3><div class="draft">Sehr geehrte Damen und Herren,\n\nzu unserer Rechnung ${o.re} vom ${dd(new Date(new Date(o.faellig).getTime()-30*86400000).toISOString())} über ${eur(o.betrag)} konnten wir noch keinen Zahlungseingang feststellen (fällig am ${dd(o.faellig)}).\nBitte überweisen Sie den Betrag innerhalb von 7 Tagen.\n\nSollte sich Ihre Zahlung mit diesem Schreiben überschnitten haben, betrachten Sie es bitte als gegenstandslos.\n\nMit freundlichen Grüßen</div><span class="hint">Vorlage je Mahnstufe; Englisch für Auslandskunden.</span></div>`)(st.op.find(o=>o.re===sel)):''}`; }
+  const off = st.kto.filter(k => k.st==='offen');
+  return `<div class="kpis"><div class="kpi"><b>${st.kto.filter(k=>k.sicher===100).length} / ${st.kto.length}</b><span>sicher zugeordnet ${src('s_bank')}</span></div><div class="kpi ${off.length?'alert':''}"><b>${off.length}</b><span>zu bestätigen</span></div><div class="kpi"><b>${eur(st.op.filter(o=>!o.bez && atage(o.faellig)<0).reduce((n,o)=>n+o.betrag,0))}</b><span>überfällig</span></div></div>
+   <div class="list">${st.kto.map(k => `<div class="card"><div class="row between"><span class="mono small">${dd(k.dat)}</span><b class="mono">${eur(k.betrag)}</b></div><span class="mono small">${esc(k.text)}</span>
+    <div class="row">${k.vor.length?k.vor.map(r => `<span class="chip info">${r}</span>`).join(''):'<span class="chip bad">kein Vorschlag</span>'}${k.vor.length?`<span class="small muted">Sicherheit ${k.sicher} %</span>`:''}</div><span class="small">${esc(k.hinweis)}</span>
+    <div class="actions">${k.st==='offen'?(k.vor.length?`<button class="btn small primary" data-a="bu:ok" data-id="${k.id}">Bestätigen & ausbuchen</button>${k.skonto?`<button class="btn small" data-a="bu:sk" data-id="${k.id}">Skontodifferenz nachfordern</button>`:''}`:`<select aria-label="Offenen Posten wählen" data-buz="${k.id}"><option value="">Zuordnen zu …</option><option>Sonstige Erträge</option>${st.op.filter(o=>!o.bez).map(o=>`<option>${o.re}</option>`).join('')}</select>`):`<span class="chip ok">${esc(k.st)}</span>`}</div></div>`).join('')}</div>`;
+ }}
+];
+function akAmp(b){ const p = Math.abs(b.preis-b.soll) < 0.005, z = art(b.artikel).zgs.startsWith(b.zgsB); if (!p || !z || b.t==='mat') return 'bad'; if (b.t==='eng') return 'warn'; return ''; }
+function akCard(b){
+ const a = art(b.artikel), p = Math.abs(b.preis-b.soll) < 0.005, z = a.zgs.startsWith(b.zgsB), c = akAmp(b);
+ const q = !p ? {r:'vt', txt:`Preis ${nf(b.preis)} € weicht von ${b.sollQ} (${nf(b.soll)} €) ab – Kunde anschreiben oder Preis bestätigen?`}
+  : !z ? {r:'tech', txt:`Bestellung nennt ${b.zgsB}, im Artikelstamm gilt ${a.zgs}. Zeichnungsänderung prüfen?`}
+  : b.t==='mat' ? {r:'ek', txt:`Material fehlt (${b.tTxt}). Kann früher beschafft werden?`}
+  : b.t==='eng' ? {r:'prod', txt:`${b.tTxt}. Teillieferung zum Wunschtermin möglich?`} : null;
+ return `<div class="card"><div class="row between"><span class="row">${amp(b.st==='ab'?'off':c)}<b class="mono">${b.nr}</b><span class="small muted">${esc(b.quelle)} · ${dt(b.eingang)}</span></span>${b.st==='ab'?`<span class="chip ok">AB versendet ${dt(b.abAm)}</span>`:b.st==='rf'?'<span class="chip warn">Rückfrage gestellt</span>':''}</div>
+  <div><b>${esc(b.kunde)}</b> · ${esc(a.de)} <span class="mono muted">${a.id}</span> · ${nf(b.menge,0)} Stk. · Wunsch ${dd(b.termin)} ${src('s_mail')}</div>
+  <div class="grid2"><div class="ck small">${chk(p)}<span>Preis ${nf(b.preis)} € ${p?'= ':'≠ '}${esc(b.sollQ)} ${src('s_rahmen')}</span></div><div class="ck small">${chk(z)}<span>Zeichnungsstand ${esc(b.zgsB)} ${z?'= Artikelstamm':'≠ '+esc(a.zgs)} ${src('s_art')}</span></div>
+   <div class="ck small">${chk(b.t==='mat'?false:b.t==='eng'?'warn':true)}<span>Termin: ${esc(b.tTxt)} ${src('s_plan')}</span></div><div class="ck small">${chk(b.mat==='fehlt'?false:b.mat==='bestellt'?'warn':true)}<span>Material ${b.mat==='ok'?'verfügbar':b.mat} ${src('s_lager')}</span></div></div>
+  ${b.st==='neu' ? (c==='' ? `<div class="actions"><button class="btn primary" data-a="ak:ab" data-id="${b.id}">AB sofort bestätigen</button><span class="small muted">Kundeninfo-Vorschlag: keine</span></div>`
+   : `<div class="note ${c==='bad'?'bad':'warn'}">Rückfrage an <b>${RO[q.r]}</b>: ${esc(q.txt)}</div><div class="actions"><button class="btn" data-a="ak:rf" data-id="${b.id}">Rückfrage senden</button><span class="small muted">ohne Fristdruck – gezielte Frage statt Reihenlauf</span></div>`) : ''}</div>`;
+}
+function vtDetail(a){
+ const preise = a.mengen.map(m => ({m, p:(a.hk + a.ruest/m)*1.28}));
+ const wv = new Date(new Date(a.angebot||a.eingang).getTime() + VT_ART[a.art][1]*86400000).toISOString();
+ const ok = (k, txt) => a.herst[k] ? `<span class="ck">${chk(true)}<span>${txt} <span class="small muted">bestätigt</span></span></span>` : `<span class="ck">${chk('warn')}<span>${txt}</span> <button class="btn small primary" data-a="vt:ok" data-v="${k}">Bestätigen</button><button class="btn small" disabled>Ändern</button></span>`;
+ return `<button class="back" data-a="vt:close">← zurück</button><div class="panel"><div class="row between"><h2>${esc(a.teil)} <span class="mono small muted">${a.id}</span></h2><span class="chip">${VT_ST.find(s=>s[0]===a.status)[1]}</span></div>
+  <div class="grid2" style="align-items:start"><dl class="kv"><dt>Kunde</dt><dd>${esc(a.kunde)} ${src('s_kunde')}</dd><dt>Eingang</dt><dd>${esc(a.quelle)} · ${dt(a.eingang)} ${src('s_mail')}</dd><dt>Mengen</dt><dd class="mono">${a.mengen.map(m=>nf(m,0)).join(' / ')} Stk. <span class="small muted">aus der Mail erkannt</span> ${src('s_mail')}</dd><dt>Werkstoff</dt><dd>${esc(a.werkstoff)} ${src('s_mail')}</dd>
+   <dt>Anfrageart</dt><dd><div class="decide">${Object.entries(VT_ART).map(([k,[l]]) => `<button data-a="vt:art" data-v="${k}" aria-pressed="${a.art===k}">${l}</button>`).join('')}</div></dd><dt>Frist Stufe</dt><dd>${amp(fristAmp(vtFrist(a)))} ${dt(vtFrist(a))} ${src('s_calc')}</dd></dl>
+   <div class="step"><span class="lbl">Ähnliche Teile ${src('s_hist')} ${src('s_nk')}</span>${a.sim.length?a.sim.map(s => `<div class="mini card">${partSvg(s.nr)}<div style="flex:1"><b>${esc(s.teil)}</b><br><span class="small mono muted">${s.nr} · ${nf(s.preis)} €</span></div><div style="text-align:right"><span class="chip info">${s.match} %</span><br><span class="small ${s.db<15?'chip bad':'muted'}">DB ${s.db} %</span></div></div>`).join(''):'<span class="muted small">keine</span>'}<span class="hint">Zeichnungsvergleich und Kennwerte; DB aus der Nachkalkulation zeigt, ob der alte Preis auskömmlich war.</span></div></div>
+  <div class="step"><span class="lbl">Herstellbarkeit – bestätigen statt ausfüllen</span><div class="list"><span class="ck">${chk(true)}<span>Vertrieb: Anfrage vollständig</span></span>${ok('pe', `Technologie: ${esc(a.vorschlag.masch||'—')}, Material ${esc(a.vorschlag.mat||'—')} <span class="small muted">(Vorschlag aus ähnlichem Teil)</span>`)}${ok('qs', `QS: Prüfmittel vorhanden – ${esc(a.vorschlag.pm||'—')}`)}</div>${a.meld?'<div class="note ok">HSA fertig – Vertrieb wurde automatisch benachrichtigt.</div>':''}</div>
+  <div class="grid2" style="align-items:start"><div class="step"><span class="lbl">Staffelpreise ${src('s_calc')}</span><div class="tbl-wrap"><table><thead><tr><th class="num">Menge</th><th class="num">€/Stk.</th><th class="num">Summe</th></tr></thead><tbody>${preise.map(x => `<tr><td class="num">${nf(x.m,0)}</td><td class="num">${nf(x.p,3)}</td><td class="num">${eur(x.p*x.m)}</td></tr>`).join('')}</tbody></table></div><span class="hint">Herstellkosten ${nf(a.hk,3)} €/Stk., Rüsten ${eur(a.ruest)}, Zuschlag 28 % (Beispiel)</span>
+   ${['kalk'].includes(a.status)?'<div class="actions"><button class="btn primary" data-a="vt:next">Angebot erzeugen & senden</button></div>':''}</div>
+   <div class="step"><span class="lbl">Nachfassen & Ergebnis</span>${a.status==='angebot'?`<span>Wiedervorlage ${dd(wv)} (${VT_ART[a.art][0]}: ${VT_ART[a.art][1]} Tage) ${src('s_calc')}</span><div class="actions"><button class="btn small" data-a="vt:draft">Nachfass-Mail entwerfen</button></div>${A.open.vtDraft?`<div class="draft">Guten Tag,\n\nwir hatten Ihnen am ${dd(a.angebot)} unser Angebot für ${esc(a.teil)} gesendet.\nPasst es zu Ihren Vorstellungen? Gerne besprechen wir Mengen oder Termine.\n\nViele Grüße</div>`:''}`:''}
+    ${a.erg?`<span class="chip ${a.erg.g?'ok':'bad'}">${a.erg.g?'gewonnen':'verloren: '+esc(a.erg.grund)}</span>`:a.status==='angebot'?`<div class="decide"><button data-a="vt:erg" data-v="gewonnen">Gewonnen</button>${['Preis','Lieferzeit','Technik','kein Feedback'].map(g => `<button data-a="vt:erg" data-v="${g}">Verloren: ${g}</button>`).join('')}</div><span class="hint">Ergebnis ist Pflicht – Grundlage der Lernschleife.</span>`:'<span class="muted small">nach dem Angebot</span>'}</div></div>
+  ${a.erg && a.erg.g ? neuteil(a) : ''}
+  <div class="step"><span class="lbl">Kommentare mit @Rolle</span><div class="timeline">${a.komm.map(c => `<div><span class="mono muted">${dt(c.t)}</span><span><b>${RO[c.r]}</b>: ${esc(c.txt).replace(/@(\w+)/g,'<span class="chip info">@$1</span>')}</span></div>`).join('')||'<span class="muted small">noch keine</span>'}</div>
+   <div class="row" style="flex-wrap:nowrap"><input type="text" id="vtK" placeholder="@Technologie …" aria-label="Kommentar"><button class="btn" data-a="vt:komm">Senden</button></div></div>
+  ${a.status!=='entschieden'&&a.status!=='kalk'&&a.status!=='angebot'?`<div class="actions"><button class="btn" data-a="vt:next">Weiter zu „${VT_ST[VT_ST.findIndex(s=>s[0]===a.status)+1][1]}“</button></div>`:''}</div>`;
+}
+
+/* ---------- Aktionen ---------- */
+function actArea(act, id, v, el){
+ const [m, x] = act.split(':'); const st = A[m];
+ const vt = () => st.anfragen.find(a => a.id === A.open.vt);
+ switch (act){
+  case 'home:go': S.area = el.dataset.v === 'qs' ? 'qs' : el.dataset.v; S.open = null; if (S.area==='qs') S.tab = S.view==='halle' ? 'tif' : 'ueb'; break;
+  case 'home:copy': { const txt = MODS.filter(md => A.fb[md.k]).map(md => `${md.name}:\n${A.fb[md.k]}`).join('\n\n') + (A.fb.qs ? `\n\nSperrkarte & Reklamation:\n${A.fb.qs}` : '');
+    try { navigator.clipboard.writeText(txt).then(() => flash('Notizen kopiert'), () => flash('Kopieren nicht möglich – Text bitte markieren')); } catch(e){ flash('Kopieren nicht möglich'); } return; }
+  case 'home:reset': A = seedAreas(); saveA(); loadExamplesLocal(); return;
+  case 'x:tab': A.tab[S.area] = v; A.open = {}; break;
+  case 'vt:open': A.open.vt = id; A.open.vtDraft = false; break;
+  case 'vt:close': A.open.vt = null; break;
+  case 'vt:art': vt().art = v; break;
+  case 'vt:ok': { const a = vt(); a.herst[v] = true; if (a.herst.pe && a.herst.qs && ['neu','technik'].includes(a.status)){ a.status = 'kalk'; a.meld = true; a.warten = 'vt'; } break; }
+  case 'vt:next': { const a = vt(); const i = VT_ST.findIndex(s => s[0]===a.status); a.status = VT_ST[i+1][0]; a.warten = {technik:'tech', einkauf:'ek', kalk:'vt', angebot:'vt'}[a.status]||''; if (a.status==='angebot') a.angebot = new Date().toISOString(); if (a.status==='kalk') a.meld = true; break; }
+  case 'vt:draft': A.open.vtDraft = true; break;
+  case 'vt:erg': { const a = vt(); a.erg = v==='gewonnen' ? {g:true, grund:''} : {g:false, grund:v}; a.status = 'entschieden'; a.warten = ''; break; }
+  case 'vt:komm': { const i = document.getElementById('vtK'); if (i && i.value.trim()){ vt().komm.push({r:'vt', txt:i.value.trim(), t:new Date().toISOString()}); } break; }
+  case 'ak:ab': { const b = st.best.find(y => y.id===id); b.st = 'ab'; b.abAm = new Date().toISOString(); flash('AB erzeugt und zum Versand vorbereitet'); break; }
+  case 'ak:rf': st.best.find(y => y.id===id).st = 'rf'; break;
+  case 'fe:ok': { const vv = st.vorschl.find(y => y.id===id); let placed = false;
+    for (let d = 0; d < 3 && !placed; d++) for (const s of (vv.ruest > 4 ? ['F'] : ['F','S'])){ const used = st.plan.filter(p => p.tag===d && p.sch===s).reduce((n,p)=>n+p.ruest,0); if (used + vv.ruest <= st.ruester[s]*7.5){ st.plan.push({id:vv.id, ba:vv.ba, artikel:vv.artikel, masch:vv.masch, ruest:vv.ruest, tag:d, sch:s}); placed = true; break; } }
+    vv.st = placed ? 'geplant' : 'vorschlag'; if (!placed) flash('Kein freier Rüster in den nächsten 3 Tagen'); break; }
+  case 'fe:no': A.open.feNo = A.open.feNo===id ? null : id; break;
+  case 'fe:grund': { const vv = st.vorschl.find(y => y.id===id); vv.st = 'abgelehnt'; vv.ablehn = v; A.open.feNo = null; flash('Abgelehnt: ' + v); break; }
+  case 'fe:undo': st.plan = st.plan.filter(p => p.id!==id); st.vorschl.find(y => y.id===id).st = 'vorschlag'; break;
+  case 'fe:abn': st.abn[+id][v] = {r: v==='zweit' ? 'Messtechnik' : 'Bediener', t:new Date().toISOString(), m: art(st.abn[+id].artikel).merkmale.length}; break;
+  case 'fe:kat': st.kat = v; break;
+  case 'fe:buch': { const tx = document.getElementById('sbT'), ma = document.getElementById('sbM'); if (tx && tx.value.trim()) st.buch.push({t:new Date().toISOString(), masch:ma.value, kat:st.kat||'Info', txt:tx.value.trim()}); break; }
+  case 'ek:vor': A.open.ekVor = A.open.ekVor===id ? null : id; st.spiegel = null; break;
+  case 'ek:spiegel': st.spiegel = id; break;
+  case 'ek:bestell': { const r = st.deck.find(y => y.id===id); const menge = Math.ceil((r.bedarf - r.bestand - r.bestellt)/250)*250 + 250; r.bestellt += menge; r.liefer = D(8); A.open.ekVor = null; st.spiegel = null; flash(`Bestellvorschlag übernommen: ${kgf(menge)} – Bestellung in M4 per Kopierblatt`); break; }
+  case 'ek:anf': A.open.ekAnf = id; break;
+  case 'ek:zok': st.zeug.find(z => z.id===id).st = 'ok'; break;
+  case 'ek:mahn': A.open.ekMahn = id; break;
+  case 'ek:sent': st.rueck.find(r => r.id===id).st = 'nachgefragt'; A.open.ekMahn = null; break;
+  case 'vs:open': A.open.vs = id; break;
+  case 'vs:close': A.open.vs = null; break;
+  case 'vs:ls': { const k = st.komm.find(y => y.id===id); k.st = 'gepackt'; flash('Lieferschein und Dokumentenpaket erzeugt'); break; }
+  case 'vs:hak': A.open.vsHak = id; break;
+  case 'vs:ver': st.vorschlag.find(y => y.id===id).st = true; st.ver.push({id:'E'+Date.now(), vered:'Muster Oberflächen GmbH', art:'Verzinken', artikel:'9900100002', menge:1200, raus:D(0), zurueck:D(7), st:'aus'}); break;
+  case 'ih:take': { const s = st.stoer.find(y => y.id===id); s.st = 'in Arbeit'; A.open.ih = id; break; }
+  case 'ih:open': A.open.ih = id; break;
+  case 'ih:done': { const s = st.stoer.find(y => y.id===id); const u = document.getElementById('ihU').value, mz = document.getElementById('ihM').value, e = document.getElementById('ihE').value;
+    s.st = 'erledigt'; s.erg = [u && 'Ursache: '+u, mz && 'Maßnahme: '+mz, e && 'Ersatzteil '+e].filter(Boolean).join(' · ') || 'repariert';
+    const hh = st.hist.find(y => y.masch===s.masch); if (hh){ hh.n++; hh.h += (Date.now()-new Date(s.seit))/3600000; } if (e){ const tt = st.teile.find(y => y.nr===e); tt.best = Math.max(0, tt.best-1); } A.open.ih = null; break; }
+  case 'ih:new': st.stoer.unshift({id:'S'+Date.now(), masch:'201', seit:new Date().toISOString(), quelle:'Meldung vom Bediener (1 Klick)', txt:'Späneförderer blockiert', st:'offen', vert:true}); break;
+  case 'ih:wok': st.wart.find(y => y.id===id).st = 'abgestimmt'; break;
+  case 'ih:wdone': st.wart.find(y => y.id===id).st = 'erledigt'; break;
+  case 'ih:pdone': { const p = st.pruef.find(y => y.id===id); p.faellig = D(365); flash('Erledigt – nächste Prüfung in 12 Monaten'); break; }
+  case 'pe:ok': st.auff.find(y => y.id===id).st = 'übernommen'; break;
+  case 'pe:al': st.auff.find(y => y.id===id).st = 'bei Abteilungsleitung'; break;
+  case 'pe:ag': st.antr.find(y => y.id===id).st = 'genehmigt'; break;
+  case 'pe:ar': st.antr.find(y => y.id===id).st = 'abgelehnt'; break;
+  case 'pe:exp': st.abschluss = true; flash('Export für das Lohnprogramm erzeugt'); break;
+  case 'gf:open': A.open.gf = A.open.gf===id ? null : id; A.open.gfK = false; break;
+  case 'gf:kalk': A.open.gfK = true; break;
+  case 'bu:ok': { const k = st.kto.find(y => y.id===id); k.st = 'ausgebucht'; k.vor.forEach(r => { const o = st.op.find(z => z.re===r); if (o) o.bez = true; }); break; }
+  case 'bu:sk': { const k = st.kto.find(y => y.id===id); k.st = 'ausgebucht, Skontodifferenz nachgefordert'; k.vor.forEach(r => { const o = st.op.find(z => z.re===r); if (o) o.bez = true; }); break; }
+  case 'bu:mahn': A.open.bu = A.open.bu===id ? null : id; break;
+  default: return;
+ }
+ saveA(); LS.set('kas-pref2', {lang:S.lang, view:S.view, src:S.showSrc, area:S.area}); S.force = true; render();
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (!b) return; actArea(b.dataset.a, b.dataset.id, b.dataset.v, b); });
+document.addEventListener('change', e => { const el = e.target;
+ if (el.dataset.vsh != null){ const k = A.vs.komm.find(y => y.id===A.open.vs); k.hak[el.dataset.vsh] = el.checked; saveA(); S.force = true; render(); }
+ if (el.dataset.vsi){ const k = A.vs.komm.find(y => y.id===A.open.vs); k.ist = el.value; saveA(); S.force = true; render(); }
+ if (el.dataset.buz && el.value){ const k = A.bu.kto.find(y => y.id===el.dataset.buz); k.st = 'zugeordnet: ' + el.value; saveA(); S.force = true; render(); }
+ if (el.dataset.fb){ A.fb[el.dataset.fb] = el.value; saveA(); }
+});
+
+/* ---------- Startseite, Kopf, Rahmen ---------- */
+function setHeadArea(){
+ document.querySelectorAll('.seg').forEach(x => x.hidden = true);
+ const mod = MODS.find(m => m.k === S.area);
+ document.getElementById('appTitle').textContent = mod ? mod.name : 'KAS-ERP Probebau';
+ document.getElementById('appSub').textContent = mod ? `${mod.who} · ${mod.step}` : 'Entwürfe je Bereich · zum Ausprobieren und Kommentieren';
+ document.getElementById('testBadge').textContent = 'Probebau · Testdaten';
+ const sb = document.getElementById('srcBtn'); sb.textContent = 'Woher kommen die Daten?'; sb.setAttribute('aria-pressed', S.showSrc);
+ document.getElementById('tabs').innerHTML = mod ? mod.tabs.map(([k,l]) => `<button data-a="x:tab" data-v="${k}" ${tabOf(mod.k)===k && !A.open.vt && !A.open.vs?'aria-current="page"':''}>${esc(l)}</button>`).join('') : '';
+ const ab = document.getElementById('areaBtn'); if (ab) ab.hidden = !S.area;
+}
+function fbBox(k){ return `<div class="panel fb"><label class="lbl" for="fb-${k}">Feedback-Notizen zu dieser Anwendung</label><textarea id="fb-${k}" data-fb="${k}" placeholder="Was passt, was fehlt, was stört? (bleibt nur auf diesem Gerät)">${esc(A.fb[k]||'')}</textarea></div>`; }
+function home(){
+ const n = Object.values(A.fb).filter(Boolean).length;
+ return `<div class="section-title"><h2>Bereich wählen</h2><span class="muted small">Je Bereich ein Entwurf – alle Daten erfunden</span></div>
+  ${flowBar()}
+  <h3 style="margin:18px 0 8px">Wertstrom</h3><div class="areas">${['vt','ak','ek','fe','vs','bu'].map(k => tile(MODS.find(x => x.k===k))).join('')}</div>
+  <h3 style="margin:18px 0 8px">Qualität, Unterstützung, Führung</h3><div class="areas"><button class="area done" data-a="home:go" data-v="qs"><span class="ic">QS</span><h3>Sperrkarte & Reklamation</h3><span class="who">Halle · QS · Jour fixe · Prozess R</span><p>Sperrkarte am Tablet über die Prüfplan-Nummer, Reklamationsakte nach QS004, Jour fixe, Berichte.</p><span class="gain">am weitesten ausgearbeitet</span>${A.fb.qs?'<span class="chip info" style="justify-self:start">Notizen vorhanden</span>':''}</button>${['ih','pe','gf'].map(k => tile(MODS.find(x => x.k===k))).join('')}</div>
+  <div class="panel"><div class="section-title"><h3>Feedback einsammeln</h3><span class="muted small">${n} Bereich(e) mit Notizen</span></div><span class="hint">Jede Anwendung hat unten ein Notizfeld. Hier alles auf einmal kopieren, z. B. für eine Mail an dich selbst.</span>
+   <div class="actions"><button class="btn primary" data-a="home:copy" ${n?'':'disabled'}>Alle Notizen kopieren</button><button class="btn" data-a="home:reset">Alle Beispieldaten zurücksetzen</button></div></div>`;
+}
+function renderArea(){
+ const a = document.activeElement;
+ if (!S.force && a && a.closest && a.closest('#main') && /INPUT|TEXTAREA|SELECT/.test(a.tagName)){ S.pending = true; return; }
+ S.force = false; S.pending = false; setHeadArea();
+ let h = '';
+ if (S.msg) h += `<div class="note ok" role="status">${esc(S.msg)}</div>`;
+ if (S.area && S.showSrc) h += `<div class="legend"><span class="src a">${esc(t('legendA'))}</span><span class="src e">${esc(t('legendE'))}</span><span class="muted">${esc(t('legendTxt'))}</span></div>`;
+ if (!S.area) h += home();
+ else { const mod = MODS.find(m => m.k === S.area); h += vnBox(mod.k) + mod.view(A[mod.k], tabOf(mod.k)) + fbBox(mod.k); }
+ document.getElementById('main').innerHTML = h;
+}
+
+/* ===================== Ausbau der Bereichs-Entwürfe ===================== */
+(function(){ const st = document.createElement('style'); st.textContent = `
+.flow{display:flex;gap:4px;flex-wrap:wrap;align-items:stretch;margin:4px 0 6px}
+.flow button{all:unset;box-sizing:border-box;cursor:pointer;flex:1 1 120px;background:var(--accent-soft);color:var(--ink);padding:10px 22px 10px 14px;font:600 .95rem var(--f-head);clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%,12px 50%);min-height:46px;display:flex;align-items:center}
+.flow button:first-child{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%)}
+.flow button:hover,.flow button:focus-visible{background:var(--accent);color:var(--accent-ink)}
+details.vn{padding:0}details.vn>summary{cursor:pointer;padding:12px 16px;list-style:none;display:flex;gap:10px;align-items:center}
+details.vn>summary::before{content:"▸";color:var(--accent);transition:transform .15s}details.vn[open]>summary::before{transform:rotate(90deg)}
+details.vn .grid2{padding:0 16px 14px}.vn ul{margin:6px 0 0;padding-left:18px}.vn .h{color:var(--bad)}.vn .k{color:var(--ok)}
+mark.m{background:var(--auto-soft);color:var(--auto);border-radius:4px;padding:0 3px;font-weight:600}
+mark.m.k{background:var(--input-soft);color:var(--input)}
+.mailbox{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:.92rem;line-height:1.6}
+.mailbox .hd{font-size:.82rem;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:8px}
+.big2{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.big2 button{min-height:58px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:600;padding:8px}
+.big2 button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.korb{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:4px 8px;background:var(--surface);font-size:.85rem}
+td input[data-ea],td select[data-ea]{width:100%;min-width:90px}
+.tbl-wrap table.fit{min-width:0}
+td.tol-ok input{border-color:var(--ok);background:var(--ok-soft)} td.tol-bad input{border-color:var(--bad);background:var(--bad-soft)}
+`; document.head.appendChild(st); })();
+
+/* ---------- Heute → künftig (aus der Prozessdurchsicht) ---------- */
+const VN = {
+ vt:[['Anfragen aus Mails abtippen','Vertrieb erfährt nicht, wann die HSA fertig ist','Neuteil: Anlage in Ninox und M4, fünf Excel-Protokolle','Nachfassen von Hand, Verlustgrund selten erfasst'],['Anfrage-Entwurf aus der Mail, Mensch prüft','Meldung „HSA fertig“ automatisch','eine digitale Neuteil-Checkliste, Besprechung nur bei Risiko','Wiedervorlage mit Entwurf, Ergebnis Pflicht → Lernschleife']],
+ ak:[['AB bei Fertigung erst nach Planung und Material: mindestens 5 Tage','Preis und Zeichnungsstand von Hand prüfen','Kommissionsliste exportieren und vorarbeiten'],['Terminvorschlag beim Eingang – Grün am selben Tag bestätigen','Prüfung automatisch, nur Abweichungen landen beim Menschen','Delivery-Board mit Ampel für das Montags-Meeting']],
+ fe:[['BA-Mappe drucken, geänderte Papiere austauschen','Werkzeugausgabeschein drucken, Einrichtblatt im Ordner suchen','Messwerte und Stückzahlen ca. 4× handschriftlich übertragen'],['Rüstliste in der Reihenfolge der Fertigungsleitung, System meldet Änderungen','Rüsten in einem Dokument, Hinweise aus QS, Schichtbuch, Instandhaltung','Erstabnahme am Tablet – keine Übertragung mehr (Welle 2)']],
+ ek:[['Bestellung doppelt in M4 und Ninox','Planungslauf per Knopf, Papier-BA bei Eile','Zeugnis: scannen → Ordner → im Ninox anhängen','Freigabeschein am Wareneingang von Hand'],['eine Erfassung, KAS-ERP liest M4','Deckung laufend automatisch','Zuordnung über Chargennummer, Einkauf sieht nur Ausnahmen','Wareneingang am Tablet, Freigabeschein entfällt']],
+ vs:[['Kundenanforderungen als Freitext auf dem Kommissionsschein','Zählwaage bucht, zusätzlich rosa Karte','Veredler-Status per Zuruf, Differenzen erst bei der Inventur','Lieferschein aus dem Kommissionsschein abtippen'],['Checkliste je Kunde, nichts wird überlesen','Zubuchen zeigt Körbe je BA, Fertigmeldung beim letzten Korb','Status je Veredler mit Rücktermin, Differenz sofort','Lieferschein und Dokumentenpaket direkt aus der Kommission']],
+ ih:[['Störungen auf Zuruf','Reparaturdoku in Excel, Serviceberichte auf G:','Prüfpflichten in separaten Listen'],['Meldung mit Zeitstempel aus MDE oder per Klick','ein Vorgang je Störung, MTBF/MTTR automatisch','Fristen mit Erinnerung an die zuständige Rolle']],
+ pe:[['Monatsabschluss von Hand in VOCUS übertragen und gegenprüfen','Klärung erst am Monatsende','eAU-Abruf je Fall einzeln','Einarbeitung ohne festen Plan'],['Export, Prüfung nur der Auffälligkeiten','täglich laufend, Mitarbeitende stellen Korrekturen selbst','vom Lohnprogramm erzeugt (abhängig von der Auswahl)','Ein-/Austritts-Checkliste mit Einarbeitungsplan je Rolle']],
+ gf:[['ca. 3 h Excel mit externen Verknüpfungen','Profitcenter über Zuordnungsliste mit ~1.500 Zeilen','Nachcontrolling punktuell'],['Monatsbericht auf Knopfdruck, Zeit für Analyse','Zuordnung aus BA und Maschine','je Auftrag mit Ampel und Rückfluss in die Kalkulation']],
+ bu:[['Zahlungen von Hand abtragen','Mahnung frei formuliert'],['automatische Zuordnung, nur bestätigen','Vorlage je Mahnstufe']]
+};
+function vnBox(k){ const v = VN[k]; if (!v) return ''; return `<details class="panel vn"><summary><b>Heute → künftig</b><span class="muted small">aus der Prozessdurchsicht – zum Gegenprüfen im Gespräch</span></summary><div class="grid2" style="align-items:start"><div><b class="h">Heute</b><ul>${v[0].map(x => `<li>${esc(x)}</li>`).join('')}</ul></div><div><b class="k">Künftig</b><ul>${v[1].map(x => `<li>${esc(x)}</li>`).join('')}</ul></div></div></details>`; }
+function flowBar(){ return `<div class="flow" role="navigation" aria-label="Wertstrom">${[['vt','1 Anfrage'],['ak','2 Auftrag'],['ek','3 Material'],['fe','4 Fertigung'],['vs','5–6 Versand'],['bu','7 Rechnung']].map(([k,l]) => `<button data-a="home:go" data-v="${k}">${l}</button>`).join('')}</div>`; }
+function tile(m){ return `<button class="area" data-a="home:go" data-v="${m.k}"><span class="ic">${m.ic}</span><h3>${esc(m.name)}</h3><span class="who">${esc(m.who)} · ${esc(m.step)}</span><p>${esc(m.kurz)}</p><span class="gain">${esc(m.gain)}</span>${A.fb[m.k]?'<span class="chip info" style="justify-self:start">Notizen vorhanden</span>':''}</button>`; }
+const MOD = k => MODS.find(m => m.k === k);
+
+/* ---------- zusätzliche Beispieldaten ---------- */
+function ext(s){
+ if (!s.vt.mail) s.vt.mail = {done:false};
+ if (!s.fe.ruest) s.fe.ruest = {ba:'309900120', wz:{}, ist:{}, pos:null, frei:false};
+ if (!s.ek.we) s.ek.we = {sel:'L1', menge:'', sicht:'', charge:'', zeug:'', done:{}, liste:[
+   {id:'L1', best:'EK-26-0661', lief:'Muster Metall GmbH', pos:'CuZn39Pb3 Ø12 h9 · Stange 3 m', soll:800, deck:'M1', kunde:'Muster Automotive GmbH', pflicht:true, lp:'R-03-2', digital:'S-88240'},
+   {id:'L2', best:'EK-26-0644', lief:'Probe Buntmetall', pos:'Cu-ETP Ø14 · Stange 3 m', soll:900, deck:'M4', kunde:'Muster Automotive GmbH', pflicht:true, lp:'R-05-1', digital:null},
+   {id:'L3', best:'EK-26-0670', lief:'Beispiel Stahlhandel', pos:'11SMnPb30 Ø14 · Stange 3 m', soll:500, deck:'M3', kunde:'Beispiel Elektrotechnik AG', pflicht:false, lp:'R-01-4', digital:null}]};
+ if (!s.vs.zb) s.vs.zb = [
+   {ba:'309900101', artikel:'9900100001', masch:'603', mde:3120, soll:5000, wasch:'Programm 3 · Messing', lp:'KB-14-05', korb:[{n:1040, t:H(-30)},{n:1035, t:H(-22)},{n:1045, t:H(-14)}]},
+   {ba:'309900102', artikel:'9900100002', masch:'612', mde:1450, soll:2000, wasch:'Programm 1 · Stahl', lp:'KB-02-04', korb:[{n:720, t:H(-20)},{n:705, t:H(-6)}]},
+   {ba:'309900103', artikel:'9900100003', masch:'201', mde:610, soll:1500, wasch:'Programm 4 · Kupfer', lp:'KB-09-01', korb:[{n:610, t:H(-4)}]}];
+ if (!s.pe.ein) s.pe.ein = {ma:'MA 131', rolle:'Rüster', abt:'Fertigung Früh', start:D(8), pate:'Rüster A', hak:{2:true}};
+ return s;
+}
+const _seedAreas = seedAreas; seedAreas = () => ext(_seedAreas()); A = ext(A);
+
+/* ---------- Vertrieb: Anfrage aus Mail, Neuteil-Checkliste ---------- */
+MOD('vt').tabs.splice(1, 0, ['mail','Aus Mail erfassen']);
+const vtView0 = MOD('vt').view;
+MOD('vt').view = function(st, tab){
+ if (tab !== 'mail' || A.open.vt) return vtView0.call(this, st, tab);
+ const M = (t2, rule) => `<mark class="m ${rule?'':'k'}">${t2}</mark>`;
+ return `<div class="note info">Welle 1 erkennt Mengen, Zeichnungsnummer, Termine, Werkstoff und Kunde regelbasiert (blau). Freitext wie Oberfläche oder Sonderwünsche liest ab Welle 4 die lokale KI (orange). Ein Mensch prüft immer, bevor die Anfrage angelegt wird.</div>
+ <div class="grid2" style="align-items:start"><div class="mailbox"><div class="hd">Von: ${M('einkauf@muster-automotive.example', true)}<br>Betreff: Anfrage Kontaktbuchse – Zeichnung ${M('4711-22 Rev. B', true)}<br>Anhang: 4711-22_B.pdf, 4711-22_B.stp</div>
+  Guten Tag,<br><br>bitte bieten Sie uns folgendes Teil an:<br>${M('Kontaktbuchse Ø5 × 16', true)}, Werkstoff ${M('CuZn39Pb3', true)}, Oberfläche ${M('verzinnt 3–5 µm', false)}.<br>
+  Mengen: ${M('2.000 / 10.000 / 25.000', true)} Stück p. a.<br>Erstmuster gewünscht bis ${M('KW 6', true)}, ${M('mit Erstmusterprüfbericht', false)}.<br>Bitte um Angebot bis ${M('05.12.', true)}<br><br>Mit freundlichen Grüßen<br>Einkauf</div>
+ <div class="panel"><h3>Anfrage-Entwurf</h3><dl class="kv">
+  <dt>Kunde</dt><dd>Muster Automotive GmbH ${src('s_kunde')} <span class="small muted">über Absenderdomain</span></dd>
+  <dt>Teil</dt><dd>Kontaktbuchse Ø5 × 16 ${src('s_mail')}</dd><dt>Zeichnung</dt><dd class="mono">4711-22 · Index B · PDF + STEP abgelegt ${src('s_mail')}</dd>
+  <dt>Werkstoff</dt><dd>CuZn39Pb3 ${src('s_mail')}</dd><dt>Oberfläche</dt><dd>verzinnt 3–5 µm <span class="chip warn">Versand fragen: Veredler</span></dd>
+  <dt>Mengen</dt><dd class="mono">2.000 / 10.000 / 25.000 p. a. ${src('s_mail')}</dd><dt>Angebot bis</dt><dd>05.12. ${src('s_mail')}</dd><dt>Anfrageart</dt><dd>Serie <span class="small muted">(Jahresmengen)</span> ${src('s_calc')}</dd>
+  <dt>Besonderes</dt><dd>Erstmusterprüfbericht (EMPB) gefordert → QS ${src('s_kanf')}</dd>
+  <dt>Ähnlich</dt><dd>Kontaktbuchse Ø6 <span class="mono muted">9900100370</span> <span class="chip info">89 %</span> ${src('s_hist')}</dd></dl>
+  ${st.mail.done ? '<div class="note ok">Anfrage A-26-0413 angelegt. Eingangsbestätigung an den Kunden ist vorbereitet (eigene Absenderdomain).</div><div class="actions"><button class="btn" data-a="vt:open" data-id="A-26-0413">Anfrage öffnen</button></div>'
+   : '<div class="actions"><button class="btn primary" data-a="vt:mail">Prüfen & Anfrage anlegen</button></div>'}</div></div>`;
+};
+function neuteil(a){
+ const ch = a.neuteil; const rows = [
+  ['Artikel im KAS-ERP angelegt', 'aus Anfrage', 'auto'], ['Kopierblatt für M4 erzeugt (Übergang)', 'auto', 'auto'], ['Zeichnung und STEP je Index abgelegt', 'aus Mail', 'auto'],
+  ['Werkstoff und Lieferant festgelegt', 'aus HSA', 'auto'], ['Maschine und Rüstfamilie', 'aus HSA', 'auto'], ['Prüfmittel vorhanden', 'aus HSA', 'auto'],
+  ['Prüfplan aus Zeichnung erstellen', 'QS', 'open'], ['Verpackung / Logistikdatenblatt', 'Versand', 'open'], ['Kundenanforderungen (EMPB, Etiketten) übernommen', 'QS', 'open'], ['Einrichtblatt nach Erstfertigung', 'Technologie', 'open']];
+ if (!ch) return `<div class="step"><span class="lbl">Auftrag erhalten</span><div class="actions"><button class="btn primary" data-a="vt:neu" data-id="${a.id}">Neuteil anlegen & Checkliste starten</button></div><span class="hint">Ersetzt die fünf Excel-Protokolle der Neuteilbesprechung. Fragen, die die HSA schon beantwortet hat, sind vorbelegt.</span></div>`;
+ const open = rows.filter((r,i) => r[2]==='open' && !ch[i]).length, risiko = /verzinnt|Querbohrung|1\.4305/.test(a.teil + a.werkstoff + (a.ober||''));
+ return `<div class="step"><span class="lbl">Neuteil-Checkliste <span class="chip ${open?'warn':'ok'}">${open ? open + ' offen' : 'vollständig'}</span></span>
+  <div class="list">${rows.map((r,i) => `<div class="ck">${chk(r[2]==='auto' || ch[i] ? true : 'warn')}<span style="flex:1">${esc(r[0])} <span class="small muted">· ${esc(r[1])}</span></span>${r[2]==='open' && !ch[i] ? `<button class="btn small" data-a="vt:nt" data-id="${a.id}" data-v="${i}">Erledigt</button>` : ''}</div>`).join('')}</div>
+  <div class="note ${risiko?'warn':'ok'}">${risiko ? 'Risiko erkannt (neuer Werkstoff, Oberfläche oder Sonderbearbeitung) → kurze Neuteilbesprechung empfohlen.' : 'Kein besonderes Risiko → keine Neuteilbesprechung nötig.'} ${src('s_calc')}</div></div>`;
+}
+
+/* ---------- Fertigung: Rüsten in einem Dokument + Erstabnahme ---------- */
+MOD('fe').tabs.splice(1, 0, ['ruest','Rüsten & Erstabnahme']);
+const feView0 = MOD('fe').view;
+const EB = {'9900100001':{spann:'Spannzange Ø12 (SZ-12)', fb:'Führungsbuchse Ø12', lader:'Stangenlader Ø12, Vorschubrohr 12', prog:'O4711 · Stand 12.03.2025', wz:[['T01','Außendrehmeißel VCGT 1604','C-12'],['T02','Abstechmeißel 2 mm','C-14'],['T03','Bohrer Ø6,0 HM','C-03'],['T04','Reibahle Ø6,2 H11','C-05'],['T05','Fasenwerkzeug 90°','C-21']]},
+ '9900100002':{spann:'Spannzange Ø14', fb:'Führungsbuchse Ø14', lader:'Stangenlader Ø14', prog:'O5120', wz:[['T01','Außendrehmeißel','C-12'],['T02','Gewindestrehler M8','C-30'],['T03','Abstechmeißel 2 mm','C-14']]},
+ '9900100003':{spann:'Spannzange Ø14', fb:'Führungsbuchse Ø14', lader:'Stangenlader Ø14', prog:'O6033', wz:[['T01','Tieflochbohrer Ø9,5','C-08'],['T02','Außendrehmeißel','C-12'],['T03','Abstechmeißel 3 mm','C-15']]},
+ '9900100004':{spann:'Spannzange Ø12', fb:'—', lader:'Stangenlader Ø12', prog:'O7002', wz:[['T01','Gewindebohrer M6','C-31'],['T02','Bohrer Ø5,0','C-02'],['T03','Außendrehmeißel','C-12']]}};
+MOD('fe').view = function(st, tab){
+ if (tab !== 'ruest') return feView0.call(this, st, tab);
+ const r = st.ruest, cand = [...st.plan.filter(p => !p.fix), ...st.vorschl.filter(v => v.st==='vorschlag')];
+ const cur = st.plan.find(p => p.ba===r.ba) || st.vorschl.find(v => v.ba===r.ba) || {ba:'309900120', artikel:'9900100001', masch:'603'};
+ const a = art(cur.artikel), eb = EB[a.id], bestand = {C:4};
+ const sks = (S.sk||[]).filter(s => s.artikel===a.id).sort((x,y) => new Date(y.erstellt)-new Date(x.erstellt)).slice(0,1);
+ const rks = (S.rk||[]).filter(x => x.artikel===a.id && x.ana && x.ana.ursache).slice(0,1);
+ const sb = st.buch.filter(e => e.masch===cur.masch).slice(-1);
+ const wart = (A.ih.wart||[]).filter(w => w.masch===cur.masch && w.st!=='erledigt');
+ const hinw = [...sks.map(s => { const m = mm(a, s.merkmal); return `Letzte Sperrkarte ${s.nr}: Pos. ${s.merkmal} ${m?esc(m.de):''}${s.ist!=null?' · Ist '+nf(s.ist, m?dec(m):2):''} – ${esc(t(s.abw==='gross'?'zu_gross':s.abw==='klein'?'zu_klein':'nio'))} ${src('s_qs004')}`; }),
+  ...rks.map(x => `Reklamation ${x.nr}: ${esc(x.ana.ursache)}`), ...sb.map(e => `Schichtbuch ${e.masch}: ${esc(e.txt)}`), ...wart.map(w => `Instandhaltung: ${esc(w.was)} fällig ${relTxt(w.faellig)}`)];
+ const tolCls = (m, v) => v==='' || v==null ? '' : m.typ!=='num' ? (v==='io'?'tol-ok':'tol-bad') : (+v >= m.lo && +v <= m.hi ? 'tol-ok' : 'tol-bad');
+ const allIn = a.merkmale.every(m => tolCls(m, r.ist[m.pos])==='tol-ok'), anyBad = a.merkmale.some(m => tolCls(m, r.ist[m.pos])==='tol-bad');
+ const done = (eb ? eb.wz : []).filter(w => r.wz[w[0]]).length;
+ const draw = drawing(a, r.pos).replace(/data-action="pickM"/g, 'data-a="fe:pos"');
+ return `<div class="row"><label class="lbl" for="feBa">Betriebsauftrag</label><select id="feBa" data-feba="1">${[{ba:'309900120', artikel:'9900100001', masch:'603'}, ...cand].filter((x,i,arr) => arr.findIndex(y=>y.ba===x.ba)===i).map(x => `<option value="${x.ba}" ${x.ba===r.ba?'selected':''}>${x.ba} · ${esc(art(x.artikel).de)} · ${x.masch}</option>`).join('')}</select></div>
+ <div class="machine-head"><div class="row between"><h3>${esc(a.de)} <span class="mono">${a.id}</span></h3><span>Maschine ${cur.masch}</span></div><dl class="kv"><dt>BA</dt><dd class="mono">${cur.ba} ${src('s_mde')}</dd><dt>Material</dt><dd>${esc(a.werkstoff)} · bereitgestellt 06:10 ${src('s_lager')}</dd><dt>Zeichnung</dt><dd>${esc(a.zgs)} ${src('s_art')}</dd><dt>Programm</dt><dd class="mono">${esc(eb.prog)} ${src('s_art')}</dd></dl></div>
+ ${hinw.length ? `<div class="note warn"><b>Hinweise zu Rüstbeginn</b><ul style="margin:6px 0 0;padding-left:18px">${hinw.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
+ <div class="grid2" style="align-items:start"><div class="panel"><h3>Einrichtblatt ${src('s_art')}</h3><dl class="kv"><dt>Spannmittel</dt><dd>${esc(eb.spann)}</dd><dt>Führung</dt><dd>${esc(eb.fb)}</dd><dt>Stangenlader</dt><dd>${esc(eb.lader)}</dd></dl>
+  <span class="hint">Ersetzt Suche im Ordner – immer der freigegebene Stand.</span></div>
+  <div class="panel"><div class="row between"><h3>Werkzeuge</h3><span class="chip ${done===eb.wz.length?'ok':''}">${done}/${eb.wz.length} entnommen</span></div><div class="tbl-wrap"><table class="fit"><thead><tr><th>Platz</th><th>Werkzeug · Automat</th><th></th></tr></thead><tbody>${eb.wz.map(w => `<tr><td class="mono">${w[0]}</td><td>${esc(w[1])}<br><span class="mono small muted">Fach ${w[2]}</span></td><td>${r.wz[w[0]]?chk(true):`<button class="btn small" data-a="fe:wz" data-v="${w[0]}">Entnehmen</button>`}</td></tr>`).join('')}</tbody></table></div>
+  <span class="hint">${src('s_cera')} Werkzeugausgabe und Einrichtblatt in einem; die Entnahme wird dem BA automatisch zugeordnet (Werkzeugkosten in der Nachkalkulation).</span></div></div>
+ <div class="panel"><div class="section-title"><h3>Erstabnahme ${src('s_pp')}</h3>${r.frei?'<span class="chip ok">Erstabnahme freigegeben – Zweitabnahme angefordert</span>':''}</div>
+  <span class="hint">Nummer auf der Zeichnung antippen oder direkt in die Tabelle schreiben – Toleranzen kommen aus dem Prüfplan, grün/rot sofort.</span>
+  <div class="grid2" style="align-items:start"><div class="drawing">${draw}</div>
+  <div class="tbl-wrap"><table class="fit"><thead><tr><th>Pos.</th><th>Merkmal · Toleranz</th><th>Ist</th></tr></thead><tbody>${a.merkmale.map(m => `<tr><td><span class="pp-pos" style="${r.pos===m.pos?'background:var(--accent);color:var(--accent-ink)':''}">${m.pos}</span></td><td class="small">${esc(m.de)}<br><span class="mono">${esc(tolTxt(m))}</span> <span class="muted">· ${esc(m.pm)}</span></td><td class="${tolCls(m, r.ist[m.pos])}">${m.typ==='num'?`<input type="number" step="any" inputmode="decimal" id="ea-${m.pos}" data-ea="${m.pos}" value="${esc(r.ist[m.pos]??'')}" aria-label="Ist Pos. ${m.pos}" ${r.frei?'disabled':''}>`:`<select id="ea-${m.pos}" data-ea="${m.pos}" aria-label="Pos. ${m.pos}" ${r.frei?'disabled':''}><option value="">–</option><option value="io" ${r.ist[m.pos]==='io'?'selected':''}>i. O.</option><option value="nio" ${r.ist[m.pos]==='nio'?'selected':''}>n. i. O.</option></select>`}</td></tr>`).join('')}</tbody></table></div></div>
+  ${anyBad ? '<div class="note bad">Mindestens ein Maß außerhalb der Toleranz – korrigieren und erneut messen. Beim Erstteil ist keine Sperrkarte nötig.</div>' : ''}
+  <div class="actions"><button class="btn primary" data-a="fe:frei" ${r.frei?'disabled':''}>Erstabnahme freigeben</button>${!allIn && !anyBad ? '<span class="small muted">alle Merkmale messen</span>' : ''}</div>
+  <span class="hint">Freigabe trägt Rüster, Uhrzeit und Messwerte automatisch ein ${src('s_login')} – daraus entsteht bei Bedarf das Erstmuster-Dokument für den Kunden.</span></div>`;
+};
+
+/* ---------- Einkauf: Wareneingang am Tablet ---------- */
+MOD('ek').tabs.splice(1, 0, ['we','Wareneingang (Tablet)']);
+const ekView0 = MOD('ek').view;
+MOD('ek').view = function(st, tab){
+ if (tab !== 'we') return ekView0.call(this, st, tab);
+ const w = st.we, l = w.liste.find(x => x.id===w.sel), done = w.done[l.id];
+ const opt = (k, v, lab) => `<button data-a="ek:w" data-v="${k}=${v}" aria-pressed="${w[k]===v}">${lab}</button>`;
+ const dev = w.menge!=='' && Math.abs(+w.menge - l.soll) / l.soll > 0.1;
+ const zAuto = l.digital && w.charge && w.charge.trim().toUpperCase()===l.digital;
+ const ok = w.menge!=='' && w.sicht==='io' && w.charge && (zAuto || w.zeug);
+ return `<div class="note info">Läuft am Galaxy Tab im Browser. Erwartete Lieferungen kommen aus den offenen Bestellungen ${src('s_m4')} – nichts muss gesucht werden.</div>
+ <div class="big2">${w.liste.map(x => `<button data-a="ek:wsel" data-v="${x.id}" aria-pressed="${x.id===w.sel}">${esc(x.lief)}<br><span class="small" style="font-weight:400">${esc(x.pos)}</span>${w.done[x.id]?'<br><span class="small">✓ zugebucht</span>':''}</button>`).join('')}</div>
+ <div class="panel"><dl class="kv"><dt>Bestellung</dt><dd class="mono">${l.best} · ${nf(l.soll,0)} kg ${src('s_m4')}</dd><dt>für</dt><dd>${esc(l.kunde)} – Zeugnis 3.1 ${l.pflicht?'<b>Pflicht</b>':'nicht gefordert'} ${src('s_kanf')}</dd></dl>
+  ${done ? `<div class="note ok">Zugebucht auf Lagerplatz ${l.lp}. Freigabeschein entfällt, Deckung aktualisiert${done==='auto'?', Zeugnis automatisch zugeordnet':done==='foto'?', Zeugnisfoto zur Prüfung beim Einkauf':', Zeugnis beim Lieferanten angefordert'}.</div>` : `
+  <div class="grid2"><div class="step"><label class="lbl" for="weM">1 · Menge laut Lieferschein (kg) ${srcIn()}</label><input id="weM" class="bignum" type="number" data-we="menge" value="${esc(w.menge)}">${dev?'<span class="chip warn" style="justify-self:start">weicht mehr als 10 % von der Bestellung ab</span>':''}</div>
+   <div class="step"><span class="lbl">2 · Sichtprüfung ${srcIn()}</span><div class="big2">${opt('sicht','io','In Ordnung')}${opt('sicht','krumm','Zu krumm → QS')}${opt('sicht','schaden','Beschädigt')}</div>${w.sicht==='krumm'?'<span class="hint">Nicht abladen – QS wird benachrichtigt.</span>':''}</div></div>
+  <div class="grid2"><div class="step"><label class="lbl" for="weC">3 · Charge / Schmelznummer ${srcIn()}</label><input id="weC" type="text" data-we="charge" value="${esc(w.charge)}" placeholder="${l.digital?'z. B. '+l.digital:''}"><button class="btn small" disabled style="justify-self:start">Etikett scannen (Welle 2)</button></div>
+   <div class="step"><span class="lbl">4 · Zeugnis</span>${zAuto ? `<div class="note ok">Digitales Zeugnis zur Charge ${l.digital} liegt vor – automatisch zugeordnet ${src('s_zeug')}</div>` : `<div class="big2">${opt('zeug','foto','Papier liegt bei → Foto')}${opt('zeug','fehlt','Fehlt → anfordern')}</div>${w.zeug==='foto'?'<input type="file" accept="image/*" capture="environment" aria-label="Zeugnis fotografieren">':''}`}</div></div>
+  <div class="row between"><span>Lagerplatz-Vorschlag: <b class="mono">${l.lp}</b> ${src('s_lager')}</span><button class="btn primary" data-a="ek:wbook">Zubuchen</button></div>`}</div>`;
+};
+
+/* ---------- Versand: Zubuchen über Zählwaage ---------- */
+MOD('vs').tabs.splice(1, 0, ['zb','Zubuchen (Zählwaage)']);
+const vsView0 = MOD('vs').view;
+MOD('vs').view = function(st, tab){
+ if (tab !== 'zb' || A.open.vs) return vsView0.call(this, st, tab);
+ return `<div class="note info">Waschen und Zählen wie bisher – aber die Zählwaage-Buchungen erscheinen je BA, die rosa Karte entfällt. Mit dem letzten Korb ist der BA fertig gemeldet, nicht erst Tage später.</div>
+ <div class="list">${st.zb.map((z,i) => { const a = art(z.artikel), sum = z.korb.reduce((n,k) => n+k.n, 0), diff = sum - z.mde, fertig = z.fertig;
+  return `<div class="card"><div class="row between"><b><span class="mono">BA ${z.ba}</span> · ${esc(a.de)} · Maschine ${z.masch}</b>${fertig?'<span class="chip ok">fertig gemeldet</span>':`<span class="chip">${nf(sum,0)} / ${nf(z.soll,0)} Stk.</span>`}</div>
+   <div class="row small"><span>Waschprogramm <b>${esc(z.wasch)}</b> ${src('s_art')}</span><span>Lagerplatz <b class="mono">${z.lp}</b> ${src('s_lager')}</span></div>
+   <div class="row">${z.korb.map((k,j) => `<span class="korb">Korb ${j+1} · <b class="mono">${nf(k.n,0)}</b> <span class="muted">${dt(k.t)}</span></span>`).join('')}</div>
+   <div class="row between small"><span>Zählwaage Σ <b class="mono">${nf(sum,0)}</b> · MDE-Zähler <b class="mono">${nf(z.mde,0)}</b> ${src('s_mde')}</span>${Math.abs(diff) > z.mde*0.01 ? `<span class="chip warn">Differenz ${diff>0?'+':''}${nf(diff,0)} Stk. – sofort sichtbar statt bei der Inventur</span>` : '<span class="chip ok">stimmt</span>'}</div>
+   ${fertig?'':`<div class="actions"><button class="btn small" data-a="vs:korb" data-id="${i}">Korb wiegen (Simulation)</button><button class="btn small primary" data-a="vs:fertig" data-id="${i}">Letzter Korb – BA fertig melden</button></div>`}</div>`; }).join('')}</div>`;
+};
+
+/* ---------- Personal: Eintritt ---------- */
+MOD('pe').tabs.splice(2, 0, ['ein','Ein-/Austritt']);
+const peView0 = MOD('pe').view;
+const EIN = [['vor','Arbeitsvertrag und Personalstammdaten','Personal'],['vor','RFID-Karte und Zeiterfassung','Personal'],['vor','PSA: Sicherheitsschuhe, Schutzbrille','Fertigung'],['vor','Karte Werkzeugautomat','Technologie'],['vor','Terminal-PIN, Zugang KAS-ERP','IT'],
+ ['w1','Sicherheitsunterweisung (Schulung im System)','Personal'],['w1','Einweisung Maschinen 603 und 612 mit Pate','Fertigung'],['w1','Prüfmittel, Prüfplan, Sperrkarte','QS'],['w1','Rüsten in einem Dokument, Erstabnahme','Fertigung'],
+ ['m1','Zwischengespräch nach 4 Wochen (Formblatt)','Abteilungsleitung'],['m1','Wirksamkeit der Schulungen bestätigen','Abteilungsleitung']];
+MOD('pe').view = function(st, tab){
+ if (tab !== 'ein') return peView0.call(this, st, tab);
+ const e = st.ein, n = EIN.filter((_,i) => e.hak[i]).length;
+ const grp = {vor:'Vor dem ersten Tag', w1:'Erste Woche', m1:'Erster Monat'};
+ return `<div class="panel"><div class="row between"><h3><span class="mono">${e.ma}</span> · ${esc(e.rolle)} · ${esc(e.abt)}</h3><span class="chip ${n===EIN.length?'ok':''}">${n}/${EIN.length} erledigt</span></div><dl class="kv"><dt>Eintritt</dt><dd>${dd(e.start)} (${relTxt(e.start)})</dd><dt>Pate</dt><dd>${esc(e.pate)}</dd><dt>Plan</dt><dd>Vorlage „${esc(e.rolle)}“ ${src('s_calc')} – jede Rolle hat ihre eigene</dd></dl></div>
+ ${Object.entries(grp).map(([g,l]) => `<div class="panel"><h3>${l}</h3><div class="checks">${EIN.map((x,i) => x[0]!==g ? '' : `<label><input type="checkbox" data-pein="${i}" ${e.hak[i]?'checked':''}> ${esc(x[1])} <span class="small muted">· ${esc(x[2])}</span></label>`).join('')}</div></div>`).join('')}
+ <span class="hint">Jede Aufgabe landet bei der zuständigen Rolle mit Termin. Austritt läuft analog: Karten, PSA, Zugänge, Werkzeuge zurück.</span>`;
+};
+
+/* ---------- Aktionen der Erweiterungen ---------- */
+const _actArea = actArea;
+actArea = function(act, id, v, el){
+ const st = A[act.split(':')[0]];
+ switch (act){
+  case 'vt:mail': if (!st.anfragen.find(a => a.id==='A-26-0413')) st.anfragen.unshift({id:'A-26-0413', kunde:'Muster Automotive GmbH', teil:'Kontaktbuchse Ø5 × 16', werkstoff:'CuZn39Pb3', ober:'verzinnt 3–5 µm', art:'serie', mengen:[2000,10000,25000], quelle:'Mail mit Zeichnung und STEP', status:'neu', eingang:new Date().toISOString(), warten:'vt', herst:{pe:null, qs:null}, hk:0.27, ruest:170,
+     sim:[{nr:'9900100370', teil:'Kontaktbuchse Ø6', match:89, preis:0.34, db:27},{nr:'9900100088', teil:'Kontaktstift Ø4 × 18', match:71, preis:0.38, db:31}], vorschlag:{masch:'201 (Star SR20)', mat:'CuZn39Pb3 Ø6 h9', pm:'Grenzlehrdorn, Schichtdickenmessgerät'}, komm:[{r:'vt', txt:'@Versand Veredler für Verzinnen 3–5 µm? @QS EMPB gefordert.', t:new Date().toISOString()}], erg:null});
+   st.mail.done = true; break;
+  case 'vt:neu': st.anfragen.find(a => a.id===id).neuteil = {}; break;
+  case 'vt:nt': st.anfragen.find(a => a.id===id).neuteil[v] = true; break;
+  case 'fe:pos': st.ruest.pos = +v; setTimeout(() => document.getElementById('ea-'+v)?.focus(), 30); break;
+  case 'fe:wz': st.ruest.wz[v] = true; break;
+  case 'fe:frei': { document.activeElement?.blur?.(); const r = st.ruest, aa = art((st.plan.find(p => p.ba===r.ba) || st.vorschl.find(x => x.ba===r.ba) || {artikel:'9900100001'}).artikel);
+    const bad = aa.merkmale.filter(m => { const v = r.ist[m.pos]; return v===undefined || v==='' || (m.typ==='num' ? !(+v >= m.lo && +v <= m.hi) : v!=='io'); });
+    if (bad.length){ flash('Noch nicht i. O.: Pos. ' + bad.map(m => m.pos).join(', ')); return; }
+    const cur = st.plan.find(p => p.ba===r.ba) || st.vorschl.find(x => x.ba===r.ba) || {ba:r.ba, artikel:'9900100001', masch:'603'};
+    r.frei = true; if (!st.abn.find(x => x.ba===r.ba)) st.abn.unshift({ba:r.ba, artikel:cur.artikel, masch:cur.masch, erst:{r:'Rüster A', t:new Date().toISOString(), m:art(cur.artikel).merkmale.length}, zweit:null, letzt:null});
+    flash('Erstabnahme freigegeben – Messtechnik ist zur Zweitabnahme benachrichtigt'); break; }
+  case 'ek:wsel': st.we.sel = v; Object.assign(st.we, {menge:'', sicht:'', charge:'', zeug:''}); break;
+  case 'ek:w': { const [k, val] = v.split('='); st.we[k] = val; break; }
+  case 'ek:wbook': { document.activeElement?.blur?.(); const w = st.we, l = w.liste.find(x => x.id===w.sel), zAuto = l.digital && w.charge.trim().toUpperCase()===l.digital;
+    const miss = [w.menge===''&&'Menge', w.sicht!=='io'&&'Sichtprüfung i. O.', !w.charge.trim()&&'Charge', !(zAuto||w.zeug)&&'Zeugnis'].filter(Boolean); if (miss.length){ flash('Noch offen: ' + miss.join(', ')); return; }
+    w.done[l.id] = zAuto ? 'auto' : w.zeug; const d = st.deck.find(x => x.id===l.deck); if (d){ d.bestand += +w.menge; d.bestellt = Math.max(0, d.bestellt - l.soll); }
+    st.zeug.unshift({id:'Z'+Date.now(), charge:w.charge.trim(), lief:l.lief, wst:l.pos.split(' · ')[0], we:'WE-26-'+(1110+Object.keys(w.done).length), ein:new Date().toISOString(), st: zAuto ? 'auto' : w.zeug==='fehlt' ? 'fehlt' : 'hersteller', ba:'—'});
+    const rr = st.rueck.find(x => x.best===l.best); if (rr) rr.st = 'geliefert'; break; }
+  case 'vs:korb': { const z = st.zb[+id]; const n = Math.round(z.korb.length ? z.korb[0].n * (0.98 + Math.random()*0.04) : 600); z.korb.push({n, t:new Date().toISOString()}); z.mde += Math.round(n * (Math.random() < 0.3 ? 0.96 : 1)); break; }
+  case 'vs:fertig': st.zb[+id].fertig = true; flash('BA fertig gemeldet – Bestand auf Lagerplatz ' + st.zb[+id].lp); break;
+  default: return _actArea(act, id, v, el);
+ }
+ saveA(); S.force = true; render();
+};
+document.addEventListener('input', e => { const el = e.target;
+ if (el.dataset.we){ A.ek.we[el.dataset.we] = el.value; saveA(); }
+ if (el.dataset.ea){ A.fe.ruest.ist[el.dataset.ea] = el.value; saveA(); }
+});
+document.addEventListener('change', e => { const el = e.target;
+ if (el.dataset.we || el.dataset.ea){ if (el.dataset.ea) A.fe.ruest.ist[el.dataset.ea] = el.value; saveA(); S.force = true; render(); }
+ if (el.dataset.feba){ A.fe.ruest = {ba:el.value, wz:{}, ist:{}, pos:null, frei:false}; saveA(); S.force = true; render(); }
+ if (el.dataset.pein != null){ A.pe.ein.hak[el.dataset.pein] = el.checked; saveA(); S.force = true; render(); }
+});
+
 /* ---------- Start ---------- */
 render();
 (async () => {
